@@ -1,6 +1,7 @@
 import { spawn } from "node:child_process";
-import { readFile } from "node:fs/promises";
+import { readFile, unlink } from "node:fs/promises";
 import http from "node:http";
+import net from "node:net";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -14,6 +15,7 @@ const STANDALONE_STATE_FILE = join(CACHE_DIR, "antigravity-standalone.json");
 
 let standaloneChild = null;
 let startingBackend = null;
+const deadUrls = new Set();
 
 function isPidAlive(pid) {
   if (typeof pid !== "number" || pid <= 0) return false;
@@ -25,12 +27,28 @@ function isPidAlive(pid) {
   }
 }
 
+function canConnect(port) {
+  return new Promise(resolvePromise => {
+    const socket = net.connect({ host: "127.0.0.1", port });
+    const done = ok => {
+      socket.destroy();
+      resolvePromise(ok);
+    };
+    socket.setTimeout(300, () => done(false));
+    socket.once("connect", () => done(true));
+    socket.once("error", () => done(false));
+  });
+}
+
 async function readValidState(filePath) {
   try {
     const raw = await readFile(filePath, "utf8");
     const parsed = JSON.parse(raw);
-    if (typeof parsed?.url === "string" && isPidAlive(parsed.pid)) {
-      return parsed;
+    if (typeof parsed?.url === "string" && !deadUrls.has(parsed.url) && isPidAlive(parsed.pid)) {
+      const port = Number(new URL(parsed.url).port);
+      if (port > 0 && await canConnect(port)) {
+        return { ...parsed, filePath };
+      }
     }
   } catch {}
   return null;
@@ -129,7 +147,15 @@ function verifyRequestToken(req, urlObj) {
   return { valid: false, fromQuery: false };
 }
 
-function proxyHttpRequest(req, res, state, urlObj, setCookie) {
+async function readRequestBuffer(req) {
+  const chunks = [];
+  for await (const chunk of req) {
+    chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk);
+  }
+  return Buffer.concat(chunks);
+}
+
+function proxyHttpRequest(req, res, body, state, urlObj, setCookie, canRetry = true) {
   const panelUrl = new URL(state.url);
   let targetPath = panelUrl.pathname;
   if (urlObj.pathname === "/mcp") {
@@ -170,14 +196,39 @@ function proxyHttpRequest(req, res, state, urlObj, setCookie) {
     },
   );
 
-  proxyReq.on("error", err => {
+  proxyReq.on("error", async err => {
+    deadUrls.add(state.url);
+    if (state.filePath) {
+      await unlink(state.filePath).catch(() => {});
+    }
     if (!res.headersSent) {
+      const hasSession = Boolean(req.headers["mcp-session-id"]);
+      if (canRetry && !hasSession) {
+        const nextState = await ensureBackend();
+        if (nextState) {
+          proxyHttpRequest(req, res, body, nextState, urlObj, setCookie, false);
+          return;
+        }
+      }
+      if (urlObj.pathname === "/mcp" || urlObj.pathname === "/context") {
+        void ensureBackend().catch(() => {});
+        res.writeHead(404, { "Cache-Control": "no-store" });
+        res.end();
+        return;
+      }
+      if (req.method === "GET") {
+        void ensureBackend().catch(() => {});
+        res.writeHead(503, { "Content-Type": "text/html; charset=utf-8", "Refresh": "1" });
+        res.end("<!doctype html><html><head><meta http-equiv='refresh' content='1'></head><body style='font-family:system-ui;padding:24px;color:#888'>Reconnecting Mobile Dev...</body></html>");
+        return;
+      }
       res.writeHead(502, { "Content-Type": "text/plain; charset=utf-8" });
     }
     res.end(`Mobile Dev sidecar proxy error: ${err.message}`);
   });
 
-  req.pipe(proxyReq);
+  if (body.length > 0) proxyReq.write(body);
+  proxyReq.end();
 }
 
 const server = http.createServer(async (req, res) => {
@@ -204,14 +255,15 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    const body = await readRequestBuffer(req);
     const state = await ensureBackend();
     if (!state) {
-      res.writeHead(503, { "Content-Type": "text/html; charset=utf-8", "Refresh": "2" });
-      res.end("<!doctype html><html><body style='font-family:system-ui;padding:24px;color:#888'>Starting Mobile Dev backend...</body></html>");
+      res.writeHead(503, { "Content-Type": "text/html; charset=utf-8", "Refresh": "1" });
+      res.end("<!doctype html><html><head><meta http-equiv='refresh' content='1'></head><body style='font-family:system-ui;padding:24px;color:#888'>Starting Mobile Dev backend...</body></html>");
       return;
     }
 
-    proxyHttpRequest(req, res, state, urlObj, auth.fromQuery);
+    proxyHttpRequest(req, res, body, state, urlObj, auth.fromQuery);
   } catch (err) {
     if (!res.headersSent) {
       res.writeHead(500, { "Content-Type": "text/plain; charset=utf-8" });
