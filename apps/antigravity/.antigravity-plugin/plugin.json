@@ -1,7 +1,6 @@
 {
   "name": "mobile-dev",
   "displayName": "Mobile Dev",
-  "version": "0.1.0",
   "description": "Stream iOS and Android devices beside your chat while building, running, or debugging mobile apps. Includes device control (agent-device), native and Metro logs, app storage inspection, and CPU, memory, and FPS performance profiling.",
   "logo": "assets/icon.png",
   "suggestedPrompts": [

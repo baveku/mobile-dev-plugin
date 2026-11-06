@@ -28,7 +28,13 @@ works with Expo, React Native, SwiftUI, and other native mobile projects.
 
 ## Install
 
-Package the Antigravity extension from this repository and install it with the `agy` CLI:
+Install directly from the `release/antigravity` branch with the `agy` CLI:
+
+```sh
+agy plugin install https://github.com/callstackincubator/codex-mobile-dev-plugin/tree/release/antigravity/mobile-dev
+```
+
+Or package and install from a local checkout:
 
 ```sh
 npm run build
