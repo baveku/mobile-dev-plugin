@@ -6,7 +6,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const PORT = Number(process.env.ANTIGRAVITY_SIDECAR_WEB_PORT || 0);
-const TOKEN = process.env.ANTIGRAVITY_SIDECAR_TOKEN || "";
+const TOKEN = process.env.ANTIGRAVITY_SIDECAR_UI_TOKEN || process.env.ANTIGRAVITY_SIDECAR_TOKEN || "";
 const PLUGIN_ROOT = process.env.PLUGIN_ROOT || resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const CACHE_DIR = join(homedir(), "Library", "Caches", "mobile-dev");
 const PANEL_STATE_FILE = join(CACHE_DIR, "antigravity-panel.json");
