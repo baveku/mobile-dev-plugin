@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import { z } from "zod";
 import { adbPath } from "../native-logs.ts";
 import { baguetteEnvironment, BAGUETTE_RUNTIME_TIMEOUT_MS } from "../baguette-runtime.ts";
+import { panelRuntimePath } from "../panel-runtime.ts";
 import type { ForegroundApp } from "@mobile-dev/shared/device-apps.ts";
 import { ExpectedOperationError } from "@mobile-dev/shared/error-reporting.ts";
 
@@ -30,8 +31,8 @@ export type SimulatorForeground = (deviceId: string, signal?: AbortSignal) => Pr
 export const unknownSimulatorForeground: SimulatorForeground = async () => null;
 
 export async function foregroundSimulatorPid(deviceId: string, signal?: AbortSignal,
-  helper = new URL("./baguette/Baguette", import.meta.url), runtime = baguetteEnvironment): Promise<number | null> {
-  const path = fileURLToPath(helper);
+  helper?: URL, runtime = baguetteEnvironment): Promise<number | null> {
+  const path = helper ? fileURLToPath(helper) : await panelRuntimePath("baguette/Baguette");
   const cancellation = signal ?? AbortSignal.timeout(10000);
   const startedAt = performance.now();
   let environment: NodeJS.ProcessEnv;

@@ -3,8 +3,9 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { foregroundPhysicalPid, foregroundSimulatorPid, foregroundAndroidApp, parseAndroidForegroundPackage, unknownSimulatorForeground } from "../src/device-apps/foreground.ts";
+import { usePanelRuntime } from "../src/panel-runtime.ts";
 import { deviceAppSources, readDeviceApps } from "../src/device-apps/sources.ts";
 import type { DeviceApp } from "../../shared/src/device-apps.ts";
 
@@ -179,6 +180,30 @@ if (args[3] === 'dumpsys') {
   abort.abort();
   const cancelled = foregroundAndroidApp("123", abort.signal);
   await assert.rejects(cancelled, /abort/i);
+});
+
+test("simulator foreground detection locates Baguette via the configured panel runtime", async t => {
+  const temporary = tmpdir();
+  const prefix = join(temporary, "mobile-dev-simulator-runtime-");
+  const root = await mkdtemp(prefix);
+  const defaultRoot = fileURLToPath(new URL("../src/", import.meta.url));
+  t.after(async () => {
+    usePanelRuntime(async () => defaultRoot);
+    await rm(root, { recursive: true, force: true });
+  });
+  const baguetteDir = join(root, "baguette");
+  await mkdir(baguetteDir, { recursive: true });
+  const path = join(baguetteDir, "Baguette");
+  const script = `#!${process.execPath}
+process.stdout.write('{"pid":789}');
+`;
+  await writeFile(path, script, { mode: 0o700 });
+  usePanelRuntime(async () => root);
+  const pid = await foregroundSimulatorPid(udid, undefined, undefined, async executable => {
+    assert.equal(executable, path);
+    return {};
+  });
+  assert.equal(pid, 789);
 });
 
 test("without the panel's Baguette, a simulator's apps list with no foreground app", async () => {
