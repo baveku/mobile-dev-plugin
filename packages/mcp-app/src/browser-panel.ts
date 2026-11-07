@@ -9,10 +9,18 @@ const dark = matchMedia("(prefers-color-scheme: dark)");
 const DISCONNECTED = "Mobile Dev disconnected from its chat session. Ask the agent to open Mobile Dev again.";
 const EXPIRED = "Mobile Dev's browser connection expired. Reload this page to reconnect.";
 
-function notice(text: string) {
+function notice(text: string, reloadable = false) {
   const alert = document.createElement("p");
   alert.setAttribute("role", "alert");
   alert.textContent = text;
+  if (reloadable) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Reload";
+    button.style.cssText = "margin-left:12px;padding:4px 10px;border:1px solid currentColor;border-radius:6px;background:transparent;color:inherit;cursor:pointer;font:inherit";
+    button.onclick = () => location.reload();
+    alert.append(button);
+  }
   document.body.replaceChildren(alert);
 }
 
@@ -20,6 +28,7 @@ function notice(text: string) {
 async function open() {
   const query = new URLSearchParams(location.search);
   const sidecarToken = query.get("token");
+  const isSidecar = sidecarToken !== null || location.pathname === "/" || location.pathname === "/index.html";
   const sidecarHeaders: Record<string, string> = sidecarToken ? { "x-sidecar-token": sidecarToken } : {};
   const toolName = query.get("tool") ?? "mobile_open_simulator";
   if (toolName !== "mobile_open_simulator" && toolName !== "mobile_open_workspace") {
@@ -59,7 +68,7 @@ async function open() {
   }
   function stopped(message: string) {
     if (disposed) return;
-    if (sidecarToken !== null && message === EXPIRED) {
+    if (isSidecar) {
       const lastReload = Number(sessionStorage.getItem("mobile-dev-sidecar-reload") ?? "0");
       if (Date.now() - lastReload > 3000) {
         sessionStorage.setItem("mobile-dev-sidecar-reload", String(Date.now()));
@@ -67,8 +76,9 @@ async function open() {
         location.reload();
         return;
       }
+      setTimeout(() => location.reload(), 3000);
     }
-    notice(message);
+    notice(message, isSidecar);
     dispose();
   }
   function hide(event: PageTransitionEvent) {
@@ -169,5 +179,7 @@ async function open() {
 
 open().catch(error => {
   const message = error instanceof Error ? error.message : String(error);
-  notice(`Mobile Dev could not open: ${message}`);
+  const isSidecar = new URLSearchParams(location.search).has("token") || location.pathname === "/" || location.pathname === "/index.html";
+  notice(`Mobile Dev could not open: ${message}`, isSidecar);
+  if (isSidecar) setTimeout(() => location.reload(), 3000);
 });

@@ -1,7 +1,6 @@
 import { spawn } from "node:child_process";
 import { readFile, unlink } from "node:fs/promises";
 import http from "node:http";
-import net from "node:net";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -16,6 +15,7 @@ const STANDALONE_STATE_FILE = join(CACHE_DIR, "antigravity-standalone.json");
 let standaloneChild = null;
 let startingBackend = null;
 const deadUrls = new Set();
+const activeSessions = new Map();
 
 function isPidAlive(pid) {
   if (typeof pid !== "number" || pid <= 0) return false;
@@ -27,28 +27,12 @@ function isPidAlive(pid) {
   }
 }
 
-function canConnect(port) {
-  return new Promise(resolvePromise => {
-    const socket = net.connect({ host: "127.0.0.1", port });
-    const done = ok => {
-      socket.destroy();
-      resolvePromise(ok);
-    };
-    socket.setTimeout(300, () => done(false));
-    socket.once("connect", () => done(true));
-    socket.once("error", () => done(false));
-  });
-}
-
 async function readValidState(filePath) {
   try {
     const raw = await readFile(filePath, "utf8");
     const parsed = JSON.parse(raw);
     if (typeof parsed?.url === "string" && !deadUrls.has(parsed.url) && isPidAlive(parsed.pid)) {
-      const port = Number(new URL(parsed.url).port);
-      if (port > 0 && await canConnect(port)) {
-        return { ...parsed, filePath };
-      }
+      return { ...parsed, filePath };
     }
   } catch {}
   return null;
@@ -58,8 +42,11 @@ async function getActiveBackend() {
   const mainState = await readValidState(PANEL_STATE_FILE);
   if (mainState) {
     if (standaloneChild && !standaloneChild.killed) {
-      try { standaloneChild.kill("SIGTERM"); } catch {}
+      const oldChild = standaloneChild;
       standaloneChild = null;
+      setTimeout(() => {
+        try { oldChild.kill("SIGTERM"); } catch {}
+      }, 3000).unref();
     }
     return mainState;
   }
@@ -74,6 +61,11 @@ async function ensureBackend() {
 
   startingBackend = (async () => {
     try {
+      for (let i = 0; i < 5; i++) {
+        await new Promise(r => setTimeout(r, 200));
+        const mainState = await readValidState(PANEL_STATE_FILE);
+        if (mainState) return mainState;
+      }
       if (!standaloneChild || standaloneChild.killed) {
         const launchScript = join(PLUGIN_ROOT, "scripts", "launch-node.sh");
         const serverScript = join(PLUGIN_ROOT, "dist", "server.mjs");
@@ -175,6 +167,11 @@ function proxyHttpRequest(req, res, body, state, urlObj, setCookie, canRetry = t
   headers.origin = panelUrl.origin;
   delete headers.referer;
 
+  const reqSessionId = typeof req.headers["mcp-session-id"] === "string" ? req.headers["mcp-session-id"] : null;
+  if (req.method === "DELETE" && reqSessionId) {
+    activeSessions.delete(reqSessionId);
+  }
+
   const proxyReq = http.request(
     {
       hostname: panelUrl.hostname,
@@ -184,6 +181,12 @@ function proxyHttpRequest(req, res, body, state, urlObj, setCookie, canRetry = t
       headers,
     },
     proxyRes => {
+      const resSessionId = typeof proxyRes.headers["mcp-session-id"] === "string" ? proxyRes.headers["mcp-session-id"] : reqSessionId;
+      if (resSessionId && (proxyRes.statusCode === 200 || proxyRes.statusCode === 202)) {
+        activeSessions.set(resSessionId, state.url);
+      } else if (resSessionId && proxyRes.statusCode === 404) {
+        activeSessions.delete(resSessionId);
+      }
       const resHeaders = { ...proxyRes.headers };
       if (typeof resHeaders["content-security-policy"] === "string") {
         resHeaders["content-security-policy"] = resHeaders["content-security-policy"].replace(/frame-ancestors\s+'none';?\s*/i, "");
@@ -195,6 +198,12 @@ function proxyHttpRequest(req, res, body, state, urlObj, setCookie, canRetry = t
       proxyRes.pipe(res);
     },
   );
+
+  res.on("close", () => {
+    if (!res.writableEnded) {
+      proxyReq.destroy();
+    }
+  });
 
   proxyReq.on("error", async err => {
     deadUrls.add(state.url);
@@ -258,6 +267,11 @@ const server = http.createServer(async (req, res) => {
     const body = await readRequestBuffer(req);
     const state = await ensureBackend();
     if (!state) {
+      if (urlObj.pathname === "/mcp" || urlObj.pathname === "/context") {
+        res.writeHead(404, { "Cache-Control": "no-store" });
+        res.end();
+        return;
+      }
       res.writeHead(503, { "Content-Type": "text/html; charset=utf-8", "Refresh": "1" });
       res.end("<!doctype html><html><head><meta http-equiv='refresh' content='1'></head><body style='font-family:system-ui;padding:24px;color:#888'>Starting Mobile Dev backend...</body></html>");
       return;
@@ -272,11 +286,47 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
+const keepAliveTimer = setInterval(async () => {
+  if (activeSessions.size === 0) return;
+  const state = await getActiveBackend();
+  if (!state) return;
+  const panelUrl = new URL(state.url);
+  const payload = JSON.stringify({ jsonrpc: "2.0", method: "notifications/initialized" });
+  for (const [sessionId, backendUrl] of activeSessions) {
+    if (backendUrl !== state.url) {
+      activeSessions.delete(sessionId);
+      continue;
+    }
+    const req = http.request(
+      {
+        hostname: panelUrl.hostname,
+        port: Number(panelUrl.port),
+        path: `${panelUrl.pathname}mcp`,
+        method: "POST",
+        headers: {
+          host: panelUrl.host,
+          origin: panelUrl.origin,
+          "content-type": "application/json",
+          accept: "application/json, text/event-stream",
+          "mcp-session-id": sessionId,
+          "content-length": Buffer.byteLength(payload),
+        },
+      },
+      res => {
+        if (res.statusCode === 404) activeSessions.delete(sessionId);
+        res.resume();
+      },
+    );
+    req.on("error", () => {});
+    req.end(payload);
+  }
+}, 60_000);
+keepAliveTimer.unref();
+
 server.listen(PORT, "127.0.0.1", () => {
   const addr = server.address();
   const actualPort = typeof addr === "object" && addr ? addr.port : PORT;
   console.error(`[mobile-dev-sidecar] Listening on http://127.0.0.1:${actualPort}`);
-  ensureBackend().catch(() => {});
 });
 
 function shutdown() {
