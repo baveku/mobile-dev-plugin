@@ -1,0 +1,17 @@
+{
+  "name": "mobile-dev",
+  "description": "Mobile Dev for Antigravity: iOS and Android device panel, control, logs, and performance charts.",
+  "owner": {
+    "name": "Callstack",
+    "email": "hello@callstack.com",
+    "url": "https://www.callstack.com/"
+  },
+  "plugins": [
+    {
+      "name": "mobile-dev",
+      "source": "./mobile-dev",
+      "description": "Stream iOS and Android devices beside your chat while building, running, or debugging mobile apps. Includes device control (agent-device), native and Metro logs, app storage inspection, and CPU, memory, and FPS performance profiling.",
+      "category": "development"
+    }
+  ]
+}
