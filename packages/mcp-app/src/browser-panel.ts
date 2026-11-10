@@ -30,14 +30,26 @@ async function open() {
   const sidecarToken = query.get("token");
   const isSidecar = sidecarToken !== null || location.pathname === "/" || location.pathname === "/index.html";
   const sidecarHeaders: Record<string, string> = sidecarToken ? { "x-sidecar-token": sidecarToken } : {};
-  const toolName = query.get("tool") ?? "mobile_open_simulator";
-  if (toolName !== "mobile_open_simulator" && toolName !== "mobile_open_workspace") {
-    throw new Error("This link does not open a Mobile Dev panel.");
-  }
+  let toolName = query.get("tool") ?? "mobile_open_simulator";
   const target: Record<string, string> = {};
-  for (const key of ["platform", "kind", "deviceId"]) {
+  for (const key of ["platform", "kind", "deviceId", "workspaceTool", "appIntelScreen"]) {
     const value = query.get(key);
     if (value !== null) target[key] = value;
+  }
+  let lastPanelUpdate = 0;
+  if (isSidecar && !query.has("tool")) {
+    try {
+      const res = await fetch(new URL("api/status", location.href), { headers: sidecarHeaders });
+      if (res.ok) {
+        const status = await res.json() as { updatedAt?: number; tool?: string; target?: Record<string, string> };
+        if (typeof status.updatedAt === "number") lastPanelUpdate = status.updatedAt;
+        if (typeof status.tool === "string") toolName = status.tool;
+        if (status.target && typeof status.target === "object") Object.assign(target, status.target);
+      }
+    } catch {}
+  }
+  if (toolName !== "mobile_open_simulator" && toolName !== "mobile_open_workspace" && toolName !== "mobile_open_app_intel") {
+    throw new Error("This link does not open a Mobile Dev panel.");
   }
   const client = new Client({ name: "mobile-dev-browser-panel", version: PLUGIN_VERSION });
   const endpoint = new URL("mcp", location.href);
@@ -50,18 +62,26 @@ async function open() {
   });
   let bridge: AppBridge | undefined;
   let heartbeat: ReturnType<typeof setInterval> | undefined;
+  let sidecarSync: ReturnType<typeof setInterval> | undefined;
   let startup: ReturnType<typeof setTimeout> | undefined;
   let disposed = false;
   let checking = false;
+  let syncing = false;
   let contextChanged = () => {};
+  const onVisible = () => {
+    if (document.visibilityState === "visible") void check();
+  };
 
   function dispose() {
     if (disposed) return;
     disposed = true;
     clearInterval(heartbeat);
+    clearInterval(sidecarSync);
     clearTimeout(startup);
     dark.removeEventListener("change", contextChanged);
     removeEventListener("pagehide", hide);
+    removeEventListener("focus", onVisible);
+    document.removeEventListener("visibilitychange", onVisible);
     const teardown = bridge?.teardownResource({}, { timeout: 1000, maxTotalTimeout: 1000 });
     void teardown?.catch(() => {}).finally(() => bridge?.close());
     void transport.terminateSession().catch(() => {}).finally(() => client.close());
@@ -100,6 +120,8 @@ async function open() {
     if (error instanceof StreamableHTTPError && error.code === 404) stopped(EXPIRED);
   };
   addEventListener("pagehide", hide);
+  addEventListener("focus", onVisible);
+  document.addEventListener("visibilitychange", onVisible);
 
   try {
     await client.connect(transport);
@@ -168,7 +190,37 @@ async function open() {
     await initialized;
     await bridge.sendToolInput({ arguments: target });
     const result = await client.callTool({ name: toolName, arguments: target });
+    lastPanelUpdate = Date.now();
     await bridge.sendToolResult(result as CallToolResult);
+    if (isSidecar && !query.has("tool")) {
+      let currentSig = JSON.stringify({ tool: toolName, target });
+      sidecarSync = setInterval(async () => {
+        if (disposed || syncing || !bridge) return;
+        syncing = true;
+        try {
+          const res = await fetch(new URL("api/status", location.href), { headers: sidecarHeaders });
+          if (!res.ok) return;
+          const status = await res.json() as { updatedAt?: number; tool?: string; target?: Record<string, string> };
+          if (typeof status.updatedAt !== "number" || status.updatedAt <= lastPanelUpdate) return;
+          lastPanelUpdate = status.updatedAt;
+          const nextTool = status.tool ?? "mobile_open_simulator";
+          const nextTarget = status.target ?? {};
+          const nextSig = JSON.stringify({ tool: nextTool, target: nextTarget });
+          if (nextSig === currentSig) return;
+          currentSig = nextSig;
+          if (nextTool !== toolName) {
+            dispose();
+            location.reload();
+            return;
+          }
+          await bridge.sendToolInput({ arguments: nextTarget });
+          const nextResult = await client.callTool({ name: nextTool, arguments: nextTarget });
+          lastPanelUpdate = Date.now();
+          await bridge.sendToolResult(nextResult as CallToolResult);
+        } catch {}
+        finally { syncing = false; }
+      }, 2000);
+    }
   } catch (error) {
     if (disposed === false) {
       dispose();

@@ -172,12 +172,13 @@ function proxyHttpRequest(req, res, body, state, urlObj, setCookie, canRetry = t
     activeSessions.delete(reqSessionId);
   }
 
+  const isHeadRoot = req.method === "HEAD" && (urlObj.pathname === "/" || urlObj.pathname === "/index.html");
   const proxyReq = http.request(
     {
       hostname: panelUrl.hostname,
       port: Number(panelUrl.port),
       path: targetPath,
-      method: req.method,
+      method: isHeadRoot ? "GET" : req.method,
       headers,
     },
     proxyRes => {
@@ -195,6 +196,11 @@ function proxyHttpRequest(req, res, body, state, urlObj, setCookie, canRetry = t
         resHeaders["set-cookie"] = `antigravity_sidecar_token=${encodeURIComponent(TOKEN)}; Path=/; HttpOnly; SameSite=Lax`;
       }
       res.writeHead(proxyRes.statusCode || 200, resHeaders);
+      if (isHeadRoot) {
+        proxyRes.resume();
+        res.end();
+        return;
+      }
       proxyRes.pipe(res);
     },
   );
@@ -252,6 +258,15 @@ const server = http.createServer(async (req, res) => {
 
     if (urlObj.pathname === "/api/status") {
       const state = await getActiveBackend();
+      const stateUrl = state ? new URL(state.url) : null;
+      const target = {};
+      if (stateUrl) {
+        for (const key of ["platform", "kind", "deviceId", "workspaceTool", "appIntelScreen"]) {
+          const value = stateUrl.searchParams.get(key);
+          if (value !== null) target[key] = value;
+        }
+      }
+      const tool = stateUrl?.searchParams.get("tool") || "mobile_open_simulator";
       res.writeHead(200, {
         "Content-Type": "application/json; charset=utf-8",
         "Cache-Control": "no-store",
@@ -260,6 +275,8 @@ const server = http.createServer(async (req, res) => {
         status: state ? "ok" : "starting",
         pid: state?.pid ?? null,
         updatedAt: state?.updatedAt ?? null,
+        tool,
+        target,
       }));
       return;
     }

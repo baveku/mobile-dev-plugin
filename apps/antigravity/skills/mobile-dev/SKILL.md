@@ -5,7 +5,7 @@ description: Use when building, running, changing, or debugging local iOS, Andro
 
 # Mobile Dev
 
-Mobile Dev shows the user's simulator, emulator, or physical iPhone in the Antigravity Auxiliary Pane (`mobile-dev.device-panel`) beside the chat, and gives you the tools to control apps on it, read its logs, and record its performance.
+Mobile Dev shows the user's simulator, emulator, or physical iPhone in the Antigravity Auxiliary Pane (`[Mobile Dev](sidecar://mobile-dev/device-panel/)`) beside the chat, and gives you the tools to control apps on it, read its logs, inspect app architecture, and record its performance.
 
 Before calling a Mobile Dev tool that is not yet in your tool list, load it through your tool-search tool if your session uses deferred tools. If none of the `mobile_*` or `device_*` tools exist at all, read `references/missing-tools.md` to diagnose the plugin's Node.js startup.
 
@@ -20,10 +20,14 @@ The Auxiliary Pane does not push its selection into the chat on its own. Call `m
 
 When the user asks to open a simulator, emulator, or device, run the app, or see a UI change:
 
-1. Call `mobile_open_simulator` with the platform (`ios` or `android`), or `mobile_open_workspace` when both platforms or no specific one is wanted. Pass `deviceId` when one is already known.
-2. In Antigravity, the Mobile Dev Auxiliary Pane (`mobile-dev.device-panel`) renders the panel beside the chat automatically. Do not open an external Chrome browser or launch a browser subagent for the panel URL. If the Auxiliary Pane is closed, you can surface a toggle pill for `mobile-dev.device-panel` using the `ui-plugin-navigation` skill.
+1. Call `mobile_open_simulator` with the platform (`ios` or `android`), `mobile_open_workspace` when both platforms or a workspace tool (`logs`, `performance`, `storage`, `app-intel`, `tracesift`) is wanted, or `mobile_open_app_intel` to visualize the React Native screen/dependency graph. Pass `deviceId` when one is already known.
+2. In Antigravity, the Mobile Dev Auxiliary Pane updates automatically to the requested view and target. Include the clickable pill `[Mobile Dev](sidecar://mobile-dev/device-panel/)` in your reply so the user can toggle the Auxiliary Pane with one click. Never open an external Chrome browser or launch a browser subagent for the loopback URL.
 
 Never open the simulator backend's `baseUrl` (`127.0.0.1:46672`) or the `ui://mobile-dev/app.html` resource URI in a browser; neither is a standalone page.
+
+## App Intelligence
+
+App Intelligence statically discovers Expo Router and React Navigation screens and combines their source dependencies for iOS and Android; it does not require App Flow or a running device. When the user asks to see the app map, call `mobile_open_app_intel` and include `[Mobile Dev](sidecar://mobile-dev/device-panel/)`. Generate or refresh with `mobile_generate_app_intel`, passing `projectPath` when no project is remembered. For a screen or file dependency question, call `mobile_app_intel` with `operation: "screen"` or `"file"`, start with depth 1, and paginate only when `nextOffset` is present.
 
 ## Drive the app and verify UI changes
 
