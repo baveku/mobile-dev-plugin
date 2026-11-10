@@ -16,6 +16,31 @@ let standaloneChild = null;
 let startingBackend = null;
 const deadUrls = new Set();
 const activeSessions = new Map();
+const MAX_BROWSER_UNSEEN_MS = 15 * 60_000;
+
+function closeBackendSession(sessionId, backendUrl) {
+  activeSessions.delete(sessionId);
+  if (typeof sessionId !== "string" || !sessionId || typeof backendUrl !== "string" || !backendUrl) return;
+  try {
+    const panelUrl = new URL(backendUrl);
+    const req = http.request(
+      {
+        hostname: panelUrl.hostname,
+        port: Number(panelUrl.port),
+        path: `${panelUrl.pathname}mcp`,
+        method: "DELETE",
+        headers: {
+          host: panelUrl.host,
+          origin: panelUrl.origin,
+          "mcp-session-id": sessionId,
+        },
+      },
+      res => res.resume(),
+    );
+    req.on("error", () => {});
+    req.end();
+  } catch {}
+}
 
 function isPidAlive(pid) {
   if (typeof pid !== "number" || pid <= 0) return false;
@@ -183,8 +208,13 @@ function proxyHttpRequest(req, res, body, state, urlObj, setCookie, canRetry = t
     },
     proxyRes => {
       const resSessionId = typeof proxyRes.headers["mcp-session-id"] === "string" ? proxyRes.headers["mcp-session-id"] : reqSessionId;
-      if (resSessionId && (proxyRes.statusCode === 200 || proxyRes.statusCode === 202)) {
-        activeSessions.set(resSessionId, state.url);
+      if (req.method !== "DELETE" && resSessionId && (proxyRes.statusCode === 200 || proxyRes.statusCode === 202)) {
+        if (!reqSessionId) {
+          for (const [oldId, oldEntry] of activeSessions) {
+            if (oldId !== resSessionId) closeBackendSession(oldId, oldEntry.backendUrl);
+          }
+        }
+        activeSessions.set(resSessionId, { backendUrl: state.url, lastBrowserSeen: Date.now() });
       } else if (resSessionId && proxyRes.statusCode === 404) {
         activeSessions.delete(resSessionId);
       }
@@ -257,6 +287,10 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (urlObj.pathname === "/api/status") {
+      const now = Date.now();
+      for (const entry of activeSessions.values()) {
+        entry.lastBrowserSeen = now;
+      }
       const state = await getActiveBackend();
       const stateUrl = state ? new URL(state.url) : null;
       const target = {};
@@ -278,6 +312,23 @@ const server = http.createServer(async (req, res) => {
         tool,
         target,
       }));
+      return;
+    }
+
+    if (urlObj.pathname === "/api/close-session" && req.method === "POST") {
+      const rawBody = await readRequestBuffer(req);
+      let sessionId = null;
+      try {
+        const parsed = JSON.parse(rawBody.toString("utf8"));
+        if (typeof parsed?.sessionId === "string") sessionId = parsed.sessionId;
+      } catch {}
+      if (sessionId) {
+        const entry = activeSessions.get(sessionId);
+        const backendUrl = entry?.backendUrl ?? (await getActiveBackend())?.url;
+        closeBackendSession(sessionId, backendUrl);
+      }
+      res.writeHead(204, { "Cache-Control": "no-store" });
+      res.end();
       return;
     }
 
@@ -307,11 +358,16 @@ const keepAliveTimer = setInterval(async () => {
   if (activeSessions.size === 0) return;
   const state = await getActiveBackend();
   if (!state) return;
+  const now = Date.now();
   const panelUrl = new URL(state.url);
   const payload = JSON.stringify({ jsonrpc: "2.0", method: "notifications/initialized" });
-  for (const [sessionId, backendUrl] of activeSessions) {
-    if (backendUrl !== state.url) {
+  for (const [sessionId, entry] of activeSessions) {
+    if (entry.backendUrl !== state.url) {
       activeSessions.delete(sessionId);
+      continue;
+    }
+    if (now - entry.lastBrowserSeen > MAX_BROWSER_UNSEEN_MS) {
+      closeBackendSession(sessionId, entry.backendUrl);
       continue;
     }
     const req = http.request(

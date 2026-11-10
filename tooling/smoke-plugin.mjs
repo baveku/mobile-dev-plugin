@@ -90,7 +90,7 @@ async function smokePanelRuntime(plugin, launch) {
   // The published release may not exist yet, so the copy pins this archive by its file.
   await writeFile(join(plugin, "dist/panel-runtime.json"), JSON.stringify({ ...pin, url: pathToFileURL(archive).href }));
   const data = join(temporary, "plugin data");
-  await launch({ CLAUDE_PLUGIN_DATA: data }, async client => {
+  await launch({ [host.data ?? "CLAUDE_PLUGIN_DATA"]: data }, async client => {
     const started = await client.callTool({ name: "mobile_start_baguette", arguments: {} });
     assert.notEqual(started.isError, true, JSON.stringify(started.content));
     const installed = await readdir(join(data, "panel-runtime"));

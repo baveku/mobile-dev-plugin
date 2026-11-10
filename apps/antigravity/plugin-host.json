@@ -4,9 +4,15 @@
   "mcpConfig": "mcp_config.json",
   "hooks": "hooks.json",
   "root": "PLUGIN_ROOT",
+  "data": "PLUGIN_DATA",
   "config": {
     "file": "antigravity-mcp-config.json",
+    "server": {},
     "target": "~/.gemini/antigravity/mcp_config.json"
+  },
+  "marketplace": {
+    "name": "mobile-dev-local",
+    "manifest": ".antigravity-plugin/marketplace.json"
   },
   "panelRuntime": "download",
   "build": "tooling/build.mjs",

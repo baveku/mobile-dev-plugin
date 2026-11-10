@@ -84,6 +84,11 @@ async function open() {
     document.removeEventListener("visibilitychange", onVisible);
     const teardown = bridge?.teardownResource({}, { timeout: 1000, maxTotalTimeout: 1000 });
     void teardown?.catch(() => {}).finally(() => bridge?.close());
+    if (isSidecar && transport.sessionId && typeof navigator.sendBeacon === "function") {
+      const closeUrl = new URL("api/close-session", location.href);
+      if (sidecarToken) closeUrl.searchParams.set("token", sidecarToken);
+      navigator.sendBeacon(closeUrl, JSON.stringify({ sessionId: transport.sessionId }));
+    }
     void transport.terminateSession().catch(() => {}).finally(() => client.close());
   }
   function stopped(message: string) {
