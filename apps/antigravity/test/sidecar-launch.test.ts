@@ -118,20 +118,23 @@ test("sidecar proxy replaces superseded sessions and closes sessions on beacon",
   const tab2 = await openBrowserSession("Second tab context");
   t.after(() => tab2.client.close());
 
-  // Wait briefly for the async DELETE of tab1 to settle on the server.
   await new Promise(r => setTimeout(r, 100));
 
-  const afterReplace = await hostClient.callTool({ name: "mobile_read_panel_context", arguments: {} });
-  const replaceText = JSON.stringify(afterReplace.content);
-  assert.doesNotMatch(replaceText, /First tab context/, "Superseded sidecar session must be closed.");
-  assert.doesNotMatch(replaceText, /tab 1 of 2/, "Only one active sidecar tab should remain.");
-  assert.match(replaceText, /Second tab context/);
+  const bothTabs = await hostClient.callTool({ name: "mobile_read_panel_context", arguments: {} });
+  const bothText = JSON.stringify(bothTabs.content);
+  assert.match(bothText, /First tab context/, "Concurrent sidecar tabs must stay open.");
+  assert.match(bothText, /Second tab context/, "Second concurrent sidecar tab must also remain active.");
 
-  const beaconRes = await fetch(`${baseUrl}/api/close-session?token=${token}`, {
+  const closeTab1 = await fetch(`${baseUrl}/api/close-session?token=${token}`, {
+    method: "POST",
+    body: JSON.stringify({ sessionId: tab1.transport.sessionId }),
+  });
+  assert.equal(closeTab1.status, 204);
+  const closeTab2 = await fetch(`${baseUrl}/api/close-session?token=${token}`, {
     method: "POST",
     body: JSON.stringify({ sessionId: tab2.transport.sessionId }),
   });
-  assert.equal(beaconRes.status, 204);
+  assert.equal(closeTab2.status, 204);
   await new Promise(r => setTimeout(r, 100));
 
   const afterClose = await hostClient.callTool({ name: "mobile_read_panel_context", arguments: {} });
@@ -171,4 +174,17 @@ test("sidecar proxy replaces superseded sessions and closes sessions on beacon",
   const statusAfterAbort = await fetch(`${baseUrl}/api/status`, { headers: { "x-sidecar-token": token } });
   const statusAfterJson = await statusAfterAbort.json() as { status: string };
   assert.equal(statusAfterJson.status, "ok");
+
+  // GET / without ?token= succeeds and injects sidecar token meta, while POST /mcp without token stays 403.
+  const tokenlessRoot = await fetch(`${baseUrl}/`);
+  assert.equal(tokenlessRoot.status, 200);
+  const tokenlessHtml = await tokenlessRoot.text();
+  assert.match(tokenlessHtml, new RegExp(`<meta name="mobile-dev-sidecar-token" content="${token}">`));
+
+  const tokenlessPost = await fetch(`${baseUrl}/mcp`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: "{}",
+  });
+  assert.equal(tokenlessPost.status, 403);
 });

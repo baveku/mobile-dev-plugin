@@ -16,7 +16,8 @@ let standaloneChild = null;
 let startingBackend = null;
 const deadUrls = new Set();
 const activeSessions = new Map();
-const MAX_BROWSER_UNSEEN_MS = 15 * 60_000;
+const MAX_BROWSER_UNSEEN_MS = 10 * 60_000;
+const MAX_CONCURRENT_SESSIONS = 8;
 
 function closeBackendSession(sessionId, backendUrl) {
   activeSessions.delete(sessionId);
@@ -257,9 +258,18 @@ function proxyHttpRequest(req, res, body, state, urlObj, setCookie, canRetry = t
     proxyRes => {
       const resSessionId = typeof proxyRes.headers["mcp-session-id"] === "string" ? proxyRes.headers["mcp-session-id"] : reqSessionId;
       if (req.method !== "DELETE" && resSessionId && (proxyRes.statusCode === 200 || proxyRes.statusCode === 202)) {
-        if (!reqSessionId) {
-          for (const [oldId, oldEntry] of activeSessions) {
-            if (oldId !== resSessionId) closeBackendSession(oldId, oldEntry.backendUrl);
+        if (!reqSessionId && !activeSessions.has(resSessionId) && activeSessions.size >= MAX_CONCURRENT_SESSIONS) {
+          let oldestId = null;
+          let oldestSeen = Infinity;
+          for (const [id, entry] of activeSessions) {
+            if (entry.lastBrowserSeen < oldestSeen) {
+              oldestSeen = entry.lastBrowserSeen;
+              oldestId = id;
+            }
+          }
+          if (oldestId) {
+            const oldestEntry = activeSessions.get(oldestId);
+            closeBackendSession(oldestId, oldestEntry?.backendUrl);
           }
         }
         activeSessions.set(resSessionId, { backendUrl: state.url, lastBrowserSeen: Date.now() });
@@ -273,12 +283,32 @@ function proxyHttpRequest(req, res, body, state, urlObj, setCookie, canRetry = t
       if (setCookie && TOKEN) {
         resHeaders["set-cookie"] = `antigravity_sidecar_token=${encodeURIComponent(TOKEN)}; Path=/; HttpOnly; SameSite=Lax`;
       }
-      res.writeHead(proxyRes.statusCode || 200, resHeaders);
       if (isHeadRoot) {
+        res.writeHead(proxyRes.statusCode || 200, resHeaders);
         proxyRes.resume();
         res.end();
         return;
       }
+      const isRootGet = !isHeadRoot && req.method === "GET" && (urlObj.pathname === "/" || urlObj.pathname === "/index.html");
+      if (isRootGet && TOKEN && (proxyRes.statusCode || 200) === 200) {
+        const chunks = [];
+        proxyRes.on("data", chunk => chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk));
+        proxyRes.on("end", () => {
+          const rawHtml = Buffer.concat(chunks).toString("utf8");
+          const escapedToken = TOKEN.replace(/[&"<>]/g, c => ({ "&": "&amp;", "\"": "&quot;", "<": "&lt;", ">": "&gt;" })[c]);
+          const html = rawHtml.replace("<head>", `<head>\n  <meta name="mobile-dev-sidecar-token" content="${escapedToken}">`);
+          delete resHeaders["content-length"];
+          delete resHeaders["transfer-encoding"];
+          res.writeHead(200, resHeaders);
+          res.end(html);
+        });
+        proxyRes.on("error", () => {
+          if (!res.headersSent) res.writeHead(502);
+          res.end();
+        });
+        return;
+      }
+      res.writeHead(proxyRes.statusCode || 200, resHeaders);
       proxyRes.pipe(res);
     },
   );
@@ -336,7 +366,7 @@ const server = http.createServer(async (req, res) => {
   try {
     const urlObj = new URL(req.url || "/", `http://${req.headers.host || "127.0.0.1"}`);
     const auth = verifyRequestToken(req, urlObj);
-    if (!auth.valid) {
+    if (req.method !== "GET" && req.method !== "HEAD" && !auth.valid) {
       res.writeHead(403, { "Content-Type": "text/plain; charset=utf-8" });
       res.end("Forbidden: Invalid or missing Antigravity sidecar token.");
       return;

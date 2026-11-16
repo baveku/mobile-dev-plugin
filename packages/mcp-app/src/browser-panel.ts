@@ -9,6 +9,22 @@ import { PANEL_PAGE_META } from "@mobile-dev/shared/panel-target.ts";
 const dark = matchMedia("(prefers-color-scheme: dark)");
 const DISCONNECTED = "Mobile Dev disconnected from its chat session. Ask the agent to open Mobile Dev again.";
 const EXPIRED = "Mobile Dev's browser connection expired. Reload this page to reconnect.";
+let fallbackLastReload = 0;
+
+function readLastReload(): number {
+  try {
+    return Number(sessionStorage.getItem("mobile-dev-sidecar-reload") ?? String(fallbackLastReload));
+  } catch {
+    return fallbackLastReload;
+  }
+}
+
+function writeLastReload(timestamp: number): void {
+  fallbackLastReload = timestamp;
+  try {
+    sessionStorage.setItem("mobile-dev-sidecar-reload", String(timestamp));
+  } catch {}
+}
 
 function notice(text: string, reloadable = false) {
   const alert = document.createElement("p");
@@ -28,8 +44,8 @@ function notice(text: string, reloadable = false) {
 /** A small MCP Apps host for the same shared panel the chat would otherwise render. */
 async function open() {
   const query = new URLSearchParams(location.search);
-  const sidecarToken = query.get("token");
-  const isSidecar = sidecarToken !== null || location.pathname === "/" || location.pathname === "/index.html";
+  const sidecarToken = query.get("token") ?? document.querySelector('meta[name="mobile-dev-sidecar-token"]')?.getAttribute("content") ?? null;
+  const isSidecar = sidecarToken !== null || location.protocol === "plugin:" || location.pathname === "/" || location.pathname === "/index.html";
   const sidecarHeaders: Record<string, string> = sidecarToken ? { "x-sidecar-token": sidecarToken } : {};
   let toolName = query.get("tool") ?? "mobile_open_simulator";
   const target: Record<string, string> = {};
@@ -85,19 +101,26 @@ async function open() {
     document.removeEventListener("visibilitychange", onVisible);
     const teardown = bridge?.teardownResource({}, { timeout: 1000, maxTotalTimeout: 1000 });
     void teardown?.catch(() => {}).finally(() => bridge?.close());
-    if (isSidecar && transport.sessionId && typeof navigator.sendBeacon === "function") {
-      const closeUrl = new URL("api/close-session", location.href);
-      if (sidecarToken) closeUrl.searchParams.set("token", sidecarToken);
-      navigator.sendBeacon(closeUrl, JSON.stringify({ sessionId: transport.sessionId }));
+    if (isSidecar && transport.sessionId) {
+      try {
+        const closeUrl = new URL("api/close-session", location.href);
+        if (sidecarToken) closeUrl.searchParams.set("token", sidecarToken);
+        const payload = JSON.stringify({ sessionId: transport.sessionId });
+        if ((closeUrl.protocol === "http:" || closeUrl.protocol === "https:") && typeof navigator.sendBeacon === "function") {
+          navigator.sendBeacon(closeUrl, payload);
+        } else {
+          void fetch(closeUrl, { method: "POST", headers: sidecarHeaders, body: payload, keepalive: true }).catch(() => {});
+        }
+      } catch {}
     }
     void transport.terminateSession().catch(() => {}).finally(() => client.close());
   }
   function stopped(message: string) {
     if (disposed) return;
     if (isSidecar) {
-      const lastReload = Number(sessionStorage.getItem("mobile-dev-sidecar-reload") ?? "0");
+      const lastReload = readLastReload();
       if (Date.now() - lastReload > 3000) {
-        sessionStorage.setItem("mobile-dev-sidecar-reload", String(Date.now()));
+        writeLastReload(Date.now());
         dispose();
         location.reload();
         return;
@@ -237,7 +260,11 @@ async function open() {
 
 open().catch(error => {
   const message = error instanceof Error ? error.message : String(error);
-  const isSidecar = new URLSearchParams(location.search).has("token") || location.pathname === "/" || location.pathname === "/index.html";
+  const isSidecar = new URLSearchParams(location.search).has("token")
+    || document.querySelector('meta[name="mobile-dev-sidecar-token"]') !== null
+    || location.protocol === "plugin:"
+    || location.pathname === "/"
+    || location.pathname === "/index.html";
   notice(`Mobile Dev could not open: ${message}`, isSidecar);
   if (isSidecar) setTimeout(() => location.reload(), 3000);
 });
