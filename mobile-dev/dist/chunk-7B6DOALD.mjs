@@ -1,5 +1,5 @@
 
-!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="8de78d83-c6eb-5360-9414-03cee1accf2d")}catch(e){}}();
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="8cab6ee8-1c03-5c4c-a39c-d4a912788c54")}catch(e){}}();
 import { createRequire as mobileDevBundleRequire } from 'node:module'; import { fileURLToPath as mobileDevFileURLToPath } from 'node:url'; import { dirname as mobileDevPathDirname } from 'node:path'; const require = mobileDevBundleRequire(import.meta.url); const __filename = mobileDevFileURLToPath(import.meta.url); const __dirname = mobileDevPathDirname(__filename);
 import {
   __commonJS,
@@ -62132,7 +62132,15 @@ var nodeRuntimeMetricsIntegration = defineIntegration((options = {}) => {
 });
 
 // packages/shared/src/version.ts
-var PLUGIN_VERSION = "0.1.180";
+var PLUGIN_VERSION = "0.1.183";
+
+// packages/shared/src/telemetry-identity.ts
+function isAnonymousUserId(value) {
+  return typeof value === "string" && /^anon_[a-f0-9]{32}$/.test(value);
+}
+function isTelemetrySessionId(value) {
+  return typeof value === "string" && /^run_[a-f0-9]{32}$/.test(value);
+}
 
 // packages/shared/src/device-apps-command-diagnostics.ts
 var foregroundCauses = [
@@ -62242,14 +62250,6 @@ var FailureEpisodes = class {
     this.episodes.clear();
   }
 };
-
-// packages/shared/src/telemetry-identity.ts
-function isAnonymousUserId(value) {
-  return typeof value === "string" && /^anon_[a-f0-9]{32}$/.test(value);
-}
-function isTelemetrySessionId(value) {
-  return typeof value === "string" && /^run_[a-f0-9]{32}$/.test(value);
-}
 
 // packages/shared/src/telemetry.ts
 var SENTRY_SERVER_DSN = "https://2ee03a9449e1f1b48e3e7c7606b6f562@o4512180958068736.ingest.de.sentry.io/4512181033173072";
@@ -62642,4 +62642,4 @@ undici/lib/web/websocket/frame.js:
   (*! ws. MIT License. Einar Otto Stangvik <einaros@gmail.com> *)
 */
 
-//# debugId=8de78d83-c6eb-5360-9414-03cee1accf2d
+//# debugId=8cab6ee8-1c03-5c4c-a39c-d4a912788c54

@@ -1,5 +1,5 @@
 
-!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="3087d6eb-aec5-5026-98d2-26e3d202afd2")}catch(e){}}();
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="26e4fbf8-7c78-55b9-867f-fbd2e2cee038")}catch(e){}}();
 import { createRequire as mobileDevBundleRequire } from 'node:module'; import { fileURLToPath as mobileDevFileURLToPath } from 'node:url'; import { dirname as mobileDevPathDirname } from 'node:path'; const require = mobileDevBundleRequire(import.meta.url); const __filename = mobileDevFileURLToPath(import.meta.url); const __dirname = mobileDevPathDirname(__filename);
 import {
   ExpectedOperationError,
@@ -27,7 +27,7 @@ import {
   telemetryHost,
   withIsolationScope,
   wrapMcpServerWithSentry
-} from "./chunk-K5PBMEWM.mjs";
+} from "./chunk-7B6DOALD.mjs";
 import {
   external_exports
 } from "./chunk-424G27NI.mjs";
@@ -4393,6 +4393,13 @@ function recordProjectDialog(outcome, duration2) {
   public_api_exports.count("app_flow.project_dialog.samples", 1, { attributes });
   public_api_exports.distribution("app_flow.project_dialog.duration", Math.max(0, duration2), { unit: "millisecond", attributes });
 }
+function recordTestingAgentRead(outcome, duration2, elements, platform2) {
+  if (process.env.MOBILE_DEV_TELEMETRY === "off") return;
+  const attributes = { component: "server", surface: "testing", platform: platform2, outcome };
+  public_api_exports.count("testing.agent.screen.samples", 1, { attributes });
+  public_api_exports.distribution("testing.agent.screen.duration", Math.max(0, duration2), { unit: "millisecond", attributes });
+  if (outcome === "success") public_api_exports.gauge("testing.agent.screen.elements", elements, { attributes });
+}
 function recordTraceSiftOperation(operation, outcome, duration2) {
   if (process.env.MOBILE_DEV_TELEMETRY === "off") return;
   const attributes = { component: "server", surface: "tracesift", operation, outcome };
@@ -4737,6 +4744,7 @@ export {
   recordAppStorageOperation,
   recordAppIntelOperation,
   recordProjectDialog,
+  recordTestingAgentRead,
   recordTraceSiftOperation,
   recordTraceSiftPayload,
   recordAnalyticsFlush,
@@ -4762,4 +4770,4 @@ export {
   import_websocket
 };
 
-//# debugId=3087d6eb-aec5-5026-98d2-26e3d202afd2
+//# debugId=26e4fbf8-7c78-55b9-867f-fbd2e2cee038

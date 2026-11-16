@@ -16,7 +16,8 @@ let standaloneChild = null;
 let startingBackend = null;
 const deadUrls = new Set();
 const activeSessions = new Map();
-const MAX_BROWSER_UNSEEN_MS = 15 * 60_000;
+const MAX_BROWSER_UNSEEN_MS = 10 * 60_000;
+const MAX_CONCURRENT_SESSIONS = 8;
 
 function closeBackendSession(sessionId, backendUrl) {
   activeSessions.delete(sessionId);
@@ -172,6 +173,54 @@ async function readRequestBuffer(req) {
   return Buffer.concat(chunks);
 }
 
+function sendWaitingHtml(res, message, setCookie, method = "GET") {
+  const headers = {
+    "Content-Type": "text/html; charset=utf-8",
+    "Cache-Control": "no-store",
+  };
+  if (setCookie && TOKEN) {
+    headers["Set-Cookie"] = `antigravity_sidecar_token=${encodeURIComponent(TOKEN)}; Path=/; HttpOnly; SameSite=Lax`;
+  }
+  res.writeHead(method === "HEAD" ? 503 : 200, headers);
+  if (method === "HEAD") {
+    res.end();
+    return;
+  }
+  res.end(`<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="color-scheme" content="light dark">
+  <title>Mobile Dev</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: Canvas; color: CanvasText; font: 13px/1.4 ui-sans-serif, system-ui, sans-serif; }
+    body { display: flex; align-items: center; justify-content: center; opacity: 0.7; }
+  </style>
+</head>
+<body>
+  <p>${message}</p>
+  <script>
+    (function poll() {
+      fetch("api/status" + location.search, { cache: "no-store" })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (s) {
+          if (s && s.status === "ok") location.reload();
+          else setTimeout(poll, 400);
+        })
+        .catch(function () { setTimeout(poll, 400); });
+    })();
+  </script>
+</body>
+</html>`);
+}
+
+function clearStandaloneChild() {
+  if (standaloneChild && !standaloneChild.killed) {
+    try { standaloneChild.kill("SIGTERM"); } catch {}
+  }
+  standaloneChild = null;
+}
+
 function proxyHttpRequest(req, res, body, state, urlObj, setCookie, canRetry = true) {
   const panelUrl = new URL(state.url);
   let targetPath = panelUrl.pathname;
@@ -209,9 +258,18 @@ function proxyHttpRequest(req, res, body, state, urlObj, setCookie, canRetry = t
     proxyRes => {
       const resSessionId = typeof proxyRes.headers["mcp-session-id"] === "string" ? proxyRes.headers["mcp-session-id"] : reqSessionId;
       if (req.method !== "DELETE" && resSessionId && (proxyRes.statusCode === 200 || proxyRes.statusCode === 202)) {
-        if (!reqSessionId) {
-          for (const [oldId, oldEntry] of activeSessions) {
-            if (oldId !== resSessionId) closeBackendSession(oldId, oldEntry.backendUrl);
+        if (!reqSessionId && !activeSessions.has(resSessionId) && activeSessions.size >= MAX_CONCURRENT_SESSIONS) {
+          let oldestId = null;
+          let oldestSeen = Infinity;
+          for (const [id, entry] of activeSessions) {
+            if (entry.lastBrowserSeen < oldestSeen) {
+              oldestSeen = entry.lastBrowserSeen;
+              oldestId = id;
+            }
+          }
+          if (oldestId) {
+            const oldestEntry = activeSessions.get(oldestId);
+            closeBackendSession(oldestId, oldestEntry?.backendUrl);
           }
         }
         activeSessions.set(resSessionId, { backendUrl: state.url, lastBrowserSeen: Date.now() });
@@ -225,26 +283,55 @@ function proxyHttpRequest(req, res, body, state, urlObj, setCookie, canRetry = t
       if (setCookie && TOKEN) {
         resHeaders["set-cookie"] = `antigravity_sidecar_token=${encodeURIComponent(TOKEN)}; Path=/; HttpOnly; SameSite=Lax`;
       }
-      res.writeHead(proxyRes.statusCode || 200, resHeaders);
       if (isHeadRoot) {
+        res.writeHead(proxyRes.statusCode || 200, resHeaders);
         proxyRes.resume();
         res.end();
         return;
       }
+      const isRootGet = !isHeadRoot && req.method === "GET" && (urlObj.pathname === "/" || urlObj.pathname === "/index.html");
+      if (isRootGet && TOKEN && (proxyRes.statusCode || 200) === 200) {
+        const chunks = [];
+        proxyRes.on("data", chunk => chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk));
+        proxyRes.on("end", () => {
+          const rawHtml = Buffer.concat(chunks).toString("utf8");
+          const escapedToken = TOKEN.replace(/[&"<>]/g, c => ({ "&": "&amp;", "\"": "&quot;", "<": "&lt;", ">": "&gt;" })[c]);
+          const html = rawHtml.replace("<head>", `<head>\n  <meta name="mobile-dev-sidecar-token" content="${escapedToken}">`);
+          delete resHeaders["content-length"];
+          delete resHeaders["transfer-encoding"];
+          res.writeHead(200, resHeaders);
+          res.end(html);
+        });
+        proxyRes.on("error", () => {
+          if (!res.headersSent) res.writeHead(502);
+          res.end();
+        });
+        return;
+      }
+      res.writeHead(proxyRes.statusCode || 200, resHeaders);
       proxyRes.pipe(res);
     },
   );
 
+  let clientAborted = false;
   res.on("close", () => {
     if (!res.writableEnded) {
+      clientAborted = true;
       proxyReq.destroy();
     }
   });
 
   proxyReq.on("error", async err => {
-    deadUrls.add(state.url);
-    if (state.filePath) {
-      await unlink(state.filePath).catch(() => {});
+    if (clientAborted || res.destroyed) return;
+    const isTrulyDead = err?.code === "ECONNREFUSED" || !isPidAlive(state.pid);
+    if (isTrulyDead) {
+      deadUrls.add(state.url);
+      if (state.filePath) {
+        await unlink(state.filePath).catch(() => {});
+        if (state.filePath === STANDALONE_STATE_FILE) {
+          clearStandaloneChild();
+        }
+      }
     }
     if (!res.headersSent) {
       const hasSession = Boolean(req.headers["mcp-session-id"]);
@@ -261,10 +348,9 @@ function proxyHttpRequest(req, res, body, state, urlObj, setCookie, canRetry = t
         res.end();
         return;
       }
-      if (req.method === "GET") {
+      if (req.method === "GET" || req.method === "HEAD") {
         void ensureBackend().catch(() => {});
-        res.writeHead(503, { "Content-Type": "text/html; charset=utf-8", "Refresh": "1" });
-        res.end("<!doctype html><html><head><meta http-equiv='refresh' content='1'></head><body style='font-family:system-ui;padding:24px;color:#888'>Reconnecting Mobile Dev...</body></html>");
+        sendWaitingHtml(res, "Reconnecting Mobile Dev...", setCookie, req.method);
         return;
       }
       res.writeHead(502, { "Content-Type": "text/plain; charset=utf-8" });
@@ -280,7 +366,7 @@ const server = http.createServer(async (req, res) => {
   try {
     const urlObj = new URL(req.url || "/", `http://${req.headers.host || "127.0.0.1"}`);
     const auth = verifyRequestToken(req, urlObj);
-    if (!auth.valid) {
+    if (req.method !== "GET" && req.method !== "HEAD" && !auth.valid) {
       res.writeHead(403, { "Content-Type": "text/plain; charset=utf-8" });
       res.end("Forbidden: Invalid or missing Antigravity sidecar token.");
       return;
@@ -333,15 +419,22 @@ const server = http.createServer(async (req, res) => {
     }
 
     const body = await readRequestBuffer(req);
-    const state = await ensureBackend();
+    let state = await getActiveBackend();
+    if (!state) {
+      if (urlObj.pathname === "/" || urlObj.pathname === "/index.html") {
+        const pending = ensureBackend();
+        state = await Promise.race([pending, new Promise(r => setTimeout(() => r(null), 1500))]);
+      } else {
+        state = await ensureBackend();
+      }
+    }
     if (!state) {
       if (urlObj.pathname === "/mcp" || urlObj.pathname === "/context") {
         res.writeHead(404, { "Cache-Control": "no-store" });
         res.end();
         return;
       }
-      res.writeHead(503, { "Content-Type": "text/html; charset=utf-8", "Refresh": "1" });
-      res.end("<!doctype html><html><head><meta http-equiv='refresh' content='1'></head><body style='font-family:system-ui;padding:24px;color:#888'>Starting Mobile Dev backend...</body></html>");
+      sendWaitingHtml(res, "Starting Mobile Dev backend...", auth.fromQuery, req.method);
       return;
     }
 

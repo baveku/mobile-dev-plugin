@@ -21,6 +21,7 @@ works with Expo, React Native, SwiftUI, and other native mobile projects.
 - **App Intelligence:** static screen-to-dependency graphs for Expo Router and React
   Navigation projects, tracing each screen through its source files, assets, and
   packages without building or running the app.
+- **Testing Studio:** record deterministic e2e tests against a booted iOS simulator or Android emulator, with live TypeScript preview and editable steps beside the mirror.
 - **Logs:** iOS unified logs, Android logcat, physical iPhone logs, and Metro console
   messages.
 - **Performance:** CPU, memory, and FPS recordings shown as interactive charts, which
