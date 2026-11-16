@@ -18,6 +18,7 @@
   "build": "tooling/build.mjs",
   "skills": [
     "skills/mobile-dev",
+    "../../packages/skills/mobile-dev-testing",
     "../../packages/skills/agent-device"
   ],
   "folders": [

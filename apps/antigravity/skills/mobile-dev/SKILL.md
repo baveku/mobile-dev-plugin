@@ -33,6 +33,8 @@ App Intelligence statically discovers Expo Router and React Navigation screens a
 
 Use the `agent-device` skill for `device_*` commands: `device_open`, `device_snapshot`, `device_click`, `device_fill`, `device_scroll`, `device_wait`, `device_screenshot`, and the rest. Use `mobile_install_app`, `mobile_launch_app`, `mobile_stop_app`, `mobile_open_url`, `mobile_set_app_permission`, `mobile_set_app_language`, and `mobile_send_push` for app lifecycle and system state.
 
+Use the `mobile-dev-testing` skill when the user asks to record or capture an end-to-end test in Mobile Dev's Testing tab.
+
 After a code change the user can see on screen, check it on the device and leave the app on the affected screen so they can see it in the panel.
 
 ## Logs, storage, and performance
