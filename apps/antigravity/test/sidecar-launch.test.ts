@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, rename, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import test from "node:test";
@@ -24,11 +24,18 @@ test("sidecar proxy replaces superseded sessions and closes sessions on beacon",
   const connections = new SharedTransport(serverSide);
   const openers: PanelOpen[] = [];
   const template = new URL("../../../packages/mcp-app/src/browser-panel.html", import.meta.url);
+  let writeQueue: Promise<void> = Promise.resolve();
   const stopPanel = browserPanel({
     always: true,
     template,
-    onPage: async url => {
-      await writeFile(statePath, JSON.stringify({ pid: process.pid, url, updatedAt: Date.now() }) + "\n");
+    onPage: url => {
+      const run = async () => {
+        const tmpPath = `${statePath}.${process.pid}.tmp`;
+        await writeFile(tmpPath, JSON.stringify({ pid: process.pid, url, updatedAt: Date.now() }) + "\n");
+        await rename(tmpPath, statePath);
+      };
+      writeQueue = writeQueue.then(run, run);
+      return writeQueue;
     },
   })(server, {
     connections,
@@ -42,6 +49,10 @@ test("sidecar proxy replaces superseded sessions and closes sessions on beacon",
   server.registerTool("mobile_open_simulator", { inputSchema: {} }, async () => {
     for (const open of openers) await open({ tool: "mobile_open_simulator", target: { platform: "android" } });
     return { content: [{ type: "text", text: "opened" }] };
+  });
+  server.registerTool("slow_ping", { inputSchema: {} }, async () => {
+    await new Promise(r => setTimeout(r, 250));
+    return { content: [{ type: "text", text: "pong" }] };
   });
 
   await server.connect(connections);
@@ -125,4 +136,39 @@ test("sidecar proxy replaces superseded sessions and closes sessions on beacon",
 
   const afterClose = await hostClient.callTool({ name: "mobile_read_panel_context", arguments: {} });
   assert.match(JSON.stringify(afterClose.content), /No Mobile Dev browser panel/);
+
+  // Aborting an in-flight proxied request must not poison deadUrls or remove state file.
+  const tab3 = await openBrowserSession("Third tab context");
+  t.after(() => tab3.client.close());
+  const ac = new AbortController();
+  setTimeout(() => ac.abort(), 30);
+  await assert.rejects(
+    fetch(`${baseUrl}/mcp`, {
+      method: "POST",
+      signal: ac.signal,
+      headers: {
+        "content-type": "application/json",
+        accept: "application/json, text/event-stream",
+        "mcp-session-id": tab3.transport.sessionId!,
+        "x-sidecar-token": token,
+      },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: 99,
+        method: "tools/call",
+        params: { name: "slow_ping", arguments: {} },
+      }),
+    }),
+  );
+  await new Promise(r => setTimeout(r, 50));
+
+  const rootAfterAbort = await fetch(`${baseUrl}/?token=${token}`);
+  assert.equal(rootAfterAbort.status, 200);
+  const rootHtml = await rootAfterAbort.text();
+  assert.match(rootHtml, /Mobile Dev/);
+  assert.doesNotMatch(rootHtml, /Starting Mobile Dev backend/);
+
+  const statusAfterAbort = await fetch(`${baseUrl}/api/status`, { headers: { "x-sidecar-token": token } });
+  const statusAfterJson = await statusAfterAbort.json() as { status: string };
+  assert.equal(statusAfterJson.status, "ok");
 });

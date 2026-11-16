@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 import { runStdioServer } from "@mobile-dev/core/stdio-server.ts";
@@ -11,14 +11,21 @@ const isStandalone = process.env.MOBILE_DEV_SIDECAR_STANDALONE === "1";
 const stateFile = isStandalone ? "antigravity-standalone.json" : "antigravity-panel.json";
 const statePath = join(homedir(), "Library", "Caches", "mobile-dev", stateFile);
 let lastWrittenUrl = "";
+let writeQueue: Promise<void> = Promise.resolve();
 
-async function writePanelState(url: string) {
+function writePanelState(url: string) {
   if (url === lastWrittenUrl) return;
   lastWrittenUrl = url;
-  try {
-    await mkdir(dirname(statePath), { recursive: true });
-    await writeFile(statePath, JSON.stringify({ pid: process.pid, url, updatedAt: Date.now() }) + "\n");
-  } catch {}
+  const run = async () => {
+    try {
+      await mkdir(dirname(statePath), { recursive: true });
+      const tmpPath = `${statePath}.${process.pid}.tmp`;
+      await writeFile(tmpPath, JSON.stringify({ pid: process.pid, url, updatedAt: Date.now() }) + "\n");
+      await rename(tmpPath, statePath);
+    } catch {}
+  };
+  writeQueue = writeQueue.then(run, run);
+  return writeQueue;
 }
 
 const pinned = await readFile(new URL("./panel-runtime.json", import.meta.url), "utf8").catch(() => undefined);

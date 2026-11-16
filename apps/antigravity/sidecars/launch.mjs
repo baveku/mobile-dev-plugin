@@ -172,6 +172,54 @@ async function readRequestBuffer(req) {
   return Buffer.concat(chunks);
 }
 
+function sendWaitingHtml(res, message, setCookie, method = "GET") {
+  const headers = {
+    "Content-Type": "text/html; charset=utf-8",
+    "Cache-Control": "no-store",
+  };
+  if (setCookie && TOKEN) {
+    headers["Set-Cookie"] = `antigravity_sidecar_token=${encodeURIComponent(TOKEN)}; Path=/; HttpOnly; SameSite=Lax`;
+  }
+  res.writeHead(method === "HEAD" ? 503 : 200, headers);
+  if (method === "HEAD") {
+    res.end();
+    return;
+  }
+  res.end(`<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="color-scheme" content="light dark">
+  <title>Mobile Dev</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: Canvas; color: CanvasText; font: 13px/1.4 ui-sans-serif, system-ui, sans-serif; }
+    body { display: flex; align-items: center; justify-content: center; opacity: 0.7; }
+  </style>
+</head>
+<body>
+  <p>${message}</p>
+  <script>
+    (function poll() {
+      fetch("api/status" + location.search, { cache: "no-store" })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (s) {
+          if (s && s.status === "ok") location.reload();
+          else setTimeout(poll, 400);
+        })
+        .catch(function () { setTimeout(poll, 400); });
+    })();
+  </script>
+</body>
+</html>`);
+}
+
+function clearStandaloneChild() {
+  if (standaloneChild && !standaloneChild.killed) {
+    try { standaloneChild.kill("SIGTERM"); } catch {}
+  }
+  standaloneChild = null;
+}
+
 function proxyHttpRequest(req, res, body, state, urlObj, setCookie, canRetry = true) {
   const panelUrl = new URL(state.url);
   let targetPath = panelUrl.pathname;
@@ -235,16 +283,25 @@ function proxyHttpRequest(req, res, body, state, urlObj, setCookie, canRetry = t
     },
   );
 
+  let clientAborted = false;
   res.on("close", () => {
     if (!res.writableEnded) {
+      clientAborted = true;
       proxyReq.destroy();
     }
   });
 
   proxyReq.on("error", async err => {
-    deadUrls.add(state.url);
-    if (state.filePath) {
-      await unlink(state.filePath).catch(() => {});
+    if (clientAborted || res.destroyed) return;
+    const isTrulyDead = err?.code === "ECONNREFUSED" || !isPidAlive(state.pid);
+    if (isTrulyDead) {
+      deadUrls.add(state.url);
+      if (state.filePath) {
+        await unlink(state.filePath).catch(() => {});
+        if (state.filePath === STANDALONE_STATE_FILE) {
+          clearStandaloneChild();
+        }
+      }
     }
     if (!res.headersSent) {
       const hasSession = Boolean(req.headers["mcp-session-id"]);
@@ -261,10 +318,9 @@ function proxyHttpRequest(req, res, body, state, urlObj, setCookie, canRetry = t
         res.end();
         return;
       }
-      if (req.method === "GET") {
+      if (req.method === "GET" || req.method === "HEAD") {
         void ensureBackend().catch(() => {});
-        res.writeHead(503, { "Content-Type": "text/html; charset=utf-8", "Refresh": "1" });
-        res.end("<!doctype html><html><head><meta http-equiv='refresh' content='1'></head><body style='font-family:system-ui;padding:24px;color:#888'>Reconnecting Mobile Dev...</body></html>");
+        sendWaitingHtml(res, "Reconnecting Mobile Dev...", setCookie, req.method);
         return;
       }
       res.writeHead(502, { "Content-Type": "text/plain; charset=utf-8" });
@@ -333,15 +389,22 @@ const server = http.createServer(async (req, res) => {
     }
 
     const body = await readRequestBuffer(req);
-    const state = await ensureBackend();
+    let state = await getActiveBackend();
+    if (!state) {
+      if (urlObj.pathname === "/" || urlObj.pathname === "/index.html") {
+        const pending = ensureBackend();
+        state = await Promise.race([pending, new Promise(r => setTimeout(() => r(null), 1500))]);
+      } else {
+        state = await ensureBackend();
+      }
+    }
     if (!state) {
       if (urlObj.pathname === "/mcp" || urlObj.pathname === "/context") {
         res.writeHead(404, { "Cache-Control": "no-store" });
         res.end();
         return;
       }
-      res.writeHead(503, { "Content-Type": "text/html; charset=utf-8", "Refresh": "1" });
-      res.end("<!doctype html><html><head><meta http-equiv='refresh' content='1'></head><body style='font-family:system-ui;padding:24px;color:#888'>Starting Mobile Dev backend...</body></html>");
+      sendWaitingHtml(res, "Starting Mobile Dev backend...", auth.fromQuery, req.method);
       return;
     }
 
