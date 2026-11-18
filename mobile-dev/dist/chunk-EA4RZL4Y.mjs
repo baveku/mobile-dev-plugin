@@ -1,9 +1,9 @@
 
-!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="de474cb5-2bd5-5372-892f-cac10ac023bb")}catch(e){}}();
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="31a11ff0-c23f-54c6-89e1-2535b292d421")}catch(e){}}();
 import { createRequire as mobileDevBundleRequire } from 'node:module'; import { fileURLToPath as mobileDevFileURLToPath } from 'node:url'; import { dirname as mobileDevPathDirname } from 'node:path'; const require = mobileDevBundleRequire(import.meta.url); const __filename = mobileDevFileURLToPath(import.meta.url); const __dirname = mobileDevPathDirname(__filename);
 import {
   external_exports
-} from "./chunk-424G27NI.mjs";
+} from "./chunk-ZZCVTTEH.mjs";
 
 // packages/shared/src/app-intelligence.ts
 var generateAppIntelInput = external_exports.object({ projectPath: external_exports.string().min(1).max(4096).optional() }).strict();
@@ -28,4 +28,4 @@ export {
   packageRef
 };
 
-//# debugId=de474cb5-2bd5-5372-892f-cac10ac023bb
+//# debugId=31a11ff0-c23f-54c6-89e1-2535b292d421

@@ -1,5 +1,5 @@
 
-!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="46ae551f-80a7-526f-b3a6-c07f43e4cad2")}catch(e){}}();
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="ff20d6ff-0d06-577b-9bee-bb807efe2775")}catch(e){}}();
 import { createRequire as mobileDevBundleRequire } from 'node:module'; import { fileURLToPath as mobileDevFileURLToPath } from 'node:url'; import { dirname as mobileDevPathDirname } from 'node:path'; const require = mobileDevBundleRequire(import.meta.url); const __filename = mobileDevFileURLToPath(import.meta.url); const __dirname = mobileDevPathDirname(__filename);
 import {
   SENTRY_RELEASE,
@@ -16,7 +16,7 @@ import {
   setAttribute,
   setTag,
   tagInstallIntegrity
-} from "./chunk-7B6DOALD.mjs";
+} from "./chunk-47HLPGPO.mjs";
 import "./chunk-WNUFIJT5.mjs";
 
 // packages/core/src/instrument.ts
@@ -73,4 +73,4 @@ client?.on("spanStart", (span) => {
   }
 });
 
-//# debugId=46ae551f-80a7-526f-b3a6-c07f43e4cad2
+//# debugId=ff20d6ff-0d06-577b-9bee-bb807efe2775

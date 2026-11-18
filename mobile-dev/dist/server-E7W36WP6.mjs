@@ -1,12 +1,12 @@
 
-!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="f8570361-092b-524d-aebc-92b22fff846f")}catch(e){}}();
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="74d12f16-e7dd-5ffc-a592-c8104a650a7e")}catch(e){}}();
 import { createRequire as mobileDevBundleRequire } from 'node:module'; import { fileURLToPath as mobileDevFileURLToPath } from 'node:url'; import { dirname as mobileDevPathDirname } from 'node:path'; const require = mobileDevBundleRequire(import.meta.url); const __filename = mobileDevFileURLToPath(import.meta.url); const __dirname = mobileDevPathDirname(__filename);
 import {
   appIntelQueryInput,
   fileRef,
   generateAppIntelInput,
   screenRef
-} from "./chunk-HQKHE3TM.mjs";
+} from "./chunk-EA4RZL4Y.mjs";
 import "./chunk-E4FKOFXD.mjs";
 import {
   DEVICE_APPS_DIAGNOSTIC_META,
@@ -59,7 +59,7 @@ import {
   touchInputSchema,
   udidSchema,
   withDeviceAppsDiagnostic
-} from "./chunk-BTLZSBHV.mjs";
+} from "./chunk-TM4VXTGB.mjs";
 import "./chunk-AV7EIOVC.mjs";
 import {
   ExpectedOperationError,
@@ -88,7 +88,7 @@ import {
   resolveTelemetryEnvironment,
   setDiscoveryCommandDiagnostic,
   telemetryHost
-} from "./chunk-7B6DOALD.mjs";
+} from "./chunk-47HLPGPO.mjs";
 import {
   $ZodObject,
   $ZodType,
@@ -122,7 +122,7 @@ import {
   toJSONSchema,
   union,
   unknown
-} from "./chunk-424G27NI.mjs";
+} from "./chunk-ZZCVTTEH.mjs";
 import {
   __commonJS,
   __export,
@@ -37826,8 +37826,8 @@ async function loadVendoredAgentDevice() {
 }
 async function createAppFlowHost(options = {}) {
   const [{ createAppFlowService }, { createManualRecordingService }] = await Promise.all([
-    import("./app-flow-7JY3OYSR.mjs"),
-    import("./manual-PVPN6ZQH.mjs")
+    import("./app-flow-CBXZUI2T.mjs"),
+    import("./manual-QMNQHZU5.mjs")
   ]);
   const listeners = /* @__PURE__ */ new Set();
   const runs = /* @__PURE__ */ new Map();
@@ -52876,4 +52876,4 @@ content-type/index.js:
    *)
 */
 
-//# debugId=f8570361-092b-524d-aebc-92b22fff846f
+//# debugId=74d12f16-e7dd-5ffc-a592-c8104a650a7e
