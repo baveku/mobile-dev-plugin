@@ -1,5 +1,5 @@
 
-!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="73ab61f6-bf32-5cec-be71-9ab378bb5317")}catch(e){}}();
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="55d21e29-31e0-5abb-8afa-c2e96f289961")}catch(e){}}();
 import { createRequire as mobileDevBundleRequire } from 'node:module'; import { fileURLToPath as mobileDevFileURLToPath } from 'node:url'; import { dirname as mobileDevPathDirname } from 'node:path'; const require = mobileDevBundleRequire(import.meta.url); const __filename = mobileDevFileURLToPath(import.meta.url); const __dirname = mobileDevPathDirname(__filename);
 import {
   __commonJS,
@@ -62132,7 +62132,7 @@ var nodeRuntimeMetricsIntegration = defineIntegration((options = {}) => {
 });
 
 // packages/shared/src/version.ts
-var PLUGIN_VERSION = "0.1.185";
+var PLUGIN_VERSION = "0.1.189";
 
 // packages/shared/src/telemetry-identity.ts
 function isAnonymousUserId(value) {
@@ -62316,8 +62316,14 @@ function scrubText(text) {
   scrubbed = scrubbed.replace(/\b[A-Fa-f0-9]{24,}\b/g, "[identifier]");
   scrubbed = scrubbed.replace(/\b[^\s@]+@[^\s@]+\.[^\s@]+\b/g, "[email]");
   scrubbed = scrubbed.replace(/(?:\/Users\/|\/home\/)[^\s"')]+/g, "[local path]");
+  scrubbed = scrubbed.replace(/(?:\b[a-z]:[\\/]|\\\\|file:\/\/)[^\r\n]*/gi, "[local path]");
   scrubbed = scrubbed.replace(/https?:\/\/[^\s"')]+/g, "[url]");
   return scrubbed.slice(0, 512);
+}
+function scrubWindowsFrame(path) {
+  if (!/^(?:(?:file:\/\/)?\/?[a-z]:[\\/]|\\\\|file:\/\/[^/])/i.test(path)) return path;
+  const file = path.split(/[\\/]/).at(-1);
+  return file && ["server.mjs", "app-intelligence-worker.mjs", "ios-mirror-service.mjs"].includes(file) ? "app:///" + file : "[local path]";
 }
 function errorReportSignature(error2, tags) {
   const message = error2 instanceof Error ? error2.message : String(error2);
@@ -62365,11 +62371,16 @@ function scrubErrorEvent(event, hint) {
     if (exception.value) exception.value = scrubText(exception.value);
     if (exception.mechanism) delete exception.mechanism.data;
     for (const frame of exception.stacktrace?.frames ?? []) {
+      if (frame.filename) frame.filename = scrubWindowsFrame(frame.filename);
+      if (frame.abs_path) frame.abs_path = scrubWindowsFrame(frame.abs_path);
       delete frame.vars;
       delete frame.pre_context;
       delete frame.post_context;
       delete frame.context_line;
     }
+  }
+  for (const image of event.debug_meta?.images ?? []) {
+    if (image.type === "sourcemap") image.code_file = scrubWindowsFrame(image.code_file);
   }
   if (event.contexts) {
     delete event.contexts.device;
@@ -62642,4 +62653,4 @@ undici/lib/web/websocket/frame.js:
   (*! ws. MIT License. Einar Otto Stangvik <einaros@gmail.com> *)
 */
 
-//# debugId=73ab61f6-bf32-5cec-be71-9ab378bb5317
+//# debugId=55d21e29-31e0-5abb-8afa-c2e96f289961

@@ -1,13 +1,13 @@
 
-!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="f066a40c-8528-5fdb-9095-afecdc0beb37")}catch(e){}}();
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="65bd9ff3-1f45-5880-8612-18575057a045")}catch(e){}}();
 ;(function(){var g=globalThis.__SENTRY_ORCHESTRION__=globalThis.__SENTRY_ORCHESTRION__||{};g.bundler=g.bundler||new Set();})();import { createRequire as mobileDevBundleRequire } from 'node:module'; import { fileURLToPath as mobileDevFileURLToPath } from 'node:url'; import { dirname as mobileDevPathDirname } from 'node:path'; const require = mobileDevBundleRequire(import.meta.url); const __filename = mobileDevFileURLToPath(import.meta.url); const __dirname = mobileDevPathDirname(__filename);
 import {
   fileRef,
   packageRef,
   screenRef
-} from "./chunk-EA4RZL4Y.mjs";
+} from "./chunk-BJOJB3L4.mjs";
 import "./chunk-AV7EIOVC.mjs";
-import "./chunk-ZZCVTTEH.mjs";
+import "./chunk-YQTRFH5T.mjs";
 import {
   __commonJS,
   __require,
@@ -23647,7 +23647,7 @@ var fingerprint = (value) => createHash("sha256").update(value).digest("hex");
 var portable = (root, path) => relative(root, path).split(sep).join("/");
 var inside = (root, path) => {
   const rel = relative(root, path);
-  return rel !== ".." && !rel.startsWith(`..${sep}`) && !rel.startsWith("/");
+  return rel !== ".." && !rel.startsWith(`..${sep}`) && !isAbsolute(rel);
 };
 var packageName = (specifier) => specifier.startsWith("@") ? specifier.split("/").slice(0, 2).join("/") : specifier.split("/")[0];
 function walkAst(node, visit) {
@@ -23984,4 +23984,4 @@ try {
   });
 }
 
-//# debugId=f066a40c-8528-5fdb-9095-afecdc0beb37
+//# debugId=65bd9ff3-1f45-5880-8612-18575057a045

@@ -1,5 +1,5 @@
 
-!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="599d957a-8c2d-5805-9f12-04a64603f2b3")}catch(e){}}();
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="acb074e5-a13b-5c8d-99d8-19a8c2c92a59")}catch(e){}}();
 import { createRequire as mobileDevBundleRequire } from 'node:module'; import { fileURLToPath as mobileDevFileURLToPath } from 'node:url'; import { dirname as mobileDevPathDirname } from 'node:path'; const require = mobileDevBundleRequire(import.meta.url); const __filename = mobileDevFileURLToPath(import.meta.url); const __dirname = mobileDevPathDirname(__filename);
 import {
   captureServerError,
@@ -9,11 +9,11 @@ import {
   parseBaseUrl,
   requiresDecisionProvider,
   resolveAppFlowStart
-} from "./chunk-TM4VXTGB.mjs";
+} from "./chunk-CFHYWBPT.mjs";
 import {
   ExpectedOperationError,
   public_api_exports
-} from "./chunk-47HLPGPO.mjs";
+} from "./chunk-3JDSZTC2.mjs";
 
 // packages/core/src/app-flow/parser.ts
 import { readdir, readFile, stat } from "node:fs/promises";
@@ -1261,7 +1261,7 @@ function isRunnerBusyError(error) {
   return /RUNNER_BUSY|still finishing a previous command/i.test(message);
 }
 function sleep(ms) {
-  return new Promise((resolve3) => setTimeout(resolve3, ms));
+  return new Promise((resolve4) => setTimeout(resolve4, ms));
 }
 async function retryWhileRunnerBusy(work, options = {}) {
   const retries = options.retries ?? RUNNER_BUSY_RETRIES;
@@ -1341,17 +1341,17 @@ async function findAvailablePort() {
   return bindEphemeralPort();
 }
 function isPortFree(port) {
-  return new Promise((resolve3) => {
+  return new Promise((resolve4) => {
     const server = createServer();
     server.unref();
-    server.once("error", () => resolve3(false));
+    server.once("error", () => resolve4(false));
     server.listen(port, "127.0.0.1", () => {
-      server.close((error) => resolve3(!error));
+      server.close((error) => resolve4(!error));
     });
   });
 }
 function bindEphemeralPort() {
-  return new Promise((resolve3, reject) => {
+  return new Promise((resolve4, reject) => {
     const server = createServer();
     server.unref();
     server.once("error", reject);
@@ -1363,7 +1363,7 @@ function bindEphemeralPort() {
         return;
       }
       const port = address.port;
-      server.close((error) => error ? reject(error) : resolve3(port));
+      server.close((error) => error ? reject(error) : resolve4(port));
     });
   });
 }
@@ -1409,8 +1409,8 @@ function endMetroLogFile(path) {
   if (!stream) return Promise.resolve();
   openLogs.delete(path);
   if (stream.destroyed || stream.writableEnded) return Promise.resolve();
-  return new Promise((resolve3) => {
-    stream.end(() => resolve3());
+  return new Promise((resolve4) => {
+    stream.end(() => resolve4());
   });
 }
 
@@ -3540,10 +3540,10 @@ async function computeNativeBuildFingerprint(projectPath, platform) {
   if (!relatives.length) return null;
   relatives.sort();
   const hash2 = createHash2("sha256");
-  for (const relative5 of relatives) {
-    hash2.update(relative5);
+  for (const relative3 of relatives) {
+    hash2.update(relative3);
     hash2.update("\0");
-    await hashFile(join6(nativeDir, relative5), hash2);
+    await hashFile(join6(nativeDir, relative3), hash2);
     hash2.update("\0");
   }
   for (const name2 of ROOT_INPUTS) {
@@ -3659,8 +3659,8 @@ function log(step, detail) {
 function measurePhase(ctx, phase, work) {
   return ctx.timing?.measure(phase, work) ?? work();
 }
-function agentDeviceBootCommand() {
-  return "agent-device boot --platform ios --target mobile";
+function agentDeviceBootCommand(udid) {
+  return `agent-device boot --platform ios --target mobile --udid ${quoteCliArg(udid)}`;
 }
 function agentDeviceInstallCommand(app, appPath) {
   return `agent-device install ${quoteCliArg(app)} ${quoteCliArg(appPath)} --platform ios`;
@@ -3685,6 +3685,23 @@ async function closeExistingSession(client) {
   try {
     await client.sessions.close();
   } catch {
+  }
+}
+async function handoffCaptureDevice(client, deviceId) {
+  const sessions = await client.sessions.list();
+  const owners = sessions.filter((session) => session.device?.id === deviceId);
+  for (const owner3 of owners) {
+    const session = owner3.address ?? owner3.name;
+    if (typeof session !== "string" || !session.trim()) continue;
+    log("sessions.close", `handoff device=${deviceId} owner=${owner3.name ?? session}`);
+    try {
+      await client.sessions.close({ session });
+    } catch (error) {
+      throw new ExpectedOperationError(
+        "resource_limit",
+        `App Flow could not take the simulator from agent-device session "${owner3.name ?? session}". Wait for that session to finish its current command, then retry. (${errorMessage(error)})`
+      );
+    }
   }
 }
 function detectPackageManager(projectPath) {
@@ -3771,7 +3788,7 @@ async function waitWhile(signal, predicate, timeoutMessage) {
   while (Date.now() < deadline) {
     if (signal?.aborted) throw new Error("Cancelled");
     if (await predicate()) return;
-    await new Promise((resolve3) => setTimeout(resolve3, 1e3));
+    await new Promise((resolve4) => setTimeout(resolve4, 1e3));
   }
   throw new Error(timeoutMessage());
 }
@@ -4009,11 +4026,20 @@ function installedAppLaunchTarget(app) {
   const formattedApp = app.match(/^.+\s+\(([A-Za-z0-9_.-]+\.[A-Za-z0-9_.-]+)\)$/);
   return formattedApp?.[1]?.trim() || app;
 }
-async function listInstalledApps(client, platform) {
-  return await client.apps.list({ platform }).catch(() => []);
+async function listInstalledApps(client, platform, deviceId) {
+  try {
+    return await client.apps.list({ platform, ...deviceSelector(platform, deviceId) });
+  } catch (error) {
+    log("apps.list", `failed \u2014 ${errorMessage(error)}`);
+    return [];
+  }
 }
-async function ensureExpoGoInstalled(client, ctx) {
-  const apps = await listInstalledApps(client, ctx.platform);
+function deviceSelector(platform, deviceId) {
+  if (!deviceId) return {};
+  return platform === "android" ? { serial: deviceId } : { udid: deviceId };
+}
+async function ensureExpoGoInstalled(client, ctx, deviceId) {
+  const apps = await listInstalledApps(client, ctx.platform, deviceId);
   const existing = matchInstalledApp(apps, [EXPO_GO_APP_NAME, "host.exp.Exponent"]);
   if (existing) {
     log("Expo Go already installed", existing);
@@ -4023,7 +4049,8 @@ async function ensureExpoGoInstalled(client, ctx) {
   log("apps.install", appPath);
   const result = await client.apps.install({
     appPath,
-    platform: ctx.platform
+    platform: ctx.platform,
+    ...deviceSelector(ctx.platform, deviceId)
   });
   return {
     launchTarget: result.app || result.appId || EXPO_GO_APP_NAME,
@@ -4055,6 +4082,7 @@ async function openAppSession(client, app, options) {
     await client.apps.open({
       app: launchTarget,
       platform: "ios",
+      ...options?.udid ? { udid: options.udid } : {},
       ...url ? { url } : {},
       ...options?.relaunch ? { relaunch: true } : {}
     });
@@ -4149,7 +4177,7 @@ async function openInstalledApp(client, ctx, mode, options) {
     });
     return { launchTarget, launchUrl, useCustomScheme: false };
   }
-  const apps = await listInstalledApps(client, ctx.platform);
+  const apps = await listInstalledApps(client, ctx.platform, options.udid);
   const nativeTarget = matchInstalledApp(apps, [ctx.bundleId, ctx.appName, ctx.slug]);
   if (!nativeTarget) {
     const lookedFor = [ctx.bundleId, ctx.appName, ctx.slug].filter(Boolean).join(", ") || "an app name";
@@ -4184,13 +4212,19 @@ async function resolveReusableNativeBuild(client, ctx, deviceId) {
     );
     return null;
   }
-  const apps = await listInstalledApps(client, ctx.platform);
+  const apps = await listInstalledApps(client, ctx.platform, deviceId);
   const installed = matchInstalledApp(apps, [recorded]);
   if (!installed) {
     log("checkInstalledBuild", `${recorded} is no longer installed \u2014 rebuilding`);
     return null;
   }
   return installed;
+}
+function selectCaptureSimulator(devices, excludedId) {
+  const simulators = devices.filter(
+    (device) => device.kind === "simulator" && device.id !== excludedId
+  );
+  return simulators.find((device) => device.booted) ?? simulators[0] ?? null;
 }
 async function bootPreferredDevice(client, ctx) {
   const preferred = await nativeBuildStore().preferredDevice(ctx.projectPath, ctx.platform);
@@ -4205,15 +4239,26 @@ async function bootPreferredDevice(client, ctx) {
     } catch (error) {
       log(
         "devices.boot",
-        `${preferred} unavailable (${errorMessage(error)}) \u2014 letting the daemon pick`
+        `${preferred} unavailable (${errorMessage(error)}) \u2014 choosing another simulator`
       );
     }
-  } else {
-    log("devices.boot", "platform=ios target=mobile");
   }
-  return await client.devices.boot({
+  const devices = await client.devices.list({
     platform: "ios",
     target: "mobile"
+  });
+  const selected = selectCaptureSimulator(devices, preferred ?? void 0);
+  if (!selected) {
+    throw new ExpectedOperationError("device_unavailable", "No iOS simulator is available for App Flow.");
+  }
+  log(
+    "devices.boot",
+    `platform=ios target=mobile udid=${selected.id} (${selected.booted ? "already booted" : "first available"})`
+  );
+  return await client.devices.boot({
+    platform: "ios",
+    target: "mobile",
+    udid: selected.id
   });
 }
 async function bootDevice(ctx) {
@@ -4230,7 +4275,8 @@ async function bootDevice(ctx) {
   await closeExistingSession(client);
   const bootResult = await bootPreferredDevice(client, ctx);
   log("devices.boot", `device=${bootResult.device} id=${bootResult.id}`);
-  const setupCommands = [agentDeviceBootCommand()];
+  await handoffCaptureDevice(client, bootResult.id);
+  const setupCommands = [agentDeviceBootCommand(bootResult.id)];
   let expoGoTarget;
   let launchProcess = null;
   let metroPort;
@@ -4256,7 +4302,7 @@ async function bootDevice(ctx) {
         }
       }
     } else {
-      const expoGo = await ensureExpoGoInstalled(client, ctx);
+      const expoGo = await ensureExpoGoInstalled(client, ctx, bootResult.id);
       expoGoTarget = expoGo.launchTarget;
       if (expoGo.installPath) {
         setupCommands.push(agentDeviceInstallCommand(expoGo.launchTarget, expoGo.installPath));
@@ -5325,7 +5371,7 @@ var IDLE_AFTER_MS = 1500;
 var IDLE_STABLE_POLLS = 3;
 var POLL_INTERVAL_MS = 40;
 function delay(ms) {
-  return new Promise((resolve3) => setTimeout(resolve3, ms));
+  return new Promise((resolve4) => setTimeout(resolve4, ms));
 }
 function createRenderPort(transport, nodeRouteName, expoRouter, deadlinesMs, measurePoll, metrics) {
   const firstDeadline = deadlinesMs[0] ?? 8e3;
@@ -8741,8 +8787,8 @@ var CdpLink = class {
       maxPayload: SOCKET_MAX_PAYLOAD_BYTES,
       followRedirects: false
     });
-    const opened = new Promise((resolve3, reject) => {
-      this.socket.once("open", () => resolve3());
+    const opened = new Promise((resolve4, reject) => {
+      this.socket.once("open", () => resolve4());
       this.socket.once("error", () => reject(new CdpConnectionLostError("socket")));
       this.socket.once("close", () => reject(new CdpConnectionLostError("socket")));
     });
@@ -8869,12 +8915,12 @@ var CdpLink = class {
     if (this.dead || this.socket.readyState !== OPEN) {
       return Promise.reject(new CdpConnectionLostError(this.dead ? "closed" : "socket"));
     }
-    return new Promise((resolve3, reject) => {
+    return new Promise((resolve4, reject) => {
       const timer = setTimeout(
         () => this.finish(id2, void 0, new CdpTimeoutError(operation, timeoutMs)),
         timeoutMs
       );
-      this.pending.set(id2, { resolve: resolve3, reject, timer, operation });
+      this.pending.set(id2, { resolve: resolve4, reject, timer, operation });
       const safe = method2 === "Runtime.evaluate" && typeof params.expression === "string" ? {
         ...params,
         expression: escapeSurrogates(params.expression)
@@ -8923,8 +8969,8 @@ var CdpLink = class {
       try {
         await Promise.race([
           this.ready.then(() => this.invoke({ type: "restore" }, RESTORE_TIMEOUT_MS)),
-          new Promise((resolve3) => {
-            timer = setTimeout(resolve3, RESTORE_TIMEOUT_MS + 500);
+          new Promise((resolve4) => {
+            timer = setTimeout(resolve4, RESTORE_TIMEOUT_MS + 500);
           })
         ]);
       } catch {
@@ -8945,19 +8991,19 @@ var CdpLink = class {
         },
         { method: "Runtime.releaseObjectGroup", params: { objectGroup: this.key } }
       ].map(
-        (call) => new Promise((resolve3) => {
+        (call) => new Promise((resolve4) => {
           try {
-            this.socket.send(JSON.stringify({ id: ++this.sequence, ...call }), () => resolve3());
+            this.socket.send(JSON.stringify({ id: ++this.sequence, ...call }), () => resolve4());
           } catch {
-            resolve3();
+            resolve4();
           }
         })
       );
       let flush;
       await Promise.race([
         Promise.all(writes),
-        new Promise((resolve3) => {
-          flush = setTimeout(resolve3, TEARDOWN_FLUSH_MS);
+        new Promise((resolve4) => {
+          flush = setTimeout(resolve4, TEARDOWN_FLUSH_MS);
         })
       ]);
       clearTimeout(flush);
@@ -8977,7 +9023,7 @@ function createTargetResolver(metroPort, initial, options = {}) {
     return match;
   };
 }
-var defaultSleep = (ms) => new Promise((resolve3) => setTimeout(resolve3, ms));
+var defaultSleep = (ms) => new Promise((resolve4) => setTimeout(resolve4, ms));
 var CdpConnection = class {
   link;
   recovery;
@@ -9698,7 +9744,16 @@ import { readFile as readFile5, readdir as readdir5 } from "node:fs/promises";
 import { join as join9 } from "node:path";
 
 // packages/core/src/app-flow/presentations-bindings.ts
-import { isAbsolute as isAbsolute2, relative as relative2 } from "node:path";
+import { isAbsolute as isAbsolute2 } from "node:path";
+import { fileURLToPath } from "node:url";
+
+// packages/core/src/app-flow/source-path.ts
+import { relative as relative2, sep } from "node:path";
+function relativeSourcePath(root, file) {
+  return relative2(root, file).split(sep).join("/");
+}
+
+// packages/core/src/app-flow/presentations-bindings.ts
 var bindingLimit = 3e3;
 var frameLimit = 16;
 var batchSize = 120;
@@ -9752,12 +9807,20 @@ async function bindPresentationSites(root, bindings, presentations, ports) {
   const matchFrame = (binding, frame) => {
     const line = frame.lineNumber;
     if (!frame.file || line === void 0 || !Number.isInteger(line)) return;
+    let sourceFile = frame.file;
+    if (sourceFile.startsWith("file://")) {
+      try {
+        sourceFile = fileURLToPath(sourceFile);
+      } catch {
+        return;
+      }
+    }
+    const file = relativeSourcePath(root, sourceFile);
+    if (!isProjectFile(file)) return;
     if (binding.kind === "portal" || binding.kind === "ui-effect") {
-      deferred.push({ binding: binding.id, frame });
+      deferred.push({ binding: binding.id, frame: { ...frame, file: sourceFile } });
       return;
     }
-    const file = relative2(root, frame.file.replace(/^file:\/\//, ""));
-    if (!isProjectFile(file)) return;
     stats.projectFrames += 1;
     const column = frame.column;
     if (binding.kind === "entry") {
@@ -9826,7 +9889,7 @@ async function bindPresentationSites(root, bindings, presentations, ports) {
     const frame = resolved[reference.index];
     if (frame) matchFrame(reference.owner, frame);
   }
-  await resolveDeferred(root, bindings, deferred, matches, ports);
+  await resolveDeferred(bindings, deferred, matches, ports);
   stats.placed = new Set(matches.map((match) => match.binding)).size;
   stats.entryPlaced = new Set(matches.filter((match) => entryIds.has(match.binding)).map((match) => match.binding)).size;
   ports.report?.(stats);
@@ -9873,15 +9936,14 @@ async function symbolicate(base, frames, resolved, ports) {
   }
   return failed;
 }
-async function resolveDeferred(root, bindings, deferred, matches, ports) {
+async function resolveDeferred(bindings, deferred, matches, ports) {
   if (!deferred.length || !ports.readSource) return;
   const sources = /* @__PURE__ */ new Map();
   const matched = /* @__PURE__ */ new Set();
   for (const { binding, frame } of deferred) {
     if (matched.has(binding)) continue;
     try {
-      const file = frame.file.replace(/^file:\/\//, "");
-      if (!isProjectFile(relative2(root, file))) continue;
+      const file = frame.file;
       if (!sources.has(file)) sources.set(file, await ports.readSource(file));
       const source = sources.get(file);
       if (source === void 0 || source.length > sourceLimit) continue;
@@ -10033,9 +10095,6 @@ function addSourcePreviewPlans(catalog, navigators = []) {
   return catalog;
 }
 
-// packages/core/src/app-flow/presentations-source.ts
-import { relative as relative3 } from "node:path";
-
 // packages/core/src/app-flow/source-units.ts
 import { createHash as createHash4 } from "node:crypto";
 import { dirname as dirname4, join as join8, resolve as resolve2 } from "node:path";
@@ -10084,7 +10143,10 @@ function createSourceUnit(file, text2) {
 }
 function createSourceUnits(sources) {
   const units = /* @__PURE__ */ new Map();
-  for (const source of sources) units.set(source.file, createSourceUnit(source.file, source.text));
+  for (const source of sources) {
+    const file = resolve2(source.file);
+    units.set(file, createSourceUnit(file, source.text));
+  }
   return units;
 }
 function createSymbolResolver(units, options = { root: "" }) {
@@ -10227,7 +10289,7 @@ function scanPresentations(units, root, symbol, options = {}) {
       value: value.name.text,
       setter: setter.name.text,
       setterNode: setter.name,
-      site: { id: key(`${relative3(root, unit.file)}:${call.pos}`), file: relative3(root, unit.file), line: start.line + 1, column: start.character, endLine: end.line + 1, owner: functionName(fn), paths: [], hook: "useState", valueName: value.name.text }
+      site: { id: key(`${relativeSourcePath(root, unit.file)}:${call.pos}`), file: relativeSourcePath(root, unit.file), line: start.line + 1, column: start.character, endLine: end.line + 1, owner: functionName(fn), paths: [], hook: "useState", valueName: value.name.text }
     });
   });
   function known(unit, node, env, depth = 0) {
@@ -10601,7 +10663,7 @@ function scanPresentations(units, root, symbol, options = {}) {
         const value = a.initializer && typescript_runtime_default.isStringLiteralLike(a.initializer) ? a.initializer.text : constant(unit, expression(a));
         if (["string", "number", "boolean"].includes(typeof value)) trigger[a.name.getText()] = value;
       }
-      const base = { source: { line: start.line + 1, column: start.character, endLine: end.line + 1, endColumn: end.character }, trigger: Object.keys(trigger).length ? trigger : void 0, handler: exp && typescript_runtime_default.isIdentifier(exp) ? exp.text : void 0, id: key(`${relative3(root, unit.file)}:${attribute.pos}`), file: relative3(root, unit.file), line: loc.line + 1, owner: own, component, prop };
+      const base = { source: { line: start.line + 1, column: start.character, endLine: end.line + 1, endColumn: end.character }, trigger: Object.keys(trigger).length ? trigger : void 0, handler: exp && typescript_runtime_default.isIdentifier(exp) ? exp.text : void 0, id: key(`${relativeSourcePath(root, unit.file)}:${attribute.pos}`), file: relativeSourcePath(root, unit.file), line: loc.line + 1, owner: own, component, prop };
       const props = /* @__PURE__ */ new Map();
       const parameter = fn.parameters[0]?.name;
       if (parameter && typescript_runtime_default.isIdentifier(parameter)) props.set(parameter.text, []);
@@ -10740,7 +10802,7 @@ function scanPresentations(units, root, symbol, options = {}) {
 }
 
 // packages/core/src/app-flow/views-source.ts
-import { relative as relative4 } from "node:path";
+import { resolve as resolve3 } from "node:path";
 var origin = (v) => {
   const candidate = v;
   return !!candidate && typeof candidate.site?.id === "string" && Array.isArray(candidate.path);
@@ -10865,7 +10927,7 @@ function scanSourceViews(units, root, symbol) {
       const call = unwrap(n.initializer), fn = owner2(n);
       if (!fn || !typescript_runtime_default.isCallExpression(call) || !/^react#use(?:State|Reducer)$/.test(symbol(unit, call.expression.getText()))) continue;
       const value = n.name.elements[0], loc = location(unit, call);
-      const site = { id: sourceHash(`${relative4(root, unit.file)}:${call.pos}`), file: relative4(root, unit.file), ...loc, owner: name(fn), paths: [], hook: symbol(unit, call.expression.getText()).endsWith("useReducer") ? "useReducer" : "useState", valueName: value && typescript_runtime_default.isBindingElement(value) && typescript_runtime_default.isIdentifier(value.name) ? value.name.text : void 0 };
+      const site = { id: sourceHash(`${relativeSourcePath(root, unit.file)}:${call.pos}`), file: relativeSourcePath(root, unit.file), ...loc, owner: name(fn), paths: [], hook: symbol(unit, call.expression.getText()).endsWith("useReducer") ? "useReducer" : "useState", valueName: value && typescript_runtime_default.isBindingElement(value) && typescript_runtime_default.isIdentifier(value.name) ? value.name.text : void 0 };
       states.push(site);
       const v = { 0: { site, path: [] } };
       stateCalls.set(call, v);
@@ -10876,7 +10938,7 @@ function scanSourceViews(units, root, symbol) {
       const fn = owner2(n);
       if (!fn) continue;
       const loc = location(unit, n);
-      const site = { id: sourceHash(`${relative4(root, unit.file)}:${n.pos}`), file: relative4(root, unit.file), ...loc, owner: name(fn), paths: [], hook: symbol(unit, n.expression.getText()).endsWith("useReducer") ? "useReducer" : "useState" };
+      const site = { id: sourceHash(`${relativeSourcePath(root, unit.file)}:${n.pos}`), file: relativeSourcePath(root, unit.file), ...loc, owner: name(fn), paths: [], hook: symbol(unit, n.expression.getText()).endsWith("useReducer") ? "useReducer" : "useState" };
       states.push(site);
       stateCalls.set(n, { 0: { site, path: [] } });
       calls.set(site.id, { unit, call: n });
@@ -10919,7 +10981,7 @@ function scanSourceViews(units, root, symbol) {
     if (sources.length) for (const v of sources) {
       const owners = v.site.owners ??= [];
       if (!owners.includes(own)) owners.push(own);
-      const ownerSites = v.site.ownerSites ??= [], file = relative4(root, fnUnits.get(fn)?.file ?? fn.getSourceFile().fileName);
+      const ownerSites = v.site.ownerSites ??= [], file = relativeSourcePath(root, fnUnits.get(fn)?.file ?? fn.getSourceFile().fileName);
       if (!ownerSites.some((site) => site.file === file && site.owner === own)) ownerSites.push({ file, owner: own });
     }
     else for (const v of Object.values(value)) consumers(v, fn, depth + 1);
@@ -11058,7 +11120,7 @@ function scanSourceViews(units, root, symbol) {
     if (!exported && !isDefault) return;
     const optional = (type, seen = /* @__PURE__ */ new Set()) => {
       if (!type) return false;
-      const context = units.get(type.getSourceFile().fileName);
+      const context = units.get(resolve3(type.getSourceFile().fileName));
       if (!context) return false;
       if (typescript_runtime_default.isTypeReferenceNode(type)) {
         const key2 = symbol(context, type.typeName.getText());
@@ -11200,7 +11262,7 @@ function scanSourceViews(units, root, symbol) {
               const condition = typescript_runtime_default.isConditionalExpression(parent) ? parent.condition : typescript_runtime_default.isIfStatement(parent) ? parent.expression : typescript_runtime_default.isBinaryExpression(parent) && parent.right === p && parent.operatorToken.kind === typescript_runtime_default.SyntaxKind.AmpersandAmpersandToken ? parent.left : void 0;
               if (condition && truth(unit, condition, ref, state.value) === void 0) guards++;
             }
-            const item = { file: relative4(root, resolved.slice(0, split)), component: resolved.slice(split + 1), entry: { file: relative4(root, unit.file), source: location(unit, n) }, ...ref ? { guards } : {} }, previous = result.get(resolved);
+            const item = { file: relativeSourcePath(root, resolved.slice(0, split)), component: resolved.slice(split + 1), entry: { file: relativeSourcePath(root, unit.file), source: location(unit, n) }, ...ref ? { guards } : {} }, previous = result.get(resolved);
             if (!previous || (item.guards ?? 0) < (previous.guards ?? 0)) result.set(resolved, item);
           }
         }
@@ -11218,7 +11280,7 @@ function scanSourceViews(units, root, symbol) {
       if (typescript_runtime_default.isJsxElement(n) || typescript_runtime_default.isJsxOpeningElement(n) || typescript_runtime_default.isJsxSelfClosingElement(n)) jsx = true;
     });
     if (!jsx) return;
-    const components2 = parts(unit, body, extra.state), file = relative4(root, unit.file), own = name(fn);
+    const components2 = parts(unit, body, extra.state), file = relativeSourcePath(root, unit.file), own = name(fn);
     const identity = extra.state ? ["state", extra.state] : [file, own, loc, kind, extra.control, extra.branch];
     const id2 = hash(identity), existing = views.get(id2);
     const renderBody = typescript_runtime_default.isCaseClause(body) || typescript_runtime_default.isReturnStatement(body) || typescript_runtime_default.isBlock(body) && body.statements.some(typescript_runtime_default.isReturnStatement) || (() => {
@@ -11360,13 +11422,13 @@ function scanSourceViews(units, root, symbol) {
     if (callee) target2 = `${fnUnits.get(callee).file}#${name(callee)}`;
     if (!fn) continue;
     const list2 = entries.get(target2) ?? [], source = location(unit, n);
-    list2.push({ file: relative4(root, unit.file), line: source.line, owner: name(fn), source });
+    list2.push({ file: relativeSourcePath(root, unit.file), line: source.line, owner: name(fn), source });
     entries.set(target2, list2);
   }
-  for (const view of views.values()) if (view.kind === "component") view.entries = entries.get(`${root}/${view.file}#${view.owner}`) ?? [];
+  for (const view of views.values()) if (view.kind === "component") view.entries = entries.get(`${resolve3(root, view.file)}#${view.owner}`) ?? [];
   for (const site of states) {
     const sources = [{ file: site.file, owner: site.owner }, ...site.ownerSites ?? []];
-    const callers = sources.flatMap((source) => (entries.get(`${root}/${source.file}#${source.owner}`) ?? []).flatMap((entry) => entry.source ? [{ component: source.owner, file: entry.file, owner: entry.owner, source: entry.source }] : []));
+    const callers = sources.flatMap((source) => (entries.get(`${resolve3(root, source.file)}#${source.owner}`) ?? []).flatMap((entry) => entry.source ? [{ component: source.owner, file: entry.file, owner: entry.owner, source: entry.source }] : []));
     if (callers.length) site.ownerEntries = [...new Map(callers.map((entry) => [JSON.stringify(entry), entry])).values()];
   }
   return { states: states.filter((site) => site.paths.length), views: [...views.values()] };
@@ -11906,8 +11968,8 @@ async function hedge(options) {
   }
   const tagged = (promise, index) => promise.then((result) => ({ index, result }));
   let timer;
-  const elapsed = new Promise((resolve3) => {
-    timer = setTimeout(() => resolve3("elapsed"), options.afterMs);
+  const elapsed = new Promise((resolve4) => {
+    timer = setTimeout(() => resolve4("elapsed"), options.afterMs);
   });
   let firstOrTimer;
   try {
@@ -13540,7 +13602,7 @@ function ingestLinkCandidates(links, seenOn, nodes, store) {
 import { spawn as spawn2 } from "node:child_process";
 async function runShellCommand(command, cwd, timeoutMs, signal) {
   if (signal?.aborted) throw new Error("Cancelled");
-  return await new Promise((resolve3, reject) => {
+  return await new Promise((resolve4, reject) => {
     const child = spawn2("/bin/zsh", ["-lc", resolveAgentDeviceCommand(command)], { cwd });
     let output = "";
     let settled = false;
@@ -13551,7 +13613,7 @@ async function runShellCommand(command, cwd, timeoutMs, signal) {
       signal?.removeEventListener("abort", onAbort);
       if (error) child.kill("SIGKILL");
       if (error) reject(error);
-      else resolve3(output);
+      else resolve4(output);
     };
     const timer = setTimeout(
       () => finish(new Error(`Timed out after ${timeoutMs}ms: ${command}`)),
@@ -16164,14 +16226,14 @@ var AppFlowBuilder = class extends EventEmitter {
   }
   requestUserAction = (prompt) => {
     this.pendingPrompt?.settle("stop");
-    return new Promise((resolve3) => {
+    return new Promise((resolve4) => {
       const signal = this.controller.signal;
       const settle = (resolution) => {
         if (this.pendingPrompt?.settle !== settle) return;
         this.pendingPrompt = null;
         clearTimeout(timer);
         signal.removeEventListener("abort", onAbort);
-        resolve3(resolution);
+        resolve4(resolution);
       };
       const onAbort = () => settle("stop");
       const timer = setTimeout(() => {
@@ -16512,4 +16574,4 @@ export {
   createAppFlowService
 };
 
-//# debugId=599d957a-8c2d-5805-9f12-04a64603f2b3
+//# debugId=acb074e5-a13b-5c8d-99d8-19a8c2c92a59

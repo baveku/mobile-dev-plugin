@@ -1,6 +1,6 @@
 ---
 name: mobile-dev
-description: Use when building, running, changing, or debugging local iOS, Android, Expo, React Native, or SwiftUI apps in Antigravity. Renders Mobile Dev's device panel in the Antigravity Auxiliary Pane beside the chat, controls devices with Mobile Dev's device_* tools, reads native and Metro logs, and records CPU, memory, and FPS into interactive charts in chat. Skip web-only apps and tasks limited to planning, docs, or code review.
+description: Use when building, running, changing, or debugging local iOS, Android, Expo, React Native, or SwiftUI apps in Antigravity. Renders Mobile Dev's device panel in the Antigravity Auxiliary Pane beside the chat, controls devices with Mobile Dev's device_* tools, reads native and Metro logs, and records CPU, memory, and FPS into interactive charts in chat. Also use when the user wants to view or control an Android device. Skip web-only apps and tasks limited to planning, docs, or code review.
 ---
 
 # Mobile Dev
@@ -21,9 +21,19 @@ The Auxiliary Pane does not push its selection into the chat on its own. Call `m
 When the user asks to open a simulator, emulator, or device, run the app, or see a UI change:
 
 1. Call `mobile_open_simulator` with the platform (`ios` or `android`), `mobile_open_workspace` when both platforms or a workspace tool (`logs`, `performance`, `storage`, `app-intel`, `tracesift`) is wanted, or `mobile_open_app_intel` to visualize the React Native screen/dependency graph. Pass `deviceId` when one is already known.
-2. In Antigravity, the Mobile Dev Auxiliary Pane updates automatically to the requested view and target. Include the clickable pill `[Mobile Dev](sidecar://mobile-dev/device-panel/)` in your reply so the user can toggle the Auxiliary Pane with one click. Never open an external Chrome browser or launch a browser subagent for the loopback URL.
+2. Use the Mobile Dev panel to show or control an Android device. For a newly connected Android device, refresh `mobile_list_android_devices` and pass its ADB serial from `udid` to `mobile_open_simulator` as `deviceId` with `platform: "android"`. Open a separate `scrcpy` window only if the user explicitly asks for one.
+3. In Antigravity, the Mobile Dev Auxiliary Pane updates automatically to the requested view and target. Include the clickable pill `[Mobile Dev](sidecar://mobile-dev/device-panel/)` in your reply so the user can toggle the Auxiliary Pane with one click. Never open an external Chrome browser or launch a browser subagent for the loopback URL.
 
 Never open the simulator backend's `baseUrl` (`127.0.0.1:46672`) or the `ui://mobile-dev/app.html` resource URI in a browser; neither is a standalone page.
+
+## Screen annotations
+
+A message that starts with "Apply these annotations." or "Apply these notes." carries notes placed on the device screen in the panel. Each note names its target and, when available, the element's Source.
+
+1. Edit the code directly. Open the Source first; when missing, search for the Target text, testID or identifier, then React owner names. Skip `device_open`, snapshots, and `mobile_inspect_ui` before editing unless a note has neither a source nor searchable text or identifier.
+2. Make every note's edit before checking anything. Apply grouped notes targeting one source with the same edit once at the source.
+3. Rely on Fast Refresh for JavaScript and style changes in a running React Native or Expo app; do not rebuild, reinstall, relaunch, or start another dev server. Native changes still require a build.
+4. Check once after all edits: open the panel's device with `device_open` without relaunching the app, take one `device_screenshot`, and close the session without `shutdown`. Read Metro or app logs before editing again if the screenshot misses the change.
 
 ## App Intelligence
 
@@ -42,3 +52,4 @@ After a code change the user can see on screen, check it on the device and leave
 - **Logs:** start `mobile_logs_session` with sources (`ios_Sim`, `android`, `ios_physical`, or `metro`), read with `mobile_read_logs`, and close with `mobile_logs_close` when done.
 - **App storage:** inspect UserDefaults, SharedPreferences, AsyncStorage, MMKV, Keychain, and SQLite with `mobile_app_storage`, `mobile_app_storage_table`, and `mobile_app_storage_file`.
 - **Performance:** record CPU, memory, and FPS with `mobile_record_performance`, finish with `mobile_finish_performance_recording`, and render or compare in chat with `mobile_render_performance_recording` and `mobile_compare_performance_recordings`. The chart renders in the chat; the device panel stays in the Auxiliary Pane.
+- **TraceSift profiles:** before asking the user to capture or pick a profile when no local path exists, call `mobile_tracesift_status` and stop to report any returned setup guidance. When a local CPU or React DevTools profile path is provided, call `mobile_analyze_profile` directly and wait for the user to choose a task before calling `mobile_get_tracesift_handoff`.

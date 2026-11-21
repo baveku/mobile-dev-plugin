@@ -1,12 +1,12 @@
 
-!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="74d12f16-e7dd-5ffc-a592-c8104a650a7e")}catch(e){}}();
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="bf6631ab-b9e9-5519-a9dc-43e01f42c3ef")}catch(e){}}();
 import { createRequire as mobileDevBundleRequire } from 'node:module'; import { fileURLToPath as mobileDevFileURLToPath } from 'node:url'; import { dirname as mobileDevPathDirname } from 'node:path'; const require = mobileDevBundleRequire(import.meta.url); const __filename = mobileDevFileURLToPath(import.meta.url); const __dirname = mobileDevPathDirname(__filename);
 import {
   appIntelQueryInput,
   fileRef,
   generateAppIntelInput,
   screenRef
-} from "./chunk-EA4RZL4Y.mjs";
+} from "./chunk-BJOJB3L4.mjs";
 import "./chunk-E4FKOFXD.mjs";
 import {
   DEVICE_APPS_DIAGNOSTIC_META,
@@ -59,7 +59,7 @@ import {
   touchInputSchema,
   udidSchema,
   withDeviceAppsDiagnostic
-} from "./chunk-TM4VXTGB.mjs";
+} from "./chunk-CFHYWBPT.mjs";
 import "./chunk-AV7EIOVC.mjs";
 import {
   ExpectedOperationError,
@@ -88,7 +88,7 @@ import {
   resolveTelemetryEnvironment,
   setDiscoveryCommandDiagnostic,
   telemetryHost
-} from "./chunk-47HLPGPO.mjs";
+} from "./chunk-3JDSZTC2.mjs";
 import {
   $ZodObject,
   $ZodType,
@@ -122,7 +122,7 @@ import {
   toJSONSchema,
   union,
   unknown
-} from "./chunk-ZZCVTTEH.mjs";
+} from "./chunk-YQTRFH5T.mjs";
 import {
   __commonJS,
   __export,
@@ -507,11 +507,11 @@ var require_codegen = __commonJS({
         const rhs = this.rhs === void 0 ? "" : ` = ${this.rhs}`;
         return `${varKind} ${this.name}${rhs};` + _n;
       }
-      optimizeNames(names, constants8) {
+      optimizeNames(names, constants9) {
         if (!names[this.name.str])
           return;
         if (this.rhs)
-          this.rhs = optimizeExpr(this.rhs, names, constants8);
+          this.rhs = optimizeExpr(this.rhs, names, constants9);
         return this;
       }
       get names() {
@@ -528,10 +528,10 @@ var require_codegen = __commonJS({
       render({ _n }) {
         return `${this.lhs} = ${this.rhs};` + _n;
       }
-      optimizeNames(names, constants8) {
+      optimizeNames(names, constants9) {
         if (this.lhs instanceof code_1.Name && !names[this.lhs.str] && !this.sideEffects)
           return;
-        this.rhs = optimizeExpr(this.rhs, names, constants8);
+        this.rhs = optimizeExpr(this.rhs, names, constants9);
         return this;
       }
       get names() {
@@ -592,8 +592,8 @@ var require_codegen = __commonJS({
       optimizeNodes() {
         return `${this.code}` ? this : void 0;
       }
-      optimizeNames(names, constants8) {
-        this.code = optimizeExpr(this.code, names, constants8);
+      optimizeNames(names, constants9) {
+        this.code = optimizeExpr(this.code, names, constants9);
         return this;
       }
       get names() {
@@ -622,12 +622,12 @@ var require_codegen = __commonJS({
         }
         return nodes.length > 0 ? this : void 0;
       }
-      optimizeNames(names, constants8) {
+      optimizeNames(names, constants9) {
         const { nodes } = this;
         let i = nodes.length;
         while (i--) {
           const n = nodes[i];
-          if (n.optimizeNames(names, constants8))
+          if (n.optimizeNames(names, constants9))
             continue;
           subtractNames(names, n.names);
           nodes.splice(i, 1);
@@ -680,12 +680,12 @@ var require_codegen = __commonJS({
           return void 0;
         return this;
       }
-      optimizeNames(names, constants8) {
+      optimizeNames(names, constants9) {
         var _a3;
-        this.else = (_a3 = this.else) === null || _a3 === void 0 ? void 0 : _a3.optimizeNames(names, constants8);
-        if (!(super.optimizeNames(names, constants8) || this.else))
+        this.else = (_a3 = this.else) === null || _a3 === void 0 ? void 0 : _a3.optimizeNames(names, constants9);
+        if (!(super.optimizeNames(names, constants9) || this.else))
           return;
-        this.condition = optimizeExpr(this.condition, names, constants8);
+        this.condition = optimizeExpr(this.condition, names, constants9);
         return this;
       }
       get names() {
@@ -708,10 +708,10 @@ var require_codegen = __commonJS({
       render(opts) {
         return `for(${this.iteration})` + super.render(opts);
       }
-      optimizeNames(names, constants8) {
-        if (!super.optimizeNames(names, constants8))
+      optimizeNames(names, constants9) {
+        if (!super.optimizeNames(names, constants9))
           return;
-        this.iteration = optimizeExpr(this.iteration, names, constants8);
+        this.iteration = optimizeExpr(this.iteration, names, constants9);
         return this;
       }
       get names() {
@@ -747,10 +747,10 @@ var require_codegen = __commonJS({
       render(opts) {
         return `for(${this.varKind} ${this.name} ${this.loop} ${this.iterable})` + super.render(opts);
       }
-      optimizeNames(names, constants8) {
-        if (!super.optimizeNames(names, constants8))
+      optimizeNames(names, constants9) {
+        if (!super.optimizeNames(names, constants9))
           return;
-        this.iterable = optimizeExpr(this.iterable, names, constants8);
+        this.iterable = optimizeExpr(this.iterable, names, constants9);
         return this;
       }
       get names() {
@@ -792,11 +792,11 @@ var require_codegen = __commonJS({
         (_b = this.finally) === null || _b === void 0 ? void 0 : _b.optimizeNodes();
         return this;
       }
-      optimizeNames(names, constants8) {
+      optimizeNames(names, constants9) {
         var _a3, _b;
-        super.optimizeNames(names, constants8);
-        (_a3 = this.catch) === null || _a3 === void 0 ? void 0 : _a3.optimizeNames(names, constants8);
-        (_b = this.finally) === null || _b === void 0 ? void 0 : _b.optimizeNames(names, constants8);
+        super.optimizeNames(names, constants9);
+        (_a3 = this.catch) === null || _a3 === void 0 ? void 0 : _a3.optimizeNames(names, constants9);
+        (_b = this.finally) === null || _b === void 0 ? void 0 : _b.optimizeNames(names, constants9);
         return this;
       }
       get names() {
@@ -1097,7 +1097,7 @@ var require_codegen = __commonJS({
     function addExprNames(names, from) {
       return from instanceof code_1._CodeOrName ? addNames(names, from.names) : names;
     }
-    function optimizeExpr(expr, names, constants8) {
+    function optimizeExpr(expr, names, constants9) {
       if (expr instanceof code_1.Name)
         return replaceName(expr);
       if (!canOptimize(expr))
@@ -1112,14 +1112,14 @@ var require_codegen = __commonJS({
         return items;
       }, []));
       function replaceName(n) {
-        const c = constants8[n.str];
+        const c = constants9[n.str];
         if (c === void 0 || names[n.str] !== 1)
           return n;
         delete names[n.str];
         return c;
       }
       function canOptimize(e) {
-        return e instanceof code_1._Code && e._items.some((c) => c instanceof code_1.Name && names[c.str] === 1 && constants8[c.str] !== void 0);
+        return e instanceof code_1._Code && e._items.some((c) => c instanceof code_1.Name && names[c.str] === 1 && constants9[c.str] !== void 0);
       }
     }
     function subtractNames(names, from) {
@@ -3081,7 +3081,7 @@ var require_compile = __commonJS({
       const schOrFunc = root.refs[ref];
       if (schOrFunc)
         return schOrFunc;
-      let _sch = resolve5.call(this, root, ref);
+      let _sch = resolve6.call(this, root, ref);
       if (_sch === void 0) {
         const schema2 = (_a3 = root.localRefs) === null || _a3 === void 0 ? void 0 : _a3[ref];
         const { schemaId } = this.opts;
@@ -3108,7 +3108,7 @@ var require_compile = __commonJS({
     function sameSchemaEnv(s1, s2) {
       return s1.schema === s2.schema && s1.root === s2.root && s1.baseId === s2.baseId;
     }
-    function resolve5(root, ref) {
+    function resolve6(root, ref) {
       let sch;
       while (typeof (sch = this.refs[ref]) == "string")
         ref = sch;
@@ -3938,7 +3938,7 @@ var require_fast_uri = __commonJS({
       }
       return uri2;
     }
-    function resolve5(baseURI, relativeURI, options) {
+    function resolve6(baseURI, relativeURI, options) {
       const schemelessOptions = options ? Object.assign({ scheme: "null" }, options) : { scheme: "null" };
       const {
         parsed: baseParsed,
@@ -4307,7 +4307,7 @@ var require_fast_uri = __commonJS({
     var fastUri = {
       SCHEMES,
       normalize: normalize4,
-      resolve: resolve5,
+      resolve: resolve6,
       resolveComponent,
       equal,
       serialize,
@@ -7390,12 +7390,12 @@ var require_isexe = __commonJS({
         if (typeof Promise !== "function") {
           throw new TypeError("callback not provided");
         }
-        return new Promise(function(resolve5, reject) {
+        return new Promise(function(resolve6, reject) {
           isexe(path, options || {}, function(er, is) {
             if (er) {
               reject(er);
             } else {
-              resolve5(is);
+              resolve6(is);
             }
           });
         });
@@ -7461,27 +7461,27 @@ var require_which = __commonJS({
         opt = {};
       const { pathEnv, pathExt, pathExtExe } = getPathInfo(cmd, opt);
       const found = [];
-      const step = (i) => new Promise((resolve5, reject) => {
+      const step = (i) => new Promise((resolve6, reject) => {
         if (i === pathEnv.length)
-          return opt.all && found.length ? resolve5(found) : reject(getNotFoundError(cmd));
+          return opt.all && found.length ? resolve6(found) : reject(getNotFoundError(cmd));
         const ppRaw = pathEnv[i];
         const pathPart = /^".*"$/.test(ppRaw) ? ppRaw.slice(1, -1) : ppRaw;
         const pCmd = path.join(pathPart, cmd);
         const p2 = !pathPart && /^\.[\\\/]/.test(cmd) ? cmd.slice(0, 2) + pCmd : pCmd;
-        resolve5(subStep(p2, i, 0));
+        resolve6(subStep(p2, i, 0));
       });
-      const subStep = (p2, i, ii) => new Promise((resolve5, reject) => {
+      const subStep = (p2, i, ii) => new Promise((resolve6, reject) => {
         if (ii === pathExt.length)
-          return resolve5(step(i + 1));
+          return resolve6(step(i + 1));
         const ext = pathExt[ii];
         isexe(p2 + ext, { pathExt: pathExtExe }, (er, is) => {
           if (!er && is) {
             if (opt.all)
               found.push(p2 + ext);
             else
-              return resolve5(p2 + ext);
+              return resolve6(p2 + ext);
           }
-          return resolve5(subStep(p2, i, ii + 1));
+          return resolve6(subStep(p2, i, ii + 1));
         });
       });
       return cb ? step(0).then((res) => cb(null, res), cb) : step(0);
@@ -7898,9 +7898,9 @@ var require_content_type = __commonJS({
 });
 
 // apps/antigravity/server/server.ts
-import { mkdir as mkdir11, readFile as readFile20, rename as rename10, writeFile as writeFile17 } from "node:fs/promises";
+import { mkdir as mkdir12, readFile as readFile20, rename as rename10, writeFile as writeFile17 } from "node:fs/promises";
 import { homedir as homedir11 } from "node:os";
-import { dirname as dirname9, join as join31 } from "node:path";
+import { dirname as dirname9, join as join29 } from "node:path";
 
 // packages/core/src/stdio-server.ts
 import { readFile as readFile14 } from "node:fs/promises";
@@ -9535,12 +9535,12 @@ var StdioServerTransport = class {
     this.onclose?.();
   }
   send(message3) {
-    return new Promise((resolve5) => {
+    return new Promise((resolve6) => {
       const json3 = serializeMessage(message3);
       if (this._stdout.write(json3)) {
-        resolve5();
+        resolve6();
       } else {
-        this._stdout.once("drain", resolve5);
+        this._stdout.once("drain", resolve6);
       }
     });
   }
@@ -15538,7 +15538,7 @@ var Protocol = class {
           return;
         }
         const pollInterval = task2.pollInterval ?? this._options?.defaultTaskPollInterval ?? 1e3;
-        await new Promise((resolve5) => setTimeout(resolve5, pollInterval));
+        await new Promise((resolve6) => setTimeout(resolve6, pollInterval));
         options?.signal?.throwIfAborted();
       }
     } catch (error51) {
@@ -15555,7 +15555,7 @@ var Protocol = class {
    */
   request(request, resultSchema, options) {
     const { relatedRequestId, resumptionToken, onresumptiontoken, task, relatedTask } = options ?? {};
-    return new Promise((resolve5, reject) => {
+    return new Promise((resolve6, reject) => {
       const earlyReject = (error51) => {
         reject(error51);
       };
@@ -15633,7 +15633,7 @@ var Protocol = class {
           if (!parseResult.success) {
             reject(parseResult.error);
           } else {
-            resolve5(parseResult.data);
+            resolve6(parseResult.data);
           }
         } catch (error51) {
           reject(error51);
@@ -15894,12 +15894,12 @@ var Protocol = class {
       }
     } catch {
     }
-    return new Promise((resolve5, reject) => {
+    return new Promise((resolve6, reject) => {
       if (signal.aborted) {
         reject(new McpError(ErrorCode.InvalidRequest, "Request cancelled"));
         return;
       }
-      const timeoutId = setTimeout(resolve5, interval);
+      const timeoutId = setTimeout(resolve6, interval);
       signal.addEventListener("abort", () => {
         clearTimeout(timeoutId);
         reject(new McpError(ErrorCode.InvalidRequest, "Request cancelled"));
@@ -17208,7 +17208,7 @@ var McpServer = class {
     let task = createTaskResult.task;
     const pollInterval = task.pollInterval ?? 5e3;
     while (task.status !== "completed" && task.status !== "failed" && task.status !== "cancelled") {
-      await new Promise((resolve5) => setTimeout(resolve5, pollInterval));
+      await new Promise((resolve6) => setTimeout(resolve6, pollInterval));
       const updatedTask = await extra.taskStore.getTask(taskId);
       if (!updatedTask) {
         throw new McpError(ErrorCode.InternalError, `Task ${taskId} not found during polling`);
@@ -19592,8 +19592,8 @@ function emoji() {
 }
 var ipv4 = /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$/;
 var ipv6 = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:))$/;
-var mac = (delimiter2) => {
-  const escapedDelim = escapeRegex(delimiter2 ?? ":");
+var mac = (delimiter3) => {
+  const escapedDelim = escapeRegex(delimiter3 ?? ":");
   return new RegExp(`^(?:[0-9A-F]{2}${escapedDelim}){5}[0-9A-F]{2}$|^(?:[0-9a-f]{2}${escapedDelim}){5}[0-9a-f]{2}$`);
 };
 var cidrv4 = /^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\/([0-9]|[1-2][0-9]|3[0-2])$/;
@@ -33978,11 +33978,9 @@ var OpenAIExtensions = class {
 };
 
 // packages/core/src/serve-emu.ts
-import { execFile as execFile4, spawn as spawn3 } from "node:child_process";
+import { execFile as execFile5, spawn as spawn3 } from "node:child_process";
 import { promisify as promisify4 } from "node:util";
-import { access as access4 } from "node:fs/promises";
-import { constants as constants3 } from "node:fs";
-import { dirname, join as join4 } from "node:path";
+import { access as access5 } from "node:fs/promises";
 import { createServer } from "node:net";
 import { setTimeout as delay3 } from "node:timers/promises";
 
@@ -33997,24 +33995,25 @@ function parseAvdName(stdout) {
 async function bootAndroidEmulator(options, launch = spawn) {
   options.signal.throwIfAborted();
   const args = ["-avd", options.name, "-no-window", "-no-boot-anim", "-gpu", "host"];
-  if (options.resourceSaving !== void 0) args.push("-no-snapshot-load", "-no-snapshot-save");
+  if (process.platform === "win32" || options.resourceSaving !== void 0) args.push("-no-snapshot-load", "-no-snapshot-save");
   if (options.resourceSaving) args.push("-lowram", "-memory", "1536");
   const child = launch(options.executable, args, {
     detached: true,
     stdio: "ignore",
-    shell: false
+    shell: false,
+    windowsHide: true
   });
-  const failed = new Promise((resolve5) => {
-    child.once("error", (error51) => resolve5(new Error(`Cannot start Android emulator ${options.name}. ${error51.message}`)));
-    child.once("exit", (code, signal2) => resolve5(new Error(`Android emulator ${options.name} exited before booting. code=${code ?? "none"} signal=${signal2 ?? "none"}. Start this AVD in Android Studio to read its error.`)));
+  const failed = new Promise((resolve6) => {
+    child.once("error", (error51) => resolve6(new Error(`Cannot start Android emulator ${options.name}. ${error51.message}`)));
+    child.once("exit", (code, signal2) => resolve6(new Error(`Android emulator ${options.name} exited before booting. code=${code ?? "none"} signal=${signal2 ?? "none"}. Start this AVD in Android Studio to read its error.`)));
   });
-  const launched = new Promise((resolve5) => child.once("spawn", resolve5));
+  const launched = new Promise((resolve6) => child.once("spawn", resolve6));
   const controller = new AbortController();
   const signal = AbortSignal.any([options.signal, controller.signal]);
   const stoppedError = () => new Error(options.signal.aborted ? "The plugin server closed while the Android emulator was starting." : "The Android emulator did not finish booting within two minutes. Refresh its status.");
   let stop;
-  const stopped = new Promise((resolve5) => {
-    stop = () => resolve5(stoppedError());
+  const stopped = new Promise((resolve6) => {
+    stop = () => resolve6(stoppedError());
     signal.addEventListener("abort", stop, { once: true });
     if (signal.aborted) stop();
   });
@@ -34043,14 +34042,35 @@ import { execFile as execFile2, spawn as spawn2 } from "node:child_process";
 import { promisify as promisify2 } from "node:util";
 import { StringDecoder } from "node:string_decoder";
 import { setTimeout as delay2 } from "node:timers/promises";
-import { access as access2 } from "node:fs/promises";
-import { join as join2 } from "node:path";
 
 // packages/core/src/android-sdk.ts
+import { constants } from "node:fs";
+import { access } from "node:fs/promises";
 import { homedir } from "node:os";
-import { join } from "node:path";
+import { delimiter, dirname, isAbsolute as isAbsolute2, join } from "node:path";
+var missingAdbMessage = "Android SDK Platform-Tools (adb) could not be found. Install Android SDK Platform-Tools in Android Studio\u2019s SDK Manager. For a custom SDK location, set ANDROID_HOME to the SDK folder or add platform-tools to PATH, then restart the host app.";
 function androidSdkRoots() {
-  return [process.env.ANDROID_HOME, process.env.ANDROID_SDK_ROOT, join(homedir(), "Library/Android/sdk")].filter((root) => !!root);
+  const defaultRoot = process.platform === "win32" ? join(process.env.LOCALAPPDATA || join(homedir(), "AppData", "Local"), "Android", "Sdk") : join(homedir(), process.platform === "darwin" ? "Library/Android/sdk" : "Android/Sdk");
+  return [...new Set([process.env.ANDROID_HOME, process.env.ANDROID_SDK_ROOT, defaultRoot].filter((root) => !!root))];
+}
+function sdkExecutable(name) {
+  return process.platform === "win32" ? `${name}.exe` : name;
+}
+async function sdkToolPath(name) {
+  const executable3 = sdkExecutable(name);
+  for (const root of androidSdkRoots()) {
+    const path = join(root, name === "emulator" ? "emulator" : "platform-tools", executable3);
+    try {
+      await access(path, constants.X_OK);
+      return path;
+    } catch {
+    }
+  }
+  return executable3;
+}
+function androidToolPath(tools, path = process.env.PATH ?? "") {
+  const inherited = path ? path.split(delimiter) : [];
+  return [.../* @__PURE__ */ new Set([...tools.filter(isAbsolute2).map((tool) => dirname(tool)), ...inherited])].join(delimiter);
 }
 
 // packages/core/src/ios-log-filter.ts
@@ -34241,8 +34261,8 @@ function parseMetroEvent(event) {
 }
 
 // packages/core/src/physical-ios-logs.ts
-import { access } from "node:fs/promises";
-import { constants } from "node:fs";
+import { access as access2 } from "node:fs/promises";
+import { constants as constants2 } from "node:fs";
 import { fileURLToPath as fileURLToPath2 } from "node:url";
 
 // packages/core/src/ios-devices.ts
@@ -34318,8 +34338,9 @@ function normalizedUdid(udid) {
   const compact = udid.replaceAll("-", "");
   return compact.toLowerCase();
 }
-async function listIosDevices(signal, run5 = execute, listConnections = listNativeIosConnections) {
+async function listIosDevices(signal, run5 = process.platform === "win32" ? void 0 : execute, listConnections = listNativeIosConnections) {
   signal?.throwIfAborted();
+  if (!run5) return [];
   const args = [
     "devicectl",
     "list",
@@ -34416,7 +34437,7 @@ async function physicalIosLogCommand(target2, signal, discover = listIosDevices,
   const device2 = await physicalIosLogDevice(target2.deviceId, discover, signal);
   const command3 = fileURLToPath2(helper);
   try {
-    await access(command3, constants.X_OK);
+    await access2(command3, constants2.X_OK);
   } catch {
     throw new Error("The bundled physical iOS log reader is missing. Rebuild and package the plugin.");
   }
@@ -34429,19 +34450,12 @@ async function physicalIosLogCommand(target2, signal, discover = listIosDevices,
 
 // packages/core/src/native-logs.ts
 var execute2 = promisify2(execFile2);
-async function adbPath() {
-  for (const root of androidSdkRoots()) {
-    const path = join2(root, "platform-tools/adb");
-    try {
-      await access2(path);
-      return path;
-    } catch {
-    }
-  }
-  return "adb";
-}
+var adbPath = () => sdkToolPath("adb");
 async function listAndroidLogDevices() {
-  const { stdout } = await execute2(await adbPath(), ["devices", "-l"], { timeout: 5e3, maxBuffer: 1024 * 1024 });
+  const { stdout } = await execute2(await adbPath(), ["devices", "-l"], { timeout: 5e3, maxBuffer: 1024 * 1024 }).catch((error51) => {
+    if (isMissingFile(error51)) throw new ExpectedOperationError("unsupported_platform", missingAdbMessage);
+    throw error51;
+  });
   return stdout.split("\n").flatMap((line) => {
     const match = line.match(/^(\S+)\s+device(?:\s|$)(.*)/);
     return match ? [{ id: match[1], name: match[2].match(/model:(\S+)/)?.[1].replace(/_/g, " ") ?? match[1] }] : [];
@@ -34449,7 +34463,7 @@ async function listAndroidLogDevices() {
 }
 function runLogProcess(command3, args, parse4, sink, signal, readyLine) {
   if (signal.aborted) return Promise.resolve();
-  return new Promise((resolve5, reject) => {
+  return new Promise((resolve6, reject) => {
     const child = spawn2(command3, args, { stdio: ["ignore", "pipe", "pipe"], shell: false });
     const decoder = new StringDecoder("utf8");
     let pending = "";
@@ -34510,11 +34524,11 @@ function runLogProcess(command3, args, parse4, sink, signal, readyLine) {
     };
     child.once("error", (error51) => {
       cleanup();
-      signal.aborted ? resolve5() : reject(error51);
+      signal.aborted ? resolve6() : reject(error51);
     });
     child.once("close", (code, exitSignal) => {
       cleanup();
-      if (signal.aborted) resolve5();
+      if (signal.aborted) resolve6();
       else reject(new Error(diagnostics.trim() || `Log reader exited: ${code ?? exitSignal}.`));
     });
   });
@@ -34618,6 +34632,13 @@ async function streamAndroidPackage(adb, target2, sink, signal) {
   }
 }
 
+// packages/core/src/app-control/commands.ts
+import { execFile as execFile3 } from "node:child_process";
+import { constants as constants3 } from "node:fs";
+import { access as access3, mkdtemp, readdir, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join as join2 } from "node:path";
+
 // packages/shared/src/device-command-diagnostics.ts
 var commands = /* @__PURE__ */ new WeakMap();
 var labelPattern = /^[a-z][a-z_]{0,47}$/;
@@ -34661,6 +34682,72 @@ function deviceCommandTags(error51) {
   return tags;
 }
 
+// packages/core/src/app-control/commands.ts
+var run = (file3, args, { timeout, input, maxBuffer = 8 * 1024 * 1024 }) => new Promise((resolve6, reject) => {
+  const child = execFile3(file3, args, { encoding: "utf8", timeout, maxBuffer }, (error51, stdout, stderr) => {
+    if (error51) reject(Object.assign(error51, { stdout, stderr }));
+    else resolve6(stdout);
+  });
+  if (input !== void 0) child.stdin?.end(input);
+});
+var readBinary = (file3, args, { timeout }) => new Promise((resolve6, reject) => {
+  execFile3(file3, args, { encoding: "buffer", timeout, maxBuffer: 64 * 1024 * 1024 }, (error51, stdout) => {
+    if (error51) reject(error51);
+    else resolve6(stdout);
+  });
+});
+var aapt2;
+async function findAapt2() {
+  if (aapt2) return aapt2;
+  for (const root of androidSdkRoots()) {
+    const versions = await readdir(join2(root, "build-tools")).catch(() => []);
+    versions.sort((a, b) => b.localeCompare(a, void 0, { numeric: true }));
+    for (const version3 of versions) {
+      const path = join2(root, "build-tools", version3, sdkExecutable("aapt2"));
+      if (await access3(path, constants3.X_OK).then(() => true, () => false)) return aapt2 = path;
+    }
+  }
+  return null;
+}
+var systemCommands = { run, readBinary, adb: adbPath, aapt2: findAapt2 };
+function commandOutput(error51) {
+  if (error51 === null || typeof error51 !== "object") return String(error51);
+  const stderr = "stderr" in error51 && typeof error51.stderr === "string" ? error51.stderr : "";
+  const stdout = "stdout" in error51 && typeof error51.stdout === "string" ? error51.stdout : "";
+  return `${stderr}
+${stdout}`.trim();
+}
+var unavailable = /current state: (?:Shutdown|Shutting Down)|not booted|Invalid device|Unable to find device|No device found|device offline|device unauthorized|device (?:'.*' )?not found|no devices\/emulators found/i;
+var commandLabel = (program, command3) => `${program}_${command3.split(" ", 1)[0].replaceAll("-", "_")}`;
+function commandError(error51, action2, command3) {
+  if (expectedOutcome(error51) !== void 0) return error51;
+  const output = commandOutput(error51);
+  const message3 = output.split("\n").map((line) => line.trim()).filter((line) => line && !/^Underlying error|^An error was encountered/.test(line)).slice(0, 3).join(" ");
+  const text7 = `${action2} failed${message3 ? `: ${message3}` : "."}`;
+  if (unavailable.test(output)) return new ExpectedOperationError("device_unavailable", text7);
+  if (error51 !== null && typeof error51 === "object" && "code" in error51 && error51.code === "ENOENT") {
+    const requirement = command3?.startsWith("adb_") ? "Android SDK Platform-Tools" : "macOS and Xcode";
+    return new ExpectedOperationError("unsupported_platform", `${action2} needs ${requirement}.`);
+  }
+  const failure3 = new Error(text7, { cause: error51 });
+  return command3 === void 0 ? failure3 : annotateDeviceCommand(failure3, command3, classifyCommandFailure(error51));
+}
+async function runAdb(commands2, serial, action2, args, timeout = 15e3) {
+  try {
+    return await commands2.run(await commands2.adb(), ["-s", serial, ...args], { timeout });
+  } catch (error51) {
+    throw commandError(error51, action2, commandLabel("adb", args[0]));
+  }
+}
+async function withTemporaryDirectory(work) {
+  const directory2 = await mkdtemp(join2(tmpdir(), "mobile-dev-app-"));
+  try {
+    return await work(directory2);
+  } finally {
+    await rm(directory2, { recursive: true, force: true });
+  }
+}
+
 // packages/core/src/simulator-unavailable.ts
 var SimulatorUnavailableError = class extends ExpectedOperationError {
   constructor(message3) {
@@ -34674,8 +34761,8 @@ function retryableFailure(error51) {
 // packages/core/src/panel-runtime.ts
 import { createHash as createHash2, randomBytes } from "node:crypto";
 import { createReadStream, createWriteStream } from "node:fs";
-import { access as access3, constants as constants2, lstat, mkdir, readdir, readFile as readFile2, rename, rm, stat as stat2, writeFile } from "node:fs/promises";
-import { execFile as execFile3 } from "node:child_process";
+import { access as access4, constants as constants4, lstat, mkdir, readdir as readdir2, readFile as readFile2, rename, rm as rm2, stat as stat2, writeFile } from "node:fs/promises";
+import { execFile as execFile4 } from "node:child_process";
 import { homedir as homedir2 } from "node:os";
 import { join as join3 } from "node:path";
 import { Readable, Transform } from "node:stream";
@@ -34711,10 +34798,12 @@ var RuntimeFailure = class extends Error {
 var DOWNLOAD_TIMEOUT_MS = 10 * 6e4;
 var STALE_MS = 60 * 6e4;
 var installed = /^\d+\.\d+\.\d+(?:-[\da-zA-Z.-]+)?-[0-9a-f]{12}$/;
-var run = promisify3(execFile3);
+var run2 = promisify3(execFile4);
 function panelRuntimeDirectory(env = process.env) {
   const data = env.CLAUDE_PLUGIN_DATA || env.PLUGIN_DATA;
-  return data ? join3(data, "panel-runtime") : join3(homedir2(), "Library", "Caches", "mobile-dev", "panel-runtime");
+  if (data) return join3(data, "panel-runtime");
+  const cache = process.platform === "win32" ? env.LOCALAPPDATA || join3(homedir2(), "AppData", "Local") : join3(homedir2(), "Library", "Caches");
+  return join3(cache, "mobile-dev", "panel-runtime");
 }
 function downloadedPanelRuntime(release, directory2 = panelRuntimeDirectory()) {
   const target2 = join3(directory2, `${release.version}-${release.sha256.slice(0, 12)}`);
@@ -34761,18 +34850,18 @@ async function install(release, directory2, target2) {
       if (await complete(target2, release) === false) throw error51;
     }
   } finally {
-    await rm(archive, { force: true });
-    await rm(staging, { recursive: true, force: true });
+    await rm2(archive, { force: true });
+    await rm2(staging, { recursive: true, force: true });
   }
 }
 async function complete(target2, release) {
   try {
     const marker2 = JSON.parse(await readFile2(join3(target2, "panel-runtime.json"), "utf8"));
     if (typeof marker2 !== "object" || marker2 === null || ("sha256" in marker2 && marker2.sha256 === release.sha256) === false) return false;
-    await access3(join3(target2, "baguette/Baguette"), constants2.X_OK);
+    await access4(join3(target2, "baguette/Baguette"), constants4.X_OK);
     for (const name of ["simslim", "avdslim"]) {
       const executable3 = join3(target2, "resource-saving", name);
-      await access3(executable3, constants2.X_OK);
+      await access4(executable3, constants4.X_OK);
     }
     return true;
   } catch {
@@ -34811,37 +34900,38 @@ async function download(url2, destination, release) {
   if (size !== release.bytes || hash2.digest("hex") !== release.sha256) throw new RuntimeFailure("checksum", "the archive does not match the release it pins.");
 }
 async function extract(archive, staging) {
-  const { stdout } = await run("/usr/bin/tar", ["-tzf", archive], { maxBuffer: 16 * 1024 * 1024 }).catch((error51) => {
+  const tar = process.platform === "win32" ? "tar.exe" : "/usr/bin/tar";
+  const { stdout } = await run2(tar, ["-tzf", archive], { maxBuffer: 16 * 1024 * 1024 }).catch((error51) => {
     throw new RuntimeFailure("archive", `the archive could not be read (${errorText(error51)}).`);
   });
-  for (const member of stdout.split("\n").filter(Boolean)) {
+  for (const member of stdout.split(/\r?\n/).filter(Boolean)) {
     const segments = member.replace(/^\.\//, "").split("/");
-    if (member.startsWith("/") || segments.includes("..") || PANEL_RUNTIME_PARTS.includes(segments[0]) === false) {
+    if (/[\\:]/.test(member) || member.startsWith("/") || segments.includes("..") || PANEL_RUNTIME_PARTS.includes(segments[0]) === false) {
       throw new RuntimeFailure("archive", "the archive holds files outside the device runtime.");
     }
   }
   await mkdir(staging);
-  await run("/usr/bin/tar", ["-xzf", archive, "-C", staging, "--no-same-owner"]).catch((error51) => {
+  await run2(tar, ["-xzf", archive, "-C", staging, "--no-same-owner"]).catch((error51) => {
     throw new RuntimeFailure("archive", `the archive could not be extracted (${errorText(error51)}).`);
   });
   await assertPlainFiles(staging);
   for (const part of PANEL_RUNTIME_PARTS) {
-    await access3(join3(staging, part)).catch(() => {
+    await access4(join3(staging, part)).catch(() => {
       throw new RuntimeFailure("archive", `the archive is missing ${part}.`);
     });
   }
-  await access3(join3(staging, "baguette/Baguette"), constants2.X_OK).catch(() => {
+  await access4(join3(staging, "baguette/Baguette"), constants4.X_OK).catch(() => {
     throw new RuntimeFailure("archive", "the simulator backend in the archive is not executable.");
   });
   for (const name of ["simslim", "avdslim"]) {
     const executable3 = join3(staging, "resource-saving", name);
-    await access3(executable3, constants2.X_OK).catch(() => {
+    await access4(executable3, constants4.X_OK).catch(() => {
       throw new RuntimeFailure("archive", "a resource optimizer in the archive is not executable.");
     });
   }
 }
 async function assertPlainFiles(directory2) {
-  for (const entry2 of await readdir(directory2, { withFileTypes: true })) {
+  for (const entry2 of await readdir2(directory2, { withFileTypes: true })) {
     const path = join3(directory2, entry2.name);
     const stats = await lstat(path);
     if (stats.isDirectory()) await assertPlainFiles(path);
@@ -34849,25 +34939,25 @@ async function assertPlainFiles(directory2) {
   }
 }
 async function removeOtherVersions(directory2, keep) {
-  const entries = await readdir(directory2);
+  const entries = await readdir2(directory2);
   const versions = [];
   for (const name of entries) {
     const path = join3(directory2, name);
     const mtimeMs = await stat2(path).then((stats) => stats.mtimeMs, () => void 0);
     if (mtimeMs === void 0) continue;
     if (name.startsWith(".download-") || name.startsWith(".staging-")) {
-      if (Date.now() - mtimeMs > STALE_MS) await rm(path, { recursive: true, force: true });
+      if (Date.now() - mtimeMs > STALE_MS) await rm2(path, { recursive: true, force: true });
     } else if (installed.test(name) && path !== keep) versions.push({ path, modified: mtimeMs });
   }
   versions.sort((a, b) => b.modified - a.modified);
-  for (const { path } of versions.slice(1)) await rm(path, { recursive: true, force: true });
+  for (const { path } of versions.slice(1)) await rm2(path, { recursive: true, force: true });
 }
 function errorText(error51) {
   return error51 instanceof Error ? error51.message : String(error51);
 }
 
 // packages/core/src/serve-emu.ts
-var execute3 = promisify4(execFile4);
+var execute3 = promisify4(execFile5);
 var androidIdSchema = external_exports.string().min(1).max(256).regex(/^[A-Za-z0-9_.:\[\]%-]+$/);
 var serveEmuErrorSchema = external_exports.object({ ok: external_exports.literal(false), error: external_exports.union([external_exports.string(), external_exports.object({ message: external_exports.string() }).loose()]).optional() }).loose();
 var healthSchema = external_exports.object({ serial: androidIdSchema, codec: external_exports.string(), size: external_exports.object({ width: external_exports.number().positive(), height: external_exports.number().positive() }) });
@@ -34896,27 +34986,16 @@ var ServeEmu = class {
   constructor(baseUrl = process.env.SERVE_EMU_URL) {
     if (baseUrl) this.external = parseBaseUrl(baseUrl, "SERVE_EMU_URL");
   }
-  async emulatorPath() {
-    for (const root of androidSdkRoots()) {
-      const path = join4(root, "emulator/emulator");
-      try {
-        await access4(path, constants3.X_OK);
-        return path;
-      } catch {
-      }
-    }
-    return "emulator";
-  }
-  async list() {
+  async list(run5 = execute3) {
     try {
       const adb = await adbPath();
-      const emulator = await this.emulatorPath();
+      const emulator = await sdkToolPath("emulator");
       const [devices3, avds] = await Promise.all([
-        execute3(adb, ["devices", "-l"], { timeout: 5e3, maxBuffer: 1024 * 1024 }),
-        execute3(emulator, ["-list-avds"], { timeout: 5e3, maxBuffer: 1024 * 1024 }).catch((error51) => {
-          if (error51.code === "ENOENT") return { stdout: "" };
-          throw error51;
-        })
+        run5(adb, ["devices", "-l"], { timeout: 5e3, maxBuffer: 1024 * 1024, windowsHide: true }),
+        run5(emulator, ["-list-avds"], { timeout: 5e3, maxBuffer: 1024 * 1024, windowsHide: true }).then(({ stdout }) => ({ stdout })).catch((error51) => ({
+          stdout: "",
+          hint: isMissingFile(error51) ? "To use a virtual device, install Android Emulator in Android Studio\u2019s SDK Manager, then create an AVD in Device Manager." : `Android Emulator could not list AVDs. Run emulator -list-avds to check the installation. ${errorMessage(error51)}`
+        }))
       ]);
       const deviceLines = devices3.stdout.split(/\r?\n/);
       const runningReads = deviceLines.flatMap((line) => {
@@ -34930,7 +35009,7 @@ var ServeEmu = class {
           let name = model ?? match[1];
           const emulatorDevice = /^emulator-\d+$/.test(match[1]);
           if (emulatorDevice) {
-            const response3 = await execute3(adb, ["-s", match[1], "emu", "avd", "name"], { timeout: 3e3 }).catch(() => void 0);
+            const response3 = await run5(adb, ["-s", match[1], "emu", "avd", "name"], { timeout: 3e3, windowsHide: true }).catch(() => void 0);
             const avdName = parseAvdName(response3?.stdout);
             if (avdName) this.avdNames.set(match[1], avdName);
             name = avdName ?? this.avdNames.get(match[1]) ?? name;
@@ -34953,9 +35032,12 @@ var ServeEmu = class {
         return parsedId.success && !runningAvd;
       });
       const stopped = stoppedNames.map((name) => ({ udid: `avd:${name}`, name, state: "Shutdown", runtime: "Android", platform: "android", kind: "emulator" }));
-      return { connected: true, managed: [...this.backends.values()].some((backend) => !!backend.child), baseUrl: this.external?.origin ?? "", devices: [...running, ...stopped] };
+      const discovered = [...running, ...stopped];
+      const setupHint = discovered.length === 0 ? `${avds.hint ?? "No Android virtual devices found. Create an AVD in Android Studio\u2019s Device Manager."} Or connect an Android device with USB debugging enabled and authorize this computer.` : void 0;
+      return { connected: true, managed: [...this.backends.values()].some((backend) => !!backend.child), baseUrl: this.external?.origin ?? "", devices: discovered, ...setupHint && { setupHint } };
     } catch (error51) {
-      return { connected: false, managed: false, baseUrl: "", devices: [], error: `Cannot list Android devices. Install Android SDK platform-tools and emulator. ${errorMessage(error51)}` };
+      const message3 = isMissingFile(error51) ? missingAdbMessage : `Cannot list Android devices. Run adb devices -l to check the connection. ${errorMessage(error51)}`;
+      return { connected: false, managed: false, baseUrl: "", devices: [], error: message3 };
     }
   }
   async device(id2, booted = false) {
@@ -34986,7 +35068,7 @@ var ServeEmu = class {
     const resourceSaving = await this.resourceSaving?.enabled(target2);
     const status = await bootAndroidEmulator({
       name: device2.name,
-      executable: await this.emulatorPath(),
+      executable: await sdkToolPath("emulator"),
       signal: this.lifetime.signal,
       ready: () => this.emulatorReady((item) => item.name === device2.name, "boot"),
       resourceSaving
@@ -35003,8 +35085,8 @@ var ServeEmu = class {
     const running = status.devices.find((item) => item.kind === "emulator" && matches(item));
     if (running?.state === "unauthorized") await this.reconnectEmulator(running.udid, trigger);
     if (running?.state !== "Booted") return;
-    const response3 = await execute3(await adbPath(), ["-s", running.udid, "shell", "getprop", "sys.boot_completed"], { timeout: 3e3 }).catch(() => void 0);
-    if (response3?.stdout.trim() === "1") return status;
+    const response3 = await systemCommands.run(await adbPath(), ["-s", running.udid, "shell", "getprop", "sys.boot_completed"], { timeout: 3e3 }).catch(() => void 0);
+    if (response3?.trim() === "1") return status;
   }
   // A quick-boot snapshot can restore an emulator after adb has marked it unauthorized, and adb
   // never checks again. Reconnecting the transport repeats the key exchange, at most every 5 s.
@@ -35033,12 +35115,12 @@ var ServeEmu = class {
     const startedAt = performance.now();
     let waited = false;
     while (!signal.aborted) {
-      const response3 = await execute3(await adbPath(), ["-s", serial, "shell", "getprop", "sys.boot_completed"], { timeout: 3e3 }).catch((error51) => {
+      const response3 = await systemCommands.run(await adbPath(), ["-s", serial, "shell", "getprop", "sys.boot_completed"], { timeout: 3e3 }).catch((error51) => {
         const stderr = String(error51.stderr ?? "");
         if (/\b(?:not found|no devices|offline|unauthorized)\b/.test(stderr)) throw new SimulatorUnavailableError("The Android device is stopped or offline. Press Start or reconnect it.");
         return void 0;
       });
-      if (response3?.stdout.trim() === "1") {
+      if (response3?.trim() === "1") {
         if (waited) recordAndroidBootWait(performance.now() - startedAt, "booted");
         return;
       }
@@ -35056,18 +35138,20 @@ var ServeEmu = class {
     const before = await this.list();
     if (!before.connected) throw new Error(before.error);
     if (!before.devices.some((device2) => device2.udid === id2)) return before;
-    await execute3(await adbPath(), ["-s", id2, "emu", "kill"], { timeout: 5e3 });
+    const adb = await adbPath();
+    await execute3(adb, ["-s", id2, "emu", "kill"], { timeout: 5e3 });
     const backend = this.backends.get(id2);
     if (backend) this.stopBackend(backend);
     this.backends.delete(id2);
-    const signal = AbortSignal.any([this.lifetime.signal, AbortSignal.timeout(15e3)]);
-    while (true) {
-      signal.throwIfAborted();
-      const status = await this.list();
-      if (!status.connected) throw new Error(status.error);
-      if (!status.devices.some((device2) => device2.udid === id2)) return status;
-      await delay3(250, void 0, { signal });
+    const signal = AbortSignal.any([this.lifetime.signal, AbortSignal.timeout(12e4)]);
+    while (!signal.aborted) {
+      const { stdout } = await execute3(adb, ["devices"], { timeout: 5e3, signal: this.lifetime.signal, windowsHide: true });
+      if (!stdout.split(/\r?\n/).some((line) => line.split(/\s+/, 1)[0] === id2)) return this.list();
+      await delay3(500, void 0, { signal }).catch(() => {
+      });
     }
+    this.lifetime.signal.throwIfAborted();
+    throw new SimulatorUnavailableError("The Android emulator is still shutting down after two minutes. Check its status in Android Studio\u2019s Device Manager.");
   }
   async json(url2, path, options = {}) {
     const command3 = backendCommand("serve_emu", path);
@@ -35135,24 +35219,24 @@ var ServeEmu = class {
     }
     await this.awaitAndroidBoot(id2);
     const cli = await panelRuntimePath("serve-emu/src/cli.mjs");
-    await access4(cli).catch((error51) => {
+    await access5(cli).catch((error51) => {
       if (isMissingFile(error51)) throw new MissingRuntimeError("serve-emu");
       throw new Error("Mobile Dev cannot read its bundled Android streaming backend. Reinstall Mobile Dev, then restart the app running it.");
     });
     const listener = createServer();
-    await new Promise((resolve5, reject) => {
+    await new Promise((resolve6, reject) => {
       listener.once("error", reject);
-      listener.listen(0, "127.0.0.1", resolve5);
+      listener.listen(0, "127.0.0.1", resolve6);
     });
     const address2 = listener.address();
-    await new Promise((resolve5) => listener.close(() => resolve5()));
+    await new Promise((resolve6) => listener.close(() => resolve6()));
     if (!address2 || typeof address2 === "string") throw new Error("Cannot allocate an Android stream port.");
     if (this.disposed) throw new Error("The plugin server has closed.");
     const url2 = new URL(`http://127.0.0.1:${address2.port}`);
     const startedAt = performance.now();
     const context2 = {
       deviceKind: device2.kind === "physical" ? "physical" : "emulator",
-      transport: device2.kind === "physical" ? device2.transportType ?? "unknown" : "emulator",
+      transport: device2.kind !== "physical" ? "emulator" : device2.platform === "android" ? device2.transportType : "unknown",
       stateBefore: "online",
       activeBackends: 0,
       stoppingBackends: this.stopping.size,
@@ -35164,7 +35248,8 @@ var ServeEmu = class {
     const child = spawn3(process.execPath, [cli, "--host", "127.0.0.1", "--port", url2.port, "--serial", id2, "--max-fps", "30"], {
       stdio: ["ignore", "pipe", "pipe", "ipc"],
       shell: false,
-      env: { ...process.env, PATH: `${dirname(adb)}:${process.env.PATH ?? ""}`, SERVE_EMU_UPDATE_CHECK: "0" }
+      windowsHide: true,
+      env: { ...process.env, PATH: androidToolPath([adb, await sdkToolPath("emulator")]), SERVE_EMU_UPDATE_CHECK: "0" }
     });
     this.backendContexts.set(child, context2);
     let stage = "process-launch";
@@ -35257,11 +35342,12 @@ var ServeEmu = class {
     const backend = await this.start(id2);
     const adb = await adbPath();
     const [tree, health2, display] = await Promise.all([
-      this.json(backend.url, "/api/accessibility"),
+      // The tree must line up with the current screen even immediately after an input.
+      this.json(backend.url, "/api/accessibility", { headers: { "Cache-Control": "no-cache" } }),
       this.health(backend.url),
-      execute3(adb, ["-s", id2, "shell", "wm", "size"], { timeout: 3e3, maxBuffer: 4096 })
+      systemCommands.run(adb, ["-s", id2, "shell", "wm", "size"], { timeout: 3e3, maxBuffer: 4096 })
     ]);
-    return { tree, screen: androidDisplaySize(display.stdout, health2.size) };
+    return { tree, screen: androidDisplaySize(display, health2.size) };
   }
   dispose() {
     this.disposed = true;
@@ -35271,18 +35357,18 @@ var ServeEmu = class {
   }
   stopBackend(backend) {
     const child = backend.child;
-    if (child === void 0) return;
+    if (!child || this.stopping.has(child) || child.pid === void 0 || child.exitCode !== null || child.signalCode !== null) return;
     const context2 = this.backendContexts.get(child);
-    if (context2 && child.pid !== void 0 && child.exitCode === null && child.signalCode === null && this.stopping.has(child) === false && process.env.MOBILE_DEV_TELEMETRY !== "off") {
-      this.stopping.add(child);
-      const started = performance.now();
-      child.once("exit", () => {
-        this.stopping.delete(child);
-        const duration3 = performance.now() - started;
-        recordAndroidBackendStop(duration3, context2);
-      });
-    }
-    child.kill("SIGTERM");
+    const started = performance.now();
+    this.stopping.add(child);
+    const deadline = setTimeout(() => child.kill("SIGKILL"), 15e3).unref();
+    child.once("exit", () => {
+      clearTimeout(deadline);
+      this.stopping.delete(child);
+      if (context2 && process.env.MOBILE_DEV_TELEMETRY !== "off") recordAndroidBackendStop(performance.now() - started, context2);
+    });
+    if (process.platform === "win32" && child.connected) child.disconnect();
+    else child.kill("SIGTERM");
   }
 };
 
@@ -35310,76 +35396,9 @@ var appDetailsBatch = 200;
 var appDetails = external_exports.object({ icon: external_exports.string().startsWith("data:image/png;base64,").max(256 * 1024).optional(), name: external_exports.string().max(256).optional() });
 var appDetailsSchema = external_exports.object({ apps: external_exports.record(external_exports.string(), appDetails) });
 
-// packages/core/src/app-control/commands.ts
-import { execFile as execFile5 } from "node:child_process";
-import { access as access5, mkdtemp, readdir as readdir2, rm as rm2 } from "node:fs/promises";
-import { tmpdir } from "node:os";
-import { join as join5 } from "node:path";
-var run2 = (file3, args, { timeout, input, maxBuffer = 8 * 1024 * 1024 }) => new Promise((resolve5, reject) => {
-  const child = execFile5(file3, args, { encoding: "utf8", timeout, maxBuffer }, (error51, stdout, stderr) => {
-    if (error51) reject(Object.assign(error51, { stdout, stderr }));
-    else resolve5(stdout);
-  });
-  if (input !== void 0) child.stdin?.end(input);
-});
-var readBinary = (file3, args, { timeout }) => new Promise((resolve5, reject) => {
-  execFile5(file3, args, { encoding: "buffer", timeout, maxBuffer: 64 * 1024 * 1024 }, (error51, stdout) => {
-    if (error51) reject(error51);
-    else resolve5(stdout);
-  });
-});
-var aapt2;
-async function findAapt2() {
-  if (aapt2) return aapt2;
-  for (const root of androidSdkRoots()) {
-    const versions = await readdir2(join5(root, "build-tools")).catch(() => []);
-    versions.sort((a, b) => b.localeCompare(a, void 0, { numeric: true }));
-    for (const version3 of versions) {
-      const path = join5(root, "build-tools", version3, "aapt2");
-      if (await access5(path).then(() => true, () => false)) return aapt2 = path;
-    }
-  }
-  return null;
-}
-var systemCommands = { run: run2, readBinary, adb: adbPath, aapt2: findAapt2 };
-function commandOutput(error51) {
-  if (error51 === null || typeof error51 !== "object") return String(error51);
-  const stderr = "stderr" in error51 && typeof error51.stderr === "string" ? error51.stderr : "";
-  const stdout = "stdout" in error51 && typeof error51.stdout === "string" ? error51.stdout : "";
-  return `${stderr}
-${stdout}`.trim();
-}
-var unavailable = /current state: (?:Shutdown|Shutting Down)|not booted|Invalid device|Unable to find device|No device found|device offline|device unauthorized|device (?:'.*' )?not found|no devices\/emulators found/i;
-var commandLabel = (program, command3) => `${program}_${command3.split(" ", 1)[0].replaceAll("-", "_")}`;
-function commandError(error51, action2, command3) {
-  if (expectedOutcome(error51) !== void 0) return error51;
-  const output = commandOutput(error51);
-  const message3 = output.split("\n").map((line) => line.trim()).filter((line) => line && !/^Underlying error|^An error was encountered/.test(line)).slice(0, 3).join(" ");
-  const text7 = `${action2} failed${message3 ? `: ${message3}` : "."}`;
-  if (unavailable.test(output)) return new ExpectedOperationError("device_unavailable", text7);
-  if (error51 !== null && typeof error51 === "object" && "code" in error51 && error51.code === "ENOENT") return new ExpectedOperationError("unsupported_platform", `${action2} needs ${process.platform === "darwin" ? "Xcode or the Android SDK" : "macOS and Xcode"}.`);
-  const failure3 = new Error(text7, { cause: error51 });
-  return command3 === void 0 ? failure3 : annotateDeviceCommand(failure3, command3, classifyCommandFailure(error51));
-}
-async function runAdb(commands2, serial, action2, args, timeout = 15e3) {
-  try {
-    return await commands2.run(await commands2.adb(), ["-s", serial, ...args], { timeout });
-  } catch (error51) {
-    throw commandError(error51, action2, commandLabel("adb", args[0]));
-  }
-}
-async function withTemporaryDirectory(work) {
-  const directory2 = await mkdtemp(join5(tmpdir(), "mobile-dev-app-"));
-  try {
-    return await work(directory2);
-  } finally {
-    await rm2(directory2, { recursive: true, force: true });
-  }
-}
-
 // packages/core/src/app-control/driver.ts
 import { readFile as readFile3, stat as stat3 } from "node:fs/promises";
-import { isAbsolute as isAbsolute2, join as join6 } from "node:path";
+import { isAbsolute as isAbsolute3, join as join4 } from "node:path";
 async function listApps(driver) {
   const [apps, { foreground, running }] = await Promise.all([driver.installed(), driver.activity()]);
   const installed2 = new Set(apps.map((app) => app.bundleId));
@@ -35394,7 +35413,7 @@ function requireSupportedPermission(platform5, permission) {
 }
 async function requireArtifact(path, extension, description) {
   const trimmed = path.replace(/(.)\/+$/, "$1");
-  const info3 = isAbsolute2(trimmed) && trimmed.endsWith(extension) ? await stat3(trimmed).catch(() => void 0) : void 0;
+  const info3 = isAbsolute3(trimmed) && trimmed.endsWith(extension) ? await stat3(trimmed).catch(() => void 0) : void 0;
   const directory2 = extension === ".app";
   if (info3 === void 0 || info3.isDirectory() !== directory2) throw new ExpectedOperationError("invalid_input", `Pass the absolute path of ${description}.`);
   return trimmed;
@@ -35429,14 +35448,31 @@ async function collectDetails(bundleIds, read12) {
   return results;
 }
 async function pngDataUrl(run5, source, directory2) {
-  const output = join6(directory2, "icon-64.png");
+  if (process.platform === "win32") {
+    const script = `$ErrorActionPreference = 'Stop'
+Add-Type -AssemblyName PresentationCore
+[Console]::InputEncoding = [Text.Encoding]::UTF8
+$image = New-Object Windows.Media.Imaging.BitmapImage
+$image.BeginInit()
+$image.UriSource = [Uri]([Console]::In.ReadToEnd())
+$image.DecodePixelWidth = 64
+$image.EndInit()
+$png = New-Object Windows.Media.Imaging.PngBitmapEncoder
+$png.Frames.Add([Windows.Media.Imaging.BitmapFrame]::Create($image))
+$stream = New-Object IO.MemoryStream
+$png.Save($stream)
+[Convert]::ToBase64String($stream.ToArray())`;
+    const data = await run5("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", script], { input: source, timeout: 1e4 });
+    return `data:image/png;base64,${data.trim()}`;
+  }
+  const output = join4(directory2, "icon-64.png");
   await run5("sips", ["-s", "format", "png", "-Z", "64", source, "--out", output], { timeout: 1e4 });
   return `data:image/png;base64,${(await readFile3(output)).toString("base64")}`;
 }
 
 // packages/core/src/app-control/simulator.ts
 import { readdir as readdir3, stat as stat4 } from "node:fs/promises";
-import { join as join7 } from "node:path";
+import { join as join5 } from "node:path";
 
 // packages/core/src/device-apps/apps.ts
 import { execFile as execFile7 } from "node:child_process";
@@ -35715,7 +35751,7 @@ var SimulatorDriver = class {
   async install(path) {
     const bundle = await requireArtifact(path, ".app", "a built .app bundle for the simulator");
     await this.simctl("Installing the app", ["install", this.deviceId, bundle], { timeout: 3e5 });
-    const bundleId3 = bundleIdSchema.safeParse(await this.plutil(["-extract", "CFBundleIdentifier", "raw", "-o", "-", join7(bundle, "Info.plist")]).then((id2) => id2.trim(), () => void 0));
+    const bundleId3 = bundleIdSchema.safeParse(await this.plutil(["-extract", "CFBundleIdentifier", "raw", "-o", "-", join5(bundle, "Info.plist")]).then((id2) => id2.trim(), () => void 0));
     return bundleId3.success ? { bundleId: bundleId3.data } : {};
   }
   async openUrl(url2) {
@@ -35727,7 +35763,7 @@ var SimulatorDriver = class {
       ["get_app_container", this.deviceId, bundleId3, "app"],
       { known: [[/No such file or directory/, `${bundleId3} is not installed on this simulator.`]] }
     );
-    const types = await this.plutil(["-extract", "CFBundleURLTypes", "json", "-o", "-", join7(container.trim(), "Info.plist")]).catch(() => void 0);
+    const types = await this.plutil(["-extract", "CFBundleURLTypes", "json", "-o", "-", join5(container.trim(), "Info.plist")]).catch(() => void 0);
     return types ? parseIosUrlSchemes(types) : [];
   }
   async details(bundleIds) {
@@ -35739,14 +35775,14 @@ var SimulatorDriver = class {
     });
   }
   async icon(bundlePath) {
-    const plist = join7(bundlePath, "Info.plist");
+    const plist = join5(bundlePath, "Info.plist");
     return this.cache.get(`ios:${bundlePath}:${(await stat4(plist)).mtimeMs}`, async () => {
       const icons = await this.plutil(["-extract", "CFBundleIcons", "json", "-o", "-", plist]).catch(() => "{}");
       const names = iconFilesSchema.safeParse(JSON.parse(icons)).data?.CFBundlePrimaryIcon?.CFBundleIconFiles ?? [];
       const files = (await readdir3(bundlePath)).filter((file3) => file3.endsWith(".png") && names.some((name) => file3.startsWith(name)));
-      const sized = await Promise.all(files.map(async (file3) => ({ file: file3, size: (await stat4(join7(bundlePath, file3))).size })));
+      const sized = await Promise.all(files.map(async (file3) => ({ file: file3, size: (await stat4(join5(bundlePath, file3))).size })));
       const largest = sized.sort((a, b) => b.size - a.size)[0];
-      return largest ? { icon: await withTemporaryDirectory((directory2) => pngDataUrl(this.commands.run, join7(bundlePath, largest.file), directory2)) } : {};
+      return largest ? { icon: await withTemporaryDirectory((directory2) => pngDataUrl(this.commands.run, join5(bundlePath, largest.file), directory2)) } : {};
     });
   }
   // simctl cannot read privacy decisions, so states are unknown until the panel sets them.
@@ -35765,7 +35801,7 @@ var SimulatorDriver = class {
       ["get_app_container", this.deviceId, bundleId3, "data"],
       { known: [[/No such file or directory/, `${bundleId3} is not installed on this simulator.`]] }
     );
-    return join7(container.trim(), "Library/Preferences", bundleId3);
+    return join5(container.trim(), "Library/Preferences", bundleId3);
   }
   // A missing key or domain means the app follows the device language.
   defaults(action2, args) {
@@ -35803,8 +35839,8 @@ import { fileURLToPath as fileURLToPath5 } from "node:url";
 // packages/core/src/baguette-runtime.ts
 import { execFile as execFile8 } from "node:child_process";
 import { access as access6, realpath } from "node:fs/promises";
-import { constants as constants4 } from "node:fs";
-import { basename, delimiter, dirname as dirname3, isAbsolute as isAbsolute3, join as join8, relative } from "node:path";
+import { constants as constants5 } from "node:fs";
+import { basename, delimiter as delimiter2, dirname as dirname3, isAbsolute as isAbsolute4, join as join6, relative } from "node:path";
 import { promisify as promisify7 } from "node:util";
 var BAGUETTE_RUNTIME_TIMEOUT_MS = 5e3;
 var execute6 = promisify7(execFile8);
@@ -35820,10 +35856,10 @@ async function baguetteEnvironment(executable3, signal, run5 = execute6) {
       maxBuffer: 64 * 1024
     });
     const selectedDeveloper = selection.stdout.trim();
-    if (isAbsolute3(selectedDeveloper) === false) throw new Error("Invalid developer directory.");
+    if (isAbsolute4(selectedDeveloper) === false) throw new Error("Invalid developer directory.");
     developer = await realpath(selectedDeveloper);
-    const xcodebuild = join8(developer, "usr/bin/xcodebuild");
-    await access6(xcodebuild, constants4.X_OK);
+    const xcodebuild = join6(developer, "usr/bin/xcodebuild");
+    await access6(xcodebuild, constants5.X_OK);
   } catch {
     discoverySignal.throwIfAborted();
     throw new Error("Baguette requires a full Xcode installation. Install Xcode 26 or later and select it in Xcode Settings > Locations > Command Line Tools.");
@@ -35861,12 +35897,12 @@ async function baguetteEnvironment(executable3, signal, run5 = execute6) {
     for (const library of libraries) {
       const physicalLibrary = await realpath(library);
       const location2 = relative(developer, physicalLibrary);
-      if (isAbsolute3(library) === false || location2.startsWith("Toolchains/") === false) {
+      if (isAbsolute4(library) === false || location2.startsWith("Toolchains/") === false) {
         throw new Error("Swift library is outside the selected Xcode toolchain.");
       }
       const directory2 = dirname3(library);
-      if (directory2.includes(delimiter)) throw new Error("Swift library directory cannot be used as a loader search path.");
-      await access6(library, constants4.R_OK);
+      if (directory2.includes(delimiter2)) throw new Error("Swift library directory cannot be used as a loader search path.");
+      await access6(library, constants5.R_OK);
       directories.add(directory2);
       const name = basename(library);
       discovered.add(name);
@@ -35876,7 +35912,7 @@ async function baguetteEnvironment(executable3, signal, run5 = execute6) {
     }
     if (directories.size > 0) {
       const paths = [...directories];
-      environment.DYLD_LIBRARY_PATH = paths.join(delimiter);
+      environment.DYLD_LIBRARY_PATH = paths.join(delimiter2);
     }
   } catch {
     discoverySignal.throwIfAborted();
@@ -35978,7 +36014,7 @@ async function foregroundAndroidApp(deviceId3, signal) {
 
 // packages/core/src/app-control/android.ts
 import { writeFile as writeFile2 } from "node:fs/promises";
-import { join as join9 } from "node:path";
+import { join as join7 } from "node:path";
 function parseAndroidPackages(output) {
   return output.split("\n").flatMap((line) => {
     const match = /^package:([A-Za-z0-9._-]+)\s*$/.exec(line);
@@ -36159,16 +36195,20 @@ var AndroidDriver = class {
     const entry2 = (name) => this.commands.readBinary(adb, ["-s", this.deviceId, "exec-out", "unzip", "-p", apk, name], { timeout: 2e4 });
     return this.cache.get(`android:${this.deviceId}:${apk}`, () => withTemporaryDirectory(async (directory2) => {
       const parts = ["AndroidManifest.xml", "resources.arsc"];
-      await Promise.all(parts.map(async (part) => writeFile2(join9(directory2, part), await entry2(part))));
-      const partial3 = join9(directory2, "partial.apk");
-      await this.commands.run("zip", ["-q", "-0", "-j", partial3, ...parts.map((part) => join9(directory2, part))], { timeout: 1e4 });
+      await Promise.all(parts.map(async (part) => writeFile2(join7(directory2, part), await entry2(part))));
+      const partial3 = join7(directory2, "partial.apk");
+      if (process.platform === "win32") {
+        await this.commands.run("tar.exe", ["--format", "zip", "-cf", partial3, "-C", directory2, ...parts], { timeout: 1e4 });
+      } else {
+        await this.commands.run("zip", ["-q", "-0", "-j", partial3, ...parts.map((part) => join7(directory2, part))], { timeout: 1e4 });
+      }
       const badging = parseAndroidBadging(await this.commands.run(aapt22, ["dump", "badging", partial3], { timeout: 15e3 }));
       const name = badging.label ?? void 0;
       const file3 = badging.icon && pickAndroidIconFile(await this.commands.run(aapt22, ["dump", "resources", partial3], { timeout: 15e3, maxBuffer: 64 * 1024 * 1024 }), badging.icon);
       if (!file3) return { name };
-      const source = join9(directory2, `icon${file3.slice(file3.lastIndexOf("."))}`);
+      const source = join7(directory2, `icon${file3.slice(file3.lastIndexOf("."))}`);
       await writeFile2(source, await entry2(file3));
-      return { name, icon: await pngDataUrl(this.commands.run, source, directory2) };
+      return { name, icon: await pngDataUrl(this.commands.run, source, directory2).catch(() => void 0) };
     }));
   }
   async permissions(bundleId3) {
@@ -36441,7 +36481,7 @@ var appleDate = (seconds) => new Date((seconds + 978307200) * 1e3).toISOString()
 
 // packages/core/src/app-storage/container.ts
 import { mkdir as mkdir2, readdir as readdir4, readFile as readFile4, rm as rm3, stat as stat5 } from "node:fs/promises";
-import { join as join10, relative as relative2, sep } from "node:path";
+import { join as join8, relative as relative2, sep } from "node:path";
 var maxContainerFiles = 2e4;
 var shellQuote2 = (value) => `'${value.replaceAll("'", "'\\''")}'`;
 function safePath(path) {
@@ -36483,9 +36523,9 @@ var SimulatorContainer = class _SimulatorContainer {
       const [id2, ...rest] = path.slice(appGroupPrefix.length).split("/");
       const group = this.groups.get(id2);
       if (group === void 0 || rest.length === 0) throw new ExpectedOperationError("invalid_input", "The storage path is outside the app's data.");
-      return join10(group, ...rest);
+      return join8(group, ...rest);
     }
-    return join10(this.root, path);
+    return join8(this.root, path);
   }
   async list() {
     const files = [];
@@ -36493,7 +36533,7 @@ var SimulatorContainer = class _SimulatorContainer {
       const entries = await readdir4(directory2, { withFileTypes: true }).catch(() => []);
       for (const entry2 of entries) {
         if (files.length >= maxContainerFiles) return;
-        const path = join10(directory2, entry2.name);
+        const path = join8(directory2, entry2.name);
         if (entry2.isDirectory()) await walk(root, prefix2, path);
         else if (entry2.isFile()) {
           const info3 = await stat5(path).catch(() => void 0);
@@ -36530,13 +36570,13 @@ var SimulatorContainer = class _SimulatorContainer {
   async reset() {
     for (const file3 of await this.list()) if (preferencesPlist.test(file3.path)) await this.forgetPreferences(file3.path);
     for (const directory2 of ["Documents", "Library", "tmp"]) {
-      const entries = await readdir4(join10(this.root, directory2)).catch(() => []);
-      await Promise.all(entries.map((entry2) => rm3(join10(this.root, directory2, entry2), { recursive: true, force: true })));
+      const entries = await readdir4(join8(this.root, directory2)).catch(() => []);
+      await Promise.all(entries.map((entry2) => rm3(join8(this.root, directory2, entry2), { recursive: true, force: true })));
     }
-    for (const directory2 of ["Documents", "Library/Caches", "Library/Preferences", "tmp"]) await mkdir2(join10(this.root, directory2), { recursive: true });
+    for (const directory2 of ["Documents", "Library/Caches", "Library/Preferences", "tmp"]) await mkdir2(join8(this.root, directory2), { recursive: true });
     for (const root of this.groups.values()) {
       const entries = await readdir4(root).catch(() => []);
-      await Promise.all(entries.filter((entry2) => entry2 !== containerMetadata).map((entry2) => rm3(join10(root, entry2), { recursive: true, force: true })));
+      await Promise.all(entries.filter((entry2) => entry2 !== containerMetadata).map((entry2) => rm3(join8(root, entry2), { recursive: true, force: true })));
     }
   }
 };
@@ -36584,7 +36624,7 @@ var AndroidContainer = class {
     try {
       output = await this.commands.run(await this.commands.adb(), ["-s", this.serial, "shell", `pm clear ${this.bundleId}`], { timeout: 3e4 });
     } catch (error51) {
-      throw commandError(error51, "Clearing app data");
+      throw commandError(error51, "Clearing app data", "adb_shell");
     }
     if (!/Success/.test(output)) throw new ExpectedOperationError("invalid_input", `Clearing app data failed: ${output.trim().split("\n")[0] || "pm clear did not succeed."}`);
   }
@@ -36593,13 +36633,13 @@ function runAsError(error51, action2, bundleId3) {
   const output = commandOutput(error51);
   if (/not debuggable/.test(output)) return new ExpectedOperationError("unsupported_platform", `${bundleId3} is a release build. Android only allows reading app data of debuggable builds; Reset app data still works.`);
   if (/unknown package|Unknown package|is unknown/.test(output)) return new ExpectedOperationError("invalid_input", `${bundleId3} is not installed on this device.`);
-  return commandError(error51, action2);
+  return commandError(error51, action2, "adb_shell");
 }
 
 // packages/core/src/app-storage/reader.ts
 import { createHash as createHash3 } from "node:crypto";
 import { writeFile as writeFile3 } from "node:fs/promises";
-import { join as join11 } from "node:path";
+import { join as join9 } from "node:path";
 
 // packages/core/src/app-storage/encoding.ts
 function readVarint(buffer, offset, limit = 10) {
@@ -37044,10 +37084,10 @@ function redactStorageEntry(entry2, context2 = "") {
 }
 
 // packages/core/src/app-storage/reader.ts
-var sqlite3 = process.platform === "darwin" ? "/usr/bin/sqlite3" : "sqlite3";
 var quoteIdentifier = (name) => `"${name.replaceAll('"', '""')}"`;
 var sqlString = (text7) => `'${text7.replaceAll("'", "''")}'`;
 async function sqlite(run5, file3, sql) {
+  const sqlite3 = process.platform === "win32" ? await sdkToolPath("sqlite3") : process.platform === "darwin" ? "/usr/bin/sqlite3" : "sqlite3";
   const output = await run5(sqlite3, ["-json", file3, sql], { timeout: 15e3, maxBuffer: 64 * 1024 * 1024 });
   return output.trim() ? JSON.parse(output) : [];
 }
@@ -37062,8 +37102,9 @@ async function describeTables(run5, file3) {
 }
 function withDatabase(container, candidate, work) {
   return withTemporaryDirectory(async (directory2) => {
-    await Promise.all(candidate.files.map(async (path) => writeFile3(join11(directory2, basename2(path)), await container.read(path))));
-    return work(join11(directory2, candidate.name));
+    const database = join9(directory2, "database");
+    await Promise.all(candidate.files.map(async (path) => writeFile3(database + path.slice(candidate.path.length), await container.read(path))));
+    return work(database);
   });
 }
 async function readSqlite(container, candidate, run5) {
@@ -37240,37 +37281,37 @@ async function readTable(container, id2, table, { offset, limit, valueLength, ru
 
 // packages/core/src/app-storage/preview.ts
 import { writeFile as writeFile4 } from "node:fs/promises";
-import { join as join12 } from "node:path";
+import { join as join10 } from "node:path";
 var isRecord = (value) => typeof value === "object" && value !== null && !Array.isArray(value);
 var uid = (value) => isRecord(value) && Object.keys(value).length === 1 && typeof value["CF$UID"] === "number" ? value["CF$UID"] : void 0;
 function unarchive(archive) {
   const objects = Array.isArray(archive.$objects) ? archive.$objects : [];
-  const resolve5 = (value, path) => {
+  const resolve6 = (value, path) => {
     const index = uid(value);
     if (index !== void 0) {
       if (path.has(index)) return "<cycle>";
       const target2 = objects[index];
-      return target2 === "$null" ? null : resolve5(target2, new Set(path).add(index));
+      return target2 === "$null" ? null : resolve6(target2, new Set(path).add(index));
     }
-    if (Array.isArray(value)) return value.map((item) => resolve5(item, path));
+    if (Array.isArray(value)) return value.map((item) => resolve6(item, path));
     if (!isRecord(value)) return value;
     const { "NS.keys": keys, "NS.objects": values, "NS.string": string5, "NS.time": time4, "NS.data": data } = value;
-    if (Array.isArray(keys) && Array.isArray(values)) return Object.fromEntries(keys.map((key, index2) => [String(resolve5(key, path)), resolve5(values[index2], path)]));
-    if (Array.isArray(values)) return resolve5(values, path);
+    if (Array.isArray(keys) && Array.isArray(values)) return Object.fromEntries(keys.map((key, index2) => [String(resolve6(key, path)), resolve6(values[index2], path)]));
+    if (Array.isArray(values)) return resolve6(values, path);
     if (typeof string5 === "string") return string5;
     if (typeof time4 === "number") return appleDate(time4);
     if (data !== void 0) return data;
-    return Object.fromEntries(Object.entries(value).filter(([key]) => key !== "$class").map(([key, child]) => [key, resolve5(child, path)]));
+    return Object.fromEntries(Object.entries(value).filter(([key]) => key !== "$class").map(([key, child]) => [key, resolve6(child, path)]));
   };
   const top = isRecord(archive.$top) ? archive.$top : {};
-  return resolve5("root" in top ? top.root : top, /* @__PURE__ */ new Set());
+  return resolve6("root" in top ? top.root : top, /* @__PURE__ */ new Set());
 }
 async function plistJson(bytes, run5) {
   const binary2 = bytes.subarray(0, 6).toString("latin1") === "bplist";
   if (binary2 && process.platform !== "darwin") return void 0;
   try {
     const xml = binary2 ? await withTemporaryDirectory(async (directory2) => {
-      const file3 = join12(directory2, "preview.plist");
+      const file3 = join10(directory2, "preview.plist");
       await writeFile4(file3, bytes);
       return run5("plutil", ["-convert", "xml1", "-o", "-", file3], { timeout: 1e4, maxBuffer: 64 * 1024 * 1024 });
     }) : bytes.toString("utf8");
@@ -37411,13 +37452,13 @@ import { createHash as createHash5, randomUUID as randomUUID3 } from "node:crypt
 import { existsSync as existsSync2 } from "node:fs";
 import { readFile as readFile6 } from "node:fs/promises";
 import { homedir as homedir3 } from "node:os";
-import { dirname as dirname6, isAbsolute as isAbsolute4, join as join14, relative as relative3, resolve as resolve2 } from "node:path";
+import { dirname as dirname6, isAbsolute as isAbsolute5, join as join12, relative as relative3, resolve as resolve2 } from "node:path";
 import { fileURLToPath as fileURLToPath6, pathToFileURL } from "node:url";
 
 // packages/core/src/app-flow-run-store.ts
 import { createHash as createHash4, randomUUID as randomUUID2 } from "node:crypto";
 import { mkdir as mkdir3, readFile as readFile5, rename as rename2, unlink, writeFile as writeFile5 } from "node:fs/promises";
-import { dirname as dirname5, join as join13 } from "node:path";
+import { dirname as dirname5, join as join11 } from "node:path";
 function projectId(projectPath3) {
   return createHash4("sha256").update(projectPath3).digest("hex").slice(0, 16);
 }
@@ -37441,13 +37482,13 @@ var AppFlowRunStore = class {
     this.dataDir = dataDir;
   }
   directory(projectPath3) {
-    return join13(this.dataDir, "app-flows", projectId(projectPath3));
+    return join11(this.dataDir, "app-flows", projectId(projectPath3));
   }
   runPath(projectPath3) {
-    return join13(this.directory(projectPath3), "active-run.json");
+    return join11(this.directory(projectPath3), "active-run.json");
   }
   resolutionPath(projectPath3) {
-    return join13(this.directory(projectPath3), "prompt-resolution.json");
+    return join11(this.directory(projectPath3), "prompt-resolution.json");
   }
   async writeRun(run5) {
     const previous = await readJson(this.runPath(run5.projectPath));
@@ -37628,11 +37669,11 @@ var CodexAppFlowDecisionProvider = class {
     if (this.state === "suspended") return { state: "suspended" };
     if (this.state === "cancelled") return { state: "cancelled" };
     if (waitMs <= 0) return { state: "waiting" };
-    await new Promise((resolve5) => {
+    await new Promise((resolve6) => {
       const done = () => {
         clearTimeout(timer);
         this.waiters.delete(done);
-        resolve5();
+        resolve6();
       };
       const timer = setTimeout(done, Math.min(waitMs, 2e4));
       this.waiters.add(done);
@@ -37699,7 +37740,7 @@ var CodexAppFlowDecisionProvider = class {
       screenshot,
       createdAt: (/* @__PURE__ */ new Date()).toISOString()
     };
-    return new Promise((resolve5, reject) => {
+    return new Promise((resolve6, reject) => {
       const timer = setTimeout(() => {
         if (this.pending?.request.requestId !== request.requestId) return;
         this.state = "suspended";
@@ -37711,7 +37752,7 @@ var CodexAppFlowDecisionProvider = class {
         this.onSuspended?.(error51);
         this.notify();
       }, this.inactivityMs);
-      this.pending = { request, resolve: resolve5, reject, timer, startedAt: Date.now() };
+      this.pending = { request, resolve: resolve6, reject, timer, startedAt: Date.now() };
       this.notify();
     });
   }
@@ -37806,28 +37847,28 @@ var AppFlowHost = class {
     await this.services.close?.();
   }
 };
-var APP_FLOW_DIRECTORY = join14(homedir3(), "Library/Application Support/mobile-dev/app-flow");
+var APP_FLOW_DIRECTORY = join12(homedir3(), "Library/Application Support/mobile-dev/app-flow");
 function vendoredAgentDeviceRoot() {
   const roots = [
-    join14(dirname6(fileURLToPath6(import.meta.url)), "agent-device/node_modules/agent-device"),
+    join12(dirname6(fileURLToPath6(import.meta.url)), "agent-device/node_modules/agent-device"),
     resolve2(process.cwd(), "runtimes/agent-device/node_modules/agent-device"),
     resolve2(process.cwd(), "../ai-harness/node_modules/agent-device"),
     // Running from source rather than from a packaged dist/, where the vendored runtime is a workspace.
     resolve2(process.cwd(), "packages/runtimes/agent-device/node_modules/agent-device")
   ];
-  return roots.find((root) => existsSync2(join14(root, "dist/src/index.js")));
+  return roots.find((root) => existsSync2(join12(root, "dist/src/index.js")));
 }
 async function loadVendoredAgentDevice() {
   const root = vendoredAgentDeviceRoot();
-  const entry2 = root ? join14(root, "dist/src/index.js") : void 0;
+  const entry2 = root ? join12(root, "dist/src/index.js") : void 0;
   if (!entry2) throw new Error("The bundled agent-device runtime is unavailable. Reinstall or rebuild Mobile Dev.");
   const dynamicImport = new Function("specifier", "return import(specifier)");
   return dynamicImport(pathToFileURL(entry2).href);
 }
 async function createAppFlowHost(options = {}) {
   const [{ createAppFlowService }, { createManualRecordingService }] = await Promise.all([
-    import("./app-flow-CBXZUI2T.mjs"),
-    import("./manual-QMNQHZU5.mjs")
+    import("./app-flow-EPK466PD.mjs"),
+    import("./manual-E2NWNWKX.mjs")
   ]);
   const listeners = /* @__PURE__ */ new Set();
   const runs = /* @__PURE__ */ new Map();
@@ -37887,9 +37928,9 @@ async function createAppFlowHost(options = {}) {
     promptRelays.set(run5.runId, timer);
   };
   const agentDeviceRoot = vendoredAgentDeviceRoot();
-  const agentDeviceCli = agentDeviceRoot ? `${JSON.stringify(process.execPath)} ${JSON.stringify(join14(agentDeviceRoot, "bin/agent-device.mjs"))}` : void 0;
+  const agentDeviceCli = agentDeviceRoot ? `${JSON.stringify(process.execPath)} ${JSON.stringify(join12(agentDeviceRoot, "bin/agent-device.mjs"))}` : void 0;
   const getProjectId = (selectedProjectPath) => createHash5("sha256").update(selectedProjectPath).digest("hex").slice(0, 16);
-  const getProjectDir = (selectedProjectId) => join14(dataDir, "app-flows", selectedProjectId);
+  const getProjectDir = (selectedProjectId) => join12(dataDir, "app-flows", selectedProjectId);
   const ports = {
     dataDir,
     get decisions() {
@@ -38139,7 +38180,7 @@ async function createAppFlowHost(options = {}) {
         }
         await runStore.requestResolution(selectedProjectPath, { runId: selectedRunId, promptId, resolution: selectedResolution });
         for (let attempt = 0; attempt < 40; attempt += 1) {
-          await new Promise((resolve5) => setTimeout(resolve5, 50));
+          await new Promise((resolve6) => setTimeout(resolve6, 50));
           const updated = await runStore.readRun(selectedProjectPath);
           if (!updated || updated.runId !== selectedRunId || updated.state !== "needs-user-action") return { resolved: true, relayed: true };
         }
@@ -38176,11 +38217,11 @@ async function createAppFlowHost(options = {}) {
     async screenshot(selectedProjectId, encodedPath) {
       let decoded = Buffer.from(encodedPath, "base64url").toString("utf8");
       decoded = decoded.split("?")[0] ?? decoded;
-      if (!decoded || isAbsolute4(decoded)) throw new Error("Invalid App Flow screenshot path.");
+      if (!decoded || isAbsolute5(decoded)) throw new Error("Invalid App Flow screenshot path.");
       const root = getProjectDir(selectedProjectId);
       const candidate = resolve2(root, decoded);
       const local = relative3(root, candidate);
-      if (local.startsWith("..") || isAbsolute4(local)) throw new Error("App Flow screenshot path escapes its project.");
+      if (local.startsWith("..") || isAbsolute5(local)) throw new Error("App Flow screenshot path escapes its project.");
       return readFile6(candidate);
     },
     subscribe(listener) {
@@ -38202,16 +38243,103 @@ function ownerAlive(pid3) {
 // packages/core/src/app-flow-projects.ts
 import { randomUUID as randomUUID4 } from "node:crypto";
 import { mkdir as mkdir4, readFile as readFile7, rename as rename3, stat as stat7, unlink as unlink2, writeFile as writeFile6 } from "node:fs/promises";
-import { basename as basename3, isAbsolute as isAbsolute6, join as join15 } from "node:path";
+import { basename as basename3, isAbsolute as isAbsolute7, join as join13 } from "node:path";
 
 // packages/core/src/project-folder-dialog.ts
-import { execFile as execFile9 } from "node:child_process";
+import { execFile as execFile10 } from "node:child_process";
 import { stat as stat6 } from "node:fs/promises";
-import { isAbsolute as isAbsolute5 } from "node:path";
+import { isAbsolute as isAbsolute6 } from "node:path";
 import { promisify as promisify8 } from "node:util";
-var execute7 = promisify8(execFile9);
+
+// packages/core/src/profile-picker.ts
+import { execFile as execFile9 } from "node:child_process";
+import { platform as platform2 } from "node:os";
+var PICKER_TIMEOUT_MS = 5 * 60 * 1e3;
+var ProfilePickerError = class extends Error {
+  constructor(message3) {
+    super(message3);
+    this.name = "ProfilePickerError";
+  }
+};
+var APPLESCRIPT = `set chosen to choose file with prompt "Choose a CPU or React profile" of type {"public.json", "json"}
+POSIX path of chosen`;
+var APPLESCRIPT_FOLDER = `set chosen to choose folder with prompt "Choose a project folder"
+POSIX path of chosen`;
+var POWERSHELL = `[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+Add-Type -AssemblyName System.Windows.Forms
+$dialog = New-Object System.Windows.Forms.OpenFileDialog
+$dialog.Filter = 'Profiles (*.json;*.cpuprofile)|*.json;*.cpuprofile|All files (*.*)|*.*'
+$dialog.Title = 'Choose a CPU or React profile'
+if ($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) { Write-Output $dialog.FileName }`;
+var POWERSHELL_FOLDER = `[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+Add-Type -AssemblyName System.Windows.Forms
+$dialog = New-Object System.Windows.Forms.FolderBrowserDialog
+$dialog.Description = 'Choose a project folder'
+if ($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) { Write-Output $dialog.SelectedPath }`;
+function command() {
+  switch (platform2()) {
+    case "darwin":
+      return { file: "osascript", args: ["-e", APPLESCRIPT] };
+    case "win32":
+      return { file: "powershell", args: ["-NoProfile", "-STA", "-Command", POWERSHELL] };
+    // zenity ships with GNOME; kdialog is the KDE equivalent and is tried next.
+    default:
+      return { file: "zenity", args: ["--file-selection", "--title=Choose a CPU or React profile", "--file-filter=Profiles | *.json *.cpuprofile"] };
+  }
+}
+function folderCommand() {
+  switch (platform2()) {
+    case "darwin":
+      return { file: "osascript", args: ["-e", APPLESCRIPT_FOLDER] };
+    case "win32":
+      return { file: "powershell", args: ["-NoProfile", "-STA", "-Command", POWERSHELL_FOLDER] };
+    default:
+      return { file: "zenity", args: ["--file-selection", "--directory", "--title=Choose a project folder"] };
+  }
+}
+function run3(file3, args) {
+  return new Promise((resolve6, reject) => {
+    execFile9(file3, args, { timeout: PICKER_TIMEOUT_MS, maxBuffer: 64 * 1024, windowsHide: true }, (error51, stdout, stderr) => {
+      const code = error51 && typeof error51 === "object" && "code" in error51 ? error51.code : 0;
+      if (typeof code === "string") {
+        reject(error51);
+        return;
+      }
+      resolve6({ code: typeof code === "number" ? code : 0, stdout, stderr });
+    });
+  });
+}
+async function pick3(chooser, fallback) {
+  const { file: file3, args } = chooser();
+  let result4;
+  try {
+    result4 = await run3(file3, args);
+  } catch (error51) {
+    if (platform2() === "linux" && error51 instanceof Error && "code" in error51 && error51.code === "ENOENT") {
+      try {
+        result4 = await run3("kdialog", fallback);
+      } catch {
+        throw new ProfilePickerError("No file dialog is available on this host. Install zenity or kdialog, or ask the agent to work by path.");
+      }
+    } else {
+      throw new ProfilePickerError("This host could not open a file dialog. Ask the agent to work by path instead.");
+    }
+  }
+  const path = result4.stdout.trim();
+  if (result4.code !== 0 || path === "") return { picked: false };
+  return { picked: true, path };
+}
+var pickProfileFile = () => pick3(command, ["--getopenfilename", ".", "*.json *.cpuprofile"]);
+var pickProjectFolder = () => pick3(folderCommand, ["--getexistingdirectory", "."]);
+
+// packages/core/src/project-folder-dialog.ts
+var execute7 = promisify8(execFile10);
 var PROMPT = "Choose your React Native project folder";
 async function chooseProjectFolder() {
+  if (process.platform === "win32") {
+    const folder = await pickProjectFolder();
+    return folder.picked ? folder.path : void 0;
+  }
   if (process.platform !== "darwin") throw new Error("Choosing a folder needs macOS.");
   const { stdout } = await execute7("/usr/bin/osascript", ["-e", `on run argv
   try
@@ -38226,7 +38354,7 @@ end run`, PROMPT], { timeout: 3e5, maxBuffer: 8192 });
   const raw = stdout.trim();
   const path = raw.length > 1 ? raw.replace(/\/+$/, "") : raw;
   if (!path) return void 0;
-  if (!isAbsolute5(path)) throw new Error("The folder picker returned an unusable path.");
+  if (!isAbsolute6(path)) throw new Error("The folder picker returned an unusable path.");
   if (!await stat6(path).then((entry2) => entry2.isDirectory(), () => false)) throw new Error("The chosen folder is unavailable.");
   return path;
 }
@@ -38267,10 +38395,10 @@ var AppFlowProjectChoices = class _AppFlowProjectChoices {
     this.pick = pick4;
   }
   get path() {
-    return join15(this.directory, REGISTRY_FILE);
+    return join13(this.directory, REGISTRY_FILE);
   }
   get enginePath() {
-    return join15(this.directory, "app-flows", REGISTRY_FILE);
+    return join13(this.directory, "app-flows", REGISTRY_FILE);
   }
   /** Folders this picker recorded, newest first. */
   async read() {
@@ -38289,7 +38417,7 @@ var AppFlowProjectChoices = class _AppFlowProjectChoices {
     const seen = /* @__PURE__ */ new Set();
     const unique = [];
     for (const entry2 of [...projects].sort((left, right) => right.lastPickedAt.localeCompare(left.lastPickedAt))) {
-      if (!isAbsolute6(entry2.path)) continue;
+      if (!isAbsolute7(entry2.path)) continue;
       const path = normalize(entry2.path);
       if (seen.has(path)) continue;
       seen.add(path);
@@ -38330,7 +38458,7 @@ var AppFlowProjectChoices = class _AppFlowProjectChoices {
    */
   async record(projectPath3) {
     const path = normalize(projectPath3.trim());
-    if (!isAbsolute6(path)) throw new Error("Choose the app's project folder.");
+    if (!isAbsolute7(path)) throw new Error("Choose the app's project folder.");
     if (!await isDirectory(path)) throw new Error("That project folder no longer exists.");
     const stamp = (/* @__PURE__ */ new Date()).toISOString();
     const projects = await this.change((known) => [{ path, lastPickedAt: stamp }, ...known.filter((entry2) => !same(entry2.path, path))]);
@@ -38649,8 +38777,8 @@ function registerAppFlowTools(server, host, projects) {
 import { createHash as createHash6, randomUUID as randomUUID5 } from "node:crypto";
 import { homedir as homedir4, tmpdir as tmpdir2 } from "node:os";
 import { lstat as lstat2, mkdir as mkdir5, readFile as readFile8, readdir as readdir5, rename as rename4, stat as stat8, unlink as unlink3, writeFile as writeFile7 } from "node:fs/promises";
-import { basename as basename4, dirname as dirname7, isAbsolute as isAbsolute7, join as join16, relative as relative4, resolve as resolve3 } from "node:path";
-var TESTING_DIRECTORY = join16(homedir4(), "Library/Application Support/mobile-dev/testing");
+import { basename as basename4, dirname as dirname7, isAbsolute as isAbsolute8, join as join14, relative as relative4, resolve as resolve3 } from "node:path";
+var TESTING_DIRECTORY = join14(homedir4(), "Library/Application Support/mobile-dev/testing");
 var REGISTRY_FILE2 = "projects.json";
 var MAX_PROJECTS2 = 12;
 var CONFIG_FILES = ["e2e.config.ts", "e2e.config.mts", "e2e.config.js", "e2e.config.mjs"];
@@ -38679,7 +38807,7 @@ function timestamp3(value) {
 }
 async function findConfig(projectPath3) {
   for (const file3 of CONFIG_FILES) {
-    const candidate = join16(projectPath3, file3);
+    const candidate = join14(projectPath3, file3);
     if (await isFile(candidate)) return candidate;
   }
   return void 0;
@@ -38702,7 +38830,7 @@ function parseTargets(source) {
 }
 async function inspectProject(projectPath3) {
   const path = normalize2(projectPath3.trim());
-  if (!isAbsolute7(path)) throw new ExpectedOperationError("invalid_input", "Choose the project folder.");
+  if (!isAbsolute8(path)) throw new ExpectedOperationError("invalid_input", "Choose the project folder.");
   if (!await isDirectory2(path)) throw new ExpectedOperationError("invalid_input", "That project folder no longer exists.");
   const configPath = await findConfig(path);
   if (!configPath) throw new ExpectedOperationError("invalid_input", "That folder has no e2e.config.ts. Run `npx e2e init` in it first.");
@@ -38719,7 +38847,7 @@ var TestingProjectChoices = class _TestingProjectChoices {
     this.pick = pick4;
   }
   get path() {
-    return join16(this.directory, REGISTRY_FILE2);
+    return join14(this.directory, REGISTRY_FILE2);
   }
   async read() {
     const saved = await readJson3(this.path);
@@ -38730,7 +38858,7 @@ var TestingProjectChoices = class _TestingProjectChoices {
     const seen = /* @__PURE__ */ new Set();
     const unique = [];
     for (const entry2 of [...projects].sort((left, right) => right.lastPickedAt.localeCompare(left.lastPickedAt))) {
-      if (!isAbsolute7(entry2.path)) continue;
+      if (!isAbsolute8(entry2.path)) continue;
       const path = normalize2(entry2.path);
       if (seen.has(path)) continue;
       seen.add(path);
@@ -38799,7 +38927,7 @@ var SEGMENT = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
 var MAX_TEST_BYTES = 256 * 1024;
 async function resolveTestPath(projectPath3, relativePath) {
   const root = normalize2(projectPath3.trim());
-  if (!isAbsolute7(root)) throw new ExpectedOperationError("invalid_input", "Choose the project folder.");
+  if (!isAbsolute8(root)) throw new ExpectedOperationError("invalid_input", "Choose the project folder.");
   const requested = relativePath.trim().replace(/\\/g, "/");
   const segments = requested.split("/").filter(Boolean);
   if (segments[0] !== TESTS_DIRECTORY) throw new ExpectedOperationError("invalid_input", "A recorded test is written inside the project's tests/ folder.");
@@ -38809,10 +38937,10 @@ async function resolveTestPath(projectPath3, relativePath) {
   const testsRoot = resolve3(root, TESTS_DIRECTORY);
   const target2 = resolve3(root, ...segments);
   const inside = relative4(testsRoot, target2);
-  if (inside.startsWith("..") || isAbsolute7(inside)) throw new ExpectedOperationError("invalid_input", "A recorded test is written inside the project's tests/ folder.");
+  if (inside.startsWith("..") || isAbsolute8(inside)) throw new ExpectedOperationError("invalid_input", "A recorded test is written inside the project's tests/ folder.");
   let directory2 = testsRoot;
   for (const segment of [void 0, ...segments.slice(1, -1)]) {
-    if (segment !== void 0) directory2 = join16(directory2, segment);
+    if (segment !== void 0) directory2 = join14(directory2, segment);
     const info3 = await lstat2(directory2).catch(() => void 0);
     if (info3?.isSymbolicLink()) throw new ExpectedOperationError("invalid_input", "That tests folder is a symbolic link.");
   }
@@ -38827,7 +38955,7 @@ async function resolveTestRunPaths(projectPath3, relativePath, configPath) {
   if (!await isFile(testPath)) throw new ExpectedOperationError("invalid_input", "That test file is no longer there.");
   if (configPath !== void 0) {
     const requestedConfig = normalize2(configPath.trim());
-    if (!isAbsolute7(requestedConfig) || !same2(resolve3(requestedConfig), resolve3(project.configPath)))
+    if (!isAbsolute8(requestedConfig) || !same2(resolve3(requestedConfig), resolve3(project.configPath)))
       throw new ExpectedOperationError("invalid_input", "Run the project with its own e2e config.");
   }
   return {
@@ -38863,7 +38991,7 @@ async function listTestFiles(projectPath3) {
     const entries = await readdir5(directory2, { withFileTypes: true }).catch(() => []);
     for (const entry2 of entries) {
       if (found.length >= MAX_LISTED_TESTS) return;
-      const child = join16(directory2, entry2.name);
+      const child = join14(directory2, entry2.name);
       if (entry2.isSymbolicLink()) continue;
       if (entry2.isDirectory()) {
         await walk(child, depth + 1);
@@ -38891,12 +39019,12 @@ async function readTestFile(projectPath3, relativePath) {
   if (info3.size > MAX_TEST_BYTES) throw new ExpectedOperationError("invalid_input", "That test is too large to preview.");
   return readFile8(target2, "utf-8");
 }
-var STAGED_TESTS_DIRECTORY = join16(tmpdir2(), "mobile-dev-testing-edits");
+var STAGED_TESTS_DIRECTORY = join14(tmpdir2(), "mobile-dev-testing-edits");
 function sourceHash(source) {
   return createHash6("sha256").update(source).digest("hex");
 }
 function stagedPath(projectPath3, relativePath) {
-  return join16(STAGED_TESTS_DIRECTORY, `${sourceHash(`${projectPath3}\0${relativePath}`)}.json`);
+  return join14(STAGED_TESTS_DIRECTORY, `${sourceHash(`${projectPath3}\0${relativePath}`)}.json`);
 }
 async function stagedTest(projectPath3, relativePath) {
   const source = await readFile8(stagedPath(projectPath3, relativePath), "utf-8").catch(() => void 0);
@@ -38953,7 +39081,7 @@ async function deleteTestFile(projectPath3, relativePath) {
 // packages/core/src/testing-drafts.ts
 import { randomUUID as randomUUID6 } from "node:crypto";
 import { mkdir as mkdir6, readFile as readFile9, readdir as readdir6, rename as rename5, rm as rm4, stat as stat9, writeFile as writeFile8 } from "node:fs/promises";
-import { join as join17 } from "node:path";
+import { join as join15 } from "node:path";
 
 // packages/shared/src/test-drafts.ts
 var point = external_exports.object({ x: external_exports.number().finite(), y: external_exports.number().finite() }).strict();
@@ -39047,7 +39175,7 @@ function draftSummary(draft) {
 }
 
 // packages/core/src/testing-drafts.ts
-var DRAFTS_DIRECTORY = join17(TESTING_DIRECTORY, "drafts");
+var DRAFTS_DIRECTORY = join15(TESTING_DIRECTORY, "drafts");
 var MAX_DRAFTS = 30;
 function normalizeProject(projectPath3) {
   const trimmed = projectPath3.length > 1 ? projectPath3.replace(/\/+$/, "") : projectPath3;
@@ -39064,7 +39192,7 @@ var TestDraftStore = class {
     this.directory = directory2;
   }
   path(id2) {
-    return join17(this.directory, `${id2}.json`);
+    return join15(this.directory, `${id2}.json`);
   }
   async writeFileAtomic(id2, draft) {
     await mkdir6(this.directory, { recursive: true, mode: 448 });
@@ -39167,15 +39295,15 @@ var TestDraftStore = class {
 
 // packages/core/src/testing-device.ts
 import { existsSync as existsSync3 } from "node:fs";
-import { join as join18 } from "node:path";
+import { join as join16 } from "node:path";
 import { pathToFileURL as pathToFileURL2 } from "node:url";
 var SESSION = "mobile-dev-recorder";
 function pinStateDir() {
   if (process.env.AGENT_DEVICE_STATE_DIR?.trim()) return;
-  process.env.AGENT_DEVICE_STATE_DIR = join18(APP_FLOW_DIRECTORY, "agent-device");
+  process.env.AGENT_DEVICE_STATE_DIR = join16(APP_FLOW_DIRECTORY, "agent-device");
 }
 async function loadProjection(projectPath3) {
-  const entry2 = join18(projectPath3, "node_modules/@e2e-dev/mobile/dist/nodes.js");
+  const entry2 = join16(projectPath3, "node_modules/@e2e-dev/mobile/dist/nodes.js");
   if (!existsSync3(entry2)) {
     throw new ExpectedOperationError(
       "invalid_input",
@@ -39390,9 +39518,9 @@ var TestingDevices = class {
 
 // packages/core/src/testing-run.ts
 import { spawn as spawn4 } from "node:child_process";
-import { existsSync as existsSync4 } from "node:fs";
+import { existsSync as existsSync4, readFileSync } from "node:fs";
 import { rm as rm5, writeFile as writeFile9 } from "node:fs/promises";
-import { join as join19 } from "node:path";
+import { join as join17 } from "node:path";
 import { pathToFileURL as pathToFileURL3 } from "node:url";
 function record3(value) {
   return value && typeof value === "object" && !Array.isArray(value) ? value : void 0;
@@ -39416,7 +39544,9 @@ function errorMessageOf(value) {
 function reportSteps(report, file3) {
   const run5 = record3(record3(report)?.run);
   const steps = [];
-  for (const entry2 of list(run5?.results)) {
+  const results = list(run5?.results);
+  const requestedFile = file3.replaceAll("\\", "/");
+  for (const entry2 of results) {
     const result4 = record3(entry2);
     if (!result4) continue;
     const attempts = list(result4.attempts);
@@ -39425,10 +39555,13 @@ function reportSteps(report, file3) {
       const step = record3(item);
       const source = record3(step?.source);
       const line = typeof source?.line === "number" ? source.line : 0;
-      if (!step || line <= 0 || str(source?.file) && str(source?.file) !== file3) continue;
+      const sourceFile = str(source?.file).replaceAll("\\", "/");
+      if (!step) continue;
+      const location2 = sourceFile === "unknown" && results.length === 1 && str(result4.file).replaceAll("\\", "/") === requestedFile && typeof step.index === "number" ? { stepIndex: step.index } : line > 0 && (!sourceFile || sourceFile === requestedFile) ? { line } : void 0;
+      if (!location2) continue;
       const error51 = errorMessageOf(step.error);
       steps.push({
-        line,
+        ...location2,
         api: str(step.api),
         label: str(step.label),
         status: str(step.status) || "unknown",
@@ -39534,21 +39667,29 @@ function untilTestPath(relativePath) {
   return relativePath.endsWith(".e2e.ts") ? `${relativePath.slice(0, -".e2e.ts".length)}.mobile-dev-until.e2e.ts` : `${relativePath}.mobile-dev-until.e2e.ts`;
 }
 function runnerBin(projectPath3) {
-  const bin = join19(projectPath3, "node_modules/.bin/e2e");
-  if (!existsSync4(bin)) {
-    throw new ExpectedOperationError(
-      "invalid_input",
-      "This project has no e2e CLI installed, so the panel cannot run the test. Install the project's dependencies, then run it again."
-    );
+  if (process.platform === "win32") {
+    const directory2 = join17(projectPath3, "node_modules", "e2e");
+    const manifest = join17(directory2, "package.json");
+    if (existsSync4(manifest)) {
+      const { bin } = JSON.parse(readFileSync(manifest, "utf8"));
+      const entry2 = typeof bin === "string" ? bin : bin?.e2e;
+      if (typeof entry2 === "string" && existsSync4(join17(directory2, entry2))) return join17(directory2, entry2);
+    }
+  } else {
+    const bin = join17(projectPath3, "node_modules/.bin/e2e");
+    if (existsSync4(bin)) return bin;
   }
-  return bin;
+  throw new ExpectedOperationError(
+    "invalid_input",
+    "This project has no e2e CLI installed, so the panel cannot run the test. Install the project's dependencies, then run it again."
+  );
 }
 function runnerEnv(environment = process.env) {
   const { AGENT_DEVICE_STATE_DIR: _pinned, ...rest } = environment;
   return { ...rest, FORCE_COLOR: "0", NO_COLOR: "1" };
 }
 function refusedTheConfig(result4) {
-  return result4.steps.length === 0 && /config/i.test(result4.output ?? "");
+  return result4.status !== "passed" && result4.steps.length === 0 && /config/i.test(result4.output ?? "");
 }
 async function runRecordedTest(request, deps = {}) {
   const result4 = await runOnce(request, deps);
@@ -39561,16 +39702,17 @@ async function runOnce(request, deps) {
   const spawner = deps.spawner ?? spawn4;
   const bin = runnerBin(request.projectPath);
   await deps.release?.();
-  const generated = request.configPath && deps.onProgress ? join19(request.projectPath, PROGRESS_CONFIG) : void 0;
+  const generated = request.configPath && deps.onProgress ? join17(request.projectPath, PROGRESS_CONFIG) : void 0;
   if (generated && request.configPath) await writeFile9(generated, progressConfigSource(request.configPath));
   const runPath = request.untilSource === void 0 ? request.relativePath : untilTestPath(request.relativePath);
-  const partial3 = request.untilSource === void 0 ? void 0 : join19(request.projectPath, runPath);
+  const partial3 = request.untilSource === void 0 ? void 0 : join17(request.projectPath, runPath);
   if (partial3 && request.untilSource !== void 0) await writeFile9(partial3, request.untilSource);
   const discard = () => {
     if (generated) void rm5(generated, { force: true });
     if (partial3) void rm5(partial3, { force: true });
   };
-  const child = spawner(bin, [
+  const child = spawner(process.platform === "win32" ? process.execPath : bin, [
+    ...process.platform === "win32" ? [bin] : [],
     "run",
     runPath,
     "--reporter",
@@ -39601,7 +39743,7 @@ async function runOnce(request, deps) {
     }
   });
   const timeoutMs = request.timeoutMs ?? 10 * 6e4;
-  const exitCode = await new Promise((resolve5, reject) => {
+  const exitCode = await new Promise((resolve6, reject) => {
     const timer = setTimeout(() => {
       child.kill("SIGTERM");
       discard();
@@ -39615,7 +39757,7 @@ async function runOnce(request, deps) {
     });
     child.on("close", (code) => {
       clearTimeout(timer);
-      resolve5(code ?? 1);
+      resolve6(code ?? 1);
     });
   });
   if (generated) await rm5(generated, { force: true });
@@ -39636,12 +39778,12 @@ ${stderr}`) } : {}
 }
 
 // packages/shared/src/panel-target.ts
-var platform2 = external_exports.enum(["ios", "android"]).optional().describe("The task's established platform. Omit when undecided.");
+var platform3 = external_exports.enum(["ios", "android"]).optional().describe("The task's established platform. Omit when undecided.");
 var kind2 = external_exports.enum(["simulator", "emulator", "physical"]).optional().describe("The requested device kind. Omit when undecided.");
 var deviceIdSchema = external_exports.string().min(1).max(256).regex(/^[A-Za-z0-9_.:\[\]%-]+$/).describe("An exact device ID from device discovery. Omit to select a matching device automatically.");
 var workspaceTool = external_exports.enum(["logs", "performance", "storage", "app-intel", "tracesift"]).optional().describe("A workspace tool to open. Omit for the device view.");
 var appIntelScreen = external_exports.string().min(1).max(512).optional().describe("An App Intelligence screen ID to focus when workspaceTool is app-intel, from mobile_app_intel's search or screen result. Omit to open on whatever screen the panel last showed.");
-var panelTargetSchema = external_exports.object({ platform: platform2, kind: kind2, deviceId: deviceIdSchema.optional(), workspaceTool, appIntelScreen }).strict().superRefine((target2, context2) => {
+var panelTargetSchema = external_exports.object({ platform: platform3, kind: kind2, deviceId: deviceIdSchema.optional(), workspaceTool, appIntelScreen }).strict().superRefine((target2, context2) => {
   if (target2.platform === "ios" && target2.kind === "emulator" || target2.platform === "android" && target2.kind === "simulator") {
     context2.addIssue({ code: "custom", path: ["kind"], message: "Use simulator for iOS or emulator for Android." });
   }
@@ -40947,7 +41089,7 @@ function mcpDeviceChoiceForm(input, devices3) {
 }
 async function statusDevices(read12) {
   const status = await read12();
-  if (status.connected === false) throw new SimulatorUnavailableError(status.error ?? "Device discovery is unavailable.");
+  if (!status.connected && status.localIosSupported !== false) throw new SimulatorUnavailableError(status.error ?? "Device discovery is unavailable.");
   return status;
 }
 async function resolveDeviceChoices(references, sources) {
@@ -41114,30 +41256,30 @@ var LogBuffer = class {
     }
   }
   notify() {
-    for (const resolve5 of this.waiters) resolve5();
+    for (const resolve6 of this.waiters) resolve6();
     this.waiters.clear();
   }
   close() {
     this.closed = true;
     this.notify();
-    for (const resolve5 of this.batches) resolve5();
+    for (const resolve6 of this.batches) resolve6();
     this.batches.clear();
   }
   async read(after, waitMs = 1e3) {
-    if (!this.closed && after >= this.sequence && waitMs > 0) await new Promise((resolve5) => {
+    if (!this.closed && after >= this.sequence && waitMs > 0) await new Promise((resolve6) => {
       const done = () => {
         clearTimeout(timer);
         this.waiters.delete(done);
-        resolve5();
+        resolve6();
       };
       const timer = setTimeout(done, waitMs);
       this.waiters.add(done);
     });
-    if (!this.closed && waitMs > 0 && after < this.sequence) await new Promise((resolve5) => {
+    if (!this.closed && waitMs > 0 && after < this.sequence) await new Promise((resolve6) => {
       const done = () => {
         clearTimeout(timer);
         this.batches.delete(done);
-        resolve5();
+        resolve6();
       };
       const timer = setTimeout(done, 75);
       this.batches.add(done);
@@ -41203,7 +41345,7 @@ function startMetroLogs(target2, sink) {
 }
 function receiveMetro(target2, sink, signal) {
   if (signal.aborted) return Promise.resolve();
-  return new Promise((resolve5, reject) => {
+  return new Promise((resolve6, reject) => {
     const url2 = new URL(target2.webSocketDebuggerUrl);
     const origin = new URL(url2);
     origin.protocol = "http:";
@@ -41218,7 +41360,7 @@ function receiveMetro(target2, sink, signal) {
       clearInterval(heartbeat);
       signal.removeEventListener("abort", stop);
       socket.terminate();
-      signal.aborted || !error51 ? resolve5() : reject(error51);
+      signal.aborted || !error51 ? resolve6() : reject(error51);
     };
     const stop = () => finish();
     const timeout = setTimeout(() => finish(new Error("Metro did not enable console events.")), 1e4);
@@ -41532,11 +41674,11 @@ var CpuBuffer = class {
   }
   async read(after, waitMs = 1e3) {
     if (this.closed === false && after >= this.revision && waitMs > 0) {
-      await new Promise((resolve5) => {
+      await new Promise((resolve6) => {
         const done = () => {
           clearTimeout(timer);
           this.waiters.delete(done);
-          resolve5();
+          resolve6();
         };
         const timer = setTimeout(done, waitMs);
         this.waiters.add(done);
@@ -41628,8 +41770,8 @@ var GdbConnection = class {
   lastPacket = null;
   retransmits = 0;
   finishClosed;
-  closed = new Promise((resolve5) => {
-    this.finishClosed = resolve5;
+  closed = new Promise((resolve6) => {
+    this.finishClosed = resolve6;
   });
   onProfile = () => {
   };
@@ -41695,14 +41837,14 @@ var GdbConnection = class {
       const error51 = new Error(message3);
       return Promise.reject(error51);
     }
-    return new Promise((resolve5, reject) => {
+    return new Promise((resolve6, reject) => {
       const timer = setTimeout(() => {
         const name = command3.split(";")[0];
         const error51 = new Error(`Debugserver timed out during ${name}.`);
         this.socket.destroy(error51);
       }, timeoutMs);
       const expectsStop = command3.startsWith("vAttach");
-      this.pending = { resolve: resolve5, reject, timer, expectsStop };
+      this.pending = { resolve: resolve6, reject, timer, expectsStop };
       this.send(command3);
     });
   }
@@ -41730,12 +41872,12 @@ var GdbConnection = class {
       const error51 = new Error(message3);
       return Promise.reject(error51);
     }
-    return new Promise((resolve5, reject) => {
+    return new Promise((resolve6, reject) => {
       const timer = setTimeout(() => {
         const error51 = new Error("Debugserver did not stop for detach.");
         this.socket.destroy(error51);
       }, 5e3);
-      this.pending = { resolve: resolve5, reject, timer, expectsStop: true };
+      this.pending = { resolve: resolve6, reject, timer, expectsStop: true };
       const interrupt = Buffer.from([3]);
       this.socket.write(interrupt);
     });
@@ -41746,12 +41888,12 @@ var GdbConnection = class {
 };
 
 // packages/core/src/cpu/simulator.ts
-import { execFile as execFile10, spawn as spawn5 } from "node:child_process";
+import { execFile as execFile11, spawn as spawn5 } from "node:child_process";
 import { access as access7 } from "node:fs/promises";
 import { createServer as createServer2 } from "node:net";
 import { resolve as resolve4 } from "node:path";
 import { promisify as promisify9 } from "node:util";
-var execute8 = promisify9(execFile10);
+var execute8 = promisify9(execFile11);
 async function openSimulatorDebugserver(signal) {
   if (process.platform !== "darwin") throw new Error("iOS simulator CPU monitoring requires macOS.");
   const discoverySignal = AbortSignal.any([signal, AbortSignal.timeout(5e3)]);
@@ -41977,8 +42119,8 @@ async function startIosCpuMonitor(options, openTransport = openSimulatorDebugser
   let running = false;
   let stopping;
   let end;
-  const closed = new Promise((resolve5) => {
-    end = resolve5;
+  const closed = new Promise((resolve6) => {
+    end = resolve6;
   });
   const stop = () => {
     if (stopping) return stopping;
@@ -42037,8 +42179,8 @@ async function startIosCpuMonitor(options, openTransport = openSimulatorDebugser
     };
     const sampler = new CpuCounterSampler();
     let firstSample;
-    const ready = new Promise((resolve5) => {
-      firstSample = resolve5;
+    const ready = new Promise((resolve6) => {
+      firstSample = resolve6;
     });
     gdb.onProfile = (profile) => {
       const counters = parseCpuCounters(profile);
@@ -42109,17 +42251,17 @@ async function openPhysicalDebugserver(deviceId3, signal, helper = new URL("./io
   let pending = "";
   let accept;
   let fail;
-  const ready = new Promise((resolve5, reject) => {
-    accept = resolve5;
+  const ready = new Promise((resolve6, reject) => {
+    accept = resolve6;
     fail = reject;
   });
-  const exited = new Promise((resolve5) => {
+  const exited = new Promise((resolve6) => {
     child.once("close", (code, exitSignal) => {
       const message3 = diagnostics.trim() || `The iPhone debugserver helper exited (${code ?? exitSignal}).`;
       const error51 = new Error(message3);
       fail(error51);
       if (closing === void 0) socket?.destroy(error51);
-      resolve5(code);
+      resolve6(code);
     });
   });
   const close = () => {
@@ -42174,9 +42316,9 @@ async function openPhysicalDebugserver(deviceId3, signal, helper = new URL("./io
   try {
     const port2 = await ready;
     signal.throwIfAborted();
-    const connected = new Promise((resolve5, reject) => {
+    const connected = new Promise((resolve6, reject) => {
       socket = createConnection({ host: "127.0.0.1", port: port2 });
-      socket.once("connect", resolve5);
+      socket.once("connect", resolve6);
       socket.once("error", reject);
       socket.once("close", () => {
         const error51 = new Error("The iPhone debugserver connection closed before connecting.");
@@ -42201,12 +42343,12 @@ async function openPhysicalDebugserver(deviceId3, signal, helper = new URL("./io
 }
 
 // packages/core/src/cpu/android.ts
-import { execFile as execFile11 } from "node:child_process";
+import { execFile as execFile12 } from "node:child_process";
 import { promisify as promisify10 } from "node:util";
 import { createHash as createHash7, randomBytes as randomBytes3 } from "node:crypto";
 import { mkdtemp as mkdtemp2, readFile as readFile10, rm as rm6, writeFile as writeFile10 } from "node:fs/promises";
 import { tmpdir as tmpdir3 } from "node:os";
-import { join as join20 } from "node:path";
+import { join as join18 } from "node:path";
 import { StringDecoder as StringDecoder2 } from "node:string_decoder";
 
 // packages/core/src/cpu/android-counters.ts
@@ -42268,10 +42410,10 @@ var AndroidCpuSampler = class {
 };
 
 // packages/core/src/cpu/android.ts
-var execute9 = promisify10(execFile11);
+var execute9 = promisify10(execFile12);
 var abiSchema = external_exports.enum(["arm64-v8a", "armeabi-v7a", "x86", "x86_64"]);
 var releaseSchema = external_exports.object({ binaries: external_exports.record(abiSchema, external_exports.object({ sha256: external_exports.string().regex(/^[a-f0-9]{64}$/) })) });
-var command = async (adb, args, signal) => {
+var command2 = async (adb, args, signal) => {
   const result4 = await execute9(adb, args, { signal, timeout: 1e4, maxBuffer: 1024 * 1024 });
   return result4.stdout;
 };
@@ -42292,7 +42434,7 @@ async function loadAndroidCollector(root) {
   }
   return collector;
 }
-async function deployAndroidCollector(adb, deviceId3, signal, collector, run5 = command) {
+async function deployAndroidCollector(adb, deviceId3, signal, collector, run5 = command2) {
   signal.throwIfAborted();
   const rawAbi = await run5(adb, ["-s", deviceId3, "shell", "getprop", "ro.product.cpu.abi"], signal);
   const abiText = rawAbi.trim();
@@ -42304,9 +42446,9 @@ async function deployAndroidCollector(adb, deviceId3, signal, collector, run5 = 
   const tokenText = token.toString("hex");
   const temporary = `${remote}-${tokenText}`;
   const hostTemporary = tmpdir3();
-  const prefix2 = join20(hostTemporary, "mobile-dev-cpu-");
+  const prefix2 = join18(hostTemporary, "mobile-dev-cpu-");
   const directory2 = await mkdtemp2(prefix2);
-  const localPath = join20(directory2, "mobile-dev-cpu");
+  const localPath = join18(directory2, "mobile-dev-cpu");
   try {
     await writeFile10(localPath, binary2.bytes, { mode: 384 });
     signal.throwIfAborted();
@@ -42333,16 +42475,16 @@ async function startAndroidCpuMonitor(options, dependencies) {
     shell: false
   });
   let finish;
-  const closed = new Promise((resolve5) => {
-    finish = resolve5;
+  const closed = new Promise((resolve6) => {
+    finish = resolve6;
   });
   let accept;
-  const ready = new Promise((resolve5) => {
-    accept = resolve5;
+  const ready = new Promise((resolve6) => {
+    accept = resolve6;
   });
   let exited;
-  const exit = new Promise((resolve5) => {
-    exited = resolve5;
+  const exit = new Promise((resolve6) => {
+    exited = resolve6;
   });
   let sampler;
   let stopping;
@@ -42725,7 +42867,7 @@ function registerCpuTools(server, cpu, simulators, { apps = readDeviceApps, andr
 import { randomUUID as randomUUID7 } from "node:crypto";
 import { mkdir as mkdir7, readFile as readFile11, readdir as readdir7, rename as rename6, stat as stat10, writeFile as writeFile11, rm as rm7 } from "node:fs/promises";
 import { homedir as homedir5 } from "node:os";
-import { join as join21 } from "node:path";
+import { join as join19 } from "node:path";
 
 // packages/shared/src/display-fps.ts
 var MAX_DISPLAY_FRAMES_PER_INTERVAL = 4096;
@@ -42765,12 +42907,12 @@ function displayFrameTime(frame2, intervalEndNs, intervalEndTime) {
   const elapsed = Number(elapsedNs) / 1e9;
   return intervalEndTime + elapsed;
 }
-var platform3 = external_exports.enum(["ios", "android"]);
+var platform4 = external_exports.enum(["ios", "android"]);
 var deviceString = external_exports.string();
 var nonemptyDevice = deviceString.min(1);
 var boundedDevice = nonemptyDevice.max(256);
 var deviceId2 = boundedDevice.regex(/^[a-zA-Z0-9_.:-]+$/);
-var target = external_exports.object({ platform: platform3, deviceId: deviceId2 });
+var target = external_exports.object({ platform: platform4, deviceId: deviceId2 });
 var displayFpsTargetSchema = target.strict();
 
 // packages/shared/src/frame-statistics.ts
@@ -43049,7 +43191,7 @@ function summarizeRecording(recording, range) {
 }
 
 // packages/core/src/performance-recordings.ts
-var RECORDINGS_DIRECTORY = join21(homedir5(), "Library/Application Support/mobile-dev/recordings");
+var RECORDINGS_DIRECTORY = join19(homedir5(), "Library/Application Support/mobile-dev/recordings");
 var RecordingStore = class {
   directory;
   constructor(directory2 = RECORDINGS_DIRECTORY) {
@@ -43058,7 +43200,7 @@ var RecordingStore = class {
   async save(recording) {
     const validated = recordingSchema.parse(recording);
     await mkdir7(this.directory, { recursive: true, mode: 448 });
-    const filename = join21(this.directory, `${validated.id}.json`);
+    const filename = join19(this.directory, `${validated.id}.json`);
     const temporary = `${filename}.tmp`;
     const text7 = JSON.stringify(validated);
     try {
@@ -43070,7 +43212,7 @@ var RecordingStore = class {
   }
   async read(id2) {
     const validated = recordingIdSchema.parse(id2);
-    const filename = join21(this.directory, `${validated}.json`);
+    const filename = join19(this.directory, `${validated}.json`);
     const text7 = await readFile11(filename, "utf8");
     const parsed = JSON.parse(text7);
     const recording = recordingSchema.parse(parsed);
@@ -43091,7 +43233,7 @@ var RecordingStore = class {
       const id2 = entry2.name.slice(0, -5);
       const parsed = recordingIdSchema.safeParse(id2);
       if (parsed.success === false) continue;
-      const filename = join21(this.directory, entry2.name);
+      const filename = join19(this.directory, entry2.name);
       const metadata4 = await stat10(filename);
       candidates.push({ id: id2, modified: metadata4.mtimeMs });
     }
@@ -43651,6 +43793,23 @@ var traceSiftProfileInputSchema = external_exports.object({
   path: external_exports.string().min(1).max(16384),
   profileType: traceSiftProfileTypeSchema.default("auto")
 });
+var traceSiftSetupReasonSchema = external_exports.enum(["missing_cli", "needs_init", "unsupported", "startup_failed"]);
+var traceSiftReadinessSchema = external_exports.discriminatedUnion("status", [
+  external_exports.object({ apiVersion: external_exports.literal(1), status: external_exports.literal("ready") }),
+  external_exports.object({
+    apiVersion: external_exports.literal(1),
+    status: external_exports.literal("setup_required"),
+    reason: traceSiftSetupReasonSchema,
+    message: external_exports.string().min(1)
+  })
+]);
+var traceSiftSetupActionSchema = external_exports.enum(["install", "init"]);
+var traceSiftSetupActionResultSchema = external_exports.object({
+  apiVersion: external_exports.literal(1),
+  action: traceSiftSetupActionSchema,
+  completed: external_exports.literal(true),
+  message: external_exports.string().min(1)
+});
 var finite2 = external_exports.number().finite().nonnegative();
 var taskCulpritSchema = external_exports.object({
   name: external_exports.string(),
@@ -43786,18 +43945,22 @@ import { createHash as createHash8, randomUUID as randomUUID8 } from "node:crypt
 import { openAsBlob } from "node:fs";
 import { mkdir as mkdir8, readFile as readFileAsync, realpath as realpath2, rename as rename7, rm as rm8, stat as stat11, writeFile as writeFile12 } from "node:fs/promises";
 import { homedir as homedir6 } from "node:os";
-import { basename as basename5, join as join22 } from "node:path";
+import { basename as basename5, join as join20 } from "node:path";
 import { createServer as createServer3 } from "node:net";
 import { setTimeout as delay5 } from "node:timers/promises";
 var STARTUP_TIMEOUT_MS = 6e4;
 var REQUEST_TIMEOUT_MS = 10 * 6e4;
 var EXPLORE_TIMEOUT_MS = 15e3;
+var SETUP_TIMEOUT_MS = 5 * 6e4;
+var SETUP_DIAGNOSTICS_MAX_BYTES = 16384;
 var EXPLORE_UNSUPPORTED = "This TraceSift service cannot open findings in the panel. Update TraceSift and restart it, or use Open in browser.";
 var TraceSiftError = class extends ExpectedOperationError {
   kind;
-  constructor(message3, kind3) {
+  setupReason;
+  constructor(message3, kind3, setupReason) {
     super("invalid_input", message3);
     this.kind = kind3;
+    this.setupReason = setupReason;
   }
 };
 function processAlive(pid3) {
@@ -43809,31 +43972,34 @@ function processAlive(pid3) {
     return error51 instanceof Error && "code" in error51 && error51.code === "EPERM";
   }
 }
+function requireTraceSiftHost() {
+  if (process.platform === "win32") throw new TraceSiftError("TraceSift profile analysis requires a macOS or Linux host.", "version", "unsupported");
+}
 async function parseDescriptor(path) {
   let raw;
   try {
     const metadata4 = await stat11(path);
-    if ((metadata4.mode & 63) !== 0) throw new TraceSiftError("TraceSift service.json permissions are unsafe. Restart TraceSift so it recreates the file with mode 0600.", "setup");
+    if ((metadata4.mode & 63) !== 0) throw new TraceSiftError("TraceSift service.json permissions are unsafe. Restart TraceSift so it recreates the file with mode 0600.", "setup", "startup_failed");
     raw = JSON.parse(await readFileAsync(path, "utf8"));
   } catch (error51) {
     if (error51 instanceof TraceSiftError) throw error51;
     if (error51 instanceof Error && "code" in error51 && error51.code === "ENOENT") return;
-    throw new TraceSiftError("TraceSift service.json could not be read. Stop TraceSift, remove the stale file if no process is running, and retry.", "setup");
+    throw new TraceSiftError("TraceSift service.json could not be read. Stop TraceSift, remove the stale file if no process is running, and retry.", "setup", "startup_failed");
   }
-  if (typeof raw !== "object" || raw === null) throw new TraceSiftError("TraceSift service.json is invalid. Restart TraceSift.", "setup");
+  if (typeof raw !== "object" || raw === null) throw new TraceSiftError("TraceSift service.json is invalid. Restart TraceSift.", "setup", "startup_failed");
   const value = raw;
-  if (value.apiVersion !== 1) throw new TraceSiftError("This TraceSift service uses an incompatible integration API. Update TraceSift and restart it.", "version");
-  if (typeof value.baseUrl !== "string" || !/^http:\/\/127\.0\.0\.1:\d+$/.test(value.baseUrl) || typeof value.token !== "string" || value.token.length < 16 || typeof value.instance !== "string" || typeof value.version !== "string" || typeof value.pid !== "number" || typeof value.childPid !== "number" || typeof value.startedAt !== "number") throw new TraceSiftError("TraceSift service.json is invalid. Restart TraceSift.", "setup");
+  if (value.apiVersion !== 1) throw new TraceSiftError("This TraceSift service uses an incompatible integration API. Update TraceSift and restart it.", "version", "unsupported");
+  if (typeof value.baseUrl !== "string" || !/^http:\/\/127\.0\.0\.1:\d+$/.test(value.baseUrl) || typeof value.token !== "string" || value.token.length < 16 || typeof value.instance !== "string" || typeof value.version !== "string" || typeof value.pid !== "number" || typeof value.childPid !== "number" || typeof value.startedAt !== "number") throw new TraceSiftError("TraceSift service.json is invalid. Restart TraceSift.", "setup", "startup_failed");
   return value;
 }
 async function freePort() {
-  return new Promise((resolve5, reject) => {
+  return new Promise((resolve6, reject) => {
     const server = createServer3();
     server.once("error", reject);
     server.listen(0, "127.0.0.1", () => {
       const address2 = server.address();
       const port2 = typeof address2 === "object" && address2 ? address2.port : 0;
-      server.close((error51) => error51 ? reject(error51) : resolve5(port2));
+      server.close((error51) => error51 ? reject(error51) : resolve6(port2));
     });
   });
 }
@@ -43863,13 +44029,14 @@ var TraceSiftClient = class {
   command;
   constructor(command3 = process.env.TRACE_SIFT_COMMAND ?? "tracesift", home2) {
     this.command = command3;
-    this.home = home2 ?? process.env.TRACE_SIFT_HOME ?? join22(homedir6(), ".tracesift");
+    this.home = home2 ?? process.env.TRACE_SIFT_HOME ?? join20(homedir6(), ".tracesift");
   }
   async existing(signal) {
-    const descriptor = await parseDescriptor(join22(this.home, "service.json"));
+    const descriptor = await parseDescriptor(join20(this.home, "service.json"));
     return descriptor && await health(descriptor, signal) ? descriptor : void 0;
   }
   async start(signal) {
+    requireTraceSiftHost();
     const reusable = await this.existing(signal);
     if (reusable) return reusable;
     const port2 = await freePort();
@@ -43880,7 +44047,7 @@ var TraceSiftClient = class {
         env: { ...process.env, TRACE_SIFT_HOME: this.home }
       });
     } catch {
-      throw new TraceSiftError("TraceSift is not installed. Install @callstack/tracesift, run `tracesift init`, and retry.", "setup");
+      throw new TraceSiftError("TraceSift is not installed. Run `npm install -g @callstack/tracesift`, then `tracesift init`.", "setup", "missing_cli");
     }
     this.child = child;
     let spawnError;
@@ -43899,16 +44066,23 @@ var TraceSiftClient = class {
     const deadline = Date.now() + STARTUP_TIMEOUT_MS;
     while (Date.now() < deadline) {
       signal?.throwIfAborted();
-      if (spawnError) throw new TraceSiftError("TraceSift could not start. Install @callstack/tracesift, run `tracesift init`, and retry.", "setup");
+      if (spawnError) {
+        const missing = spawnError instanceof Error && "code" in spawnError && spawnError.code === "ENOENT";
+        if (missing) throw new TraceSiftError("TraceSift is not installed or is not available to Mobile Dev. Run `npm install -g @callstack/tracesift`, then `tracesift init`.", "setup", "missing_cli");
+        throw new TraceSiftError("TraceSift could not start. Check the installation and retry.", "startup", "startup_failed");
+      }
       const descriptor = await this.existing(signal);
       if (descriptor) return descriptor;
       if (exited && /another tracesift operation/i.test(diagnostics) === false) {
-        if (/node\.js|unsupported|platform|architecture/i.test(diagnostics)) throw new TraceSiftError("This TraceSift installation does not support the current Node.js version or platform. Update Node and TraceSift, then retry.", "version");
-        throw new TraceSiftError("TraceSift could not start. Run `tracesift init`, then retry or start `tracesift start --no-open` manually.", "setup");
+        if (/node\.js|unsupported|platform|architecture/i.test(diagnostics)) throw new TraceSiftError("This TraceSift installation does not support the current Node.js version or platform. Update Node and TraceSift, run `tracesift init`, then retry.", "version", "unsupported");
+        if (/tracesift init|install the app|installation is incomplete|matching this cli release/i.test(diagnostics)) {
+          throw new TraceSiftError("TraceSift is installed, but its app is missing or does not match this CLI. Run `tracesift init`, then retry.", "setup", "needs_init");
+        }
+        throw new TraceSiftError("TraceSift could not start. Retry, or run `tracesift start --no-open` in a terminal to see its startup error.", "startup", "startup_failed");
       }
       await delay5(200, void 0, { signal });
     }
-    throw new TraceSiftError("TraceSift did not become ready within 60 seconds. Run `tracesift init`, then retry or start `tracesift start --no-open` manually.", "startup");
+    throw new TraceSiftError("TraceSift did not become ready within 60 seconds. Retry, or run `tracesift start --no-open` in a terminal to see its startup error.", "startup", "startup_failed");
   }
   service(signal) {
     return this.ready ??= this.start(signal).catch((error51) => {
@@ -43919,20 +44093,80 @@ var TraceSiftClient = class {
   async readyService(signal) {
     await this.service(signal);
   }
+  runSetupCommand(command3, args, label, signal, env = process.env) {
+    return new Promise((resolve6, reject) => {
+      let child;
+      try {
+        child = spawn9(command3, args, { stdio: ["ignore", "pipe", "pipe"], env });
+      } catch {
+        reject(new TraceSiftError(`${label} could not start because ${command3} is not available to Mobile Dev. Run the command in a terminal instead.`, "setup", "missing_cli"));
+        return;
+      }
+      let diagnostics = "";
+      let settled = false;
+      const append = (chunk) => {
+        if (diagnostics.length < SETUP_DIAGNOSTICS_MAX_BYTES) diagnostics += String(chunk).slice(0, SETUP_DIAGNOSTICS_MAX_BYTES - diagnostics.length);
+      };
+      child.stdout?.setEncoding("utf8");
+      child.stderr?.setEncoding("utf8");
+      child.stdout?.on("data", append);
+      child.stderr?.on("data", append);
+      const finish = (error51) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timeout);
+        signal?.removeEventListener("abort", abort);
+        if (error51) reject(error51);
+        else resolve6();
+      };
+      const abort = () => {
+        child.kill("SIGTERM");
+        finish(signal?.reason instanceof Error ? signal.reason : new Error(`${label} was cancelled.`));
+      };
+      const timeout = setTimeout(() => {
+        child.kill("SIGTERM");
+        finish(new TraceSiftError(`${label} did not finish within five minutes. Run the command in a terminal to continue.`, "setup", "startup_failed"));
+      }, SETUP_TIMEOUT_MS);
+      child.once("error", (error51) => {
+        const missing = "code" in error51 && error51.code === "ENOENT";
+        finish(missing ? new TraceSiftError(`${label} could not start because ${command3} is not available to Mobile Dev. Run the command in a terminal instead.`, "setup", "missing_cli") : new TraceSiftError(`${label} could not start.`, "setup", "startup_failed"));
+      });
+      child.once("exit", (code) => {
+        const detail = diagnostics.trim();
+        finish(code === 0 ? void 0 : new TraceSiftError(detail || `${label} exited with code ${code}.`, "setup", "startup_failed"));
+      });
+      if (signal?.aborted) abort();
+      else signal?.addEventListener("abort", abort, { once: true });
+    });
+  }
+  async installCli(signal) {
+    requireTraceSiftHost();
+    await this.runSetupCommand("npm", ["install", "-g", "@callstack/tracesift"], "TraceSift installation", signal);
+  }
+  async initialize(signal) {
+    requireTraceSiftHost();
+    await this.runSetupCommand(
+      this.command,
+      ["init"],
+      "TraceSift initialization",
+      signal,
+      { ...process.env, TRACE_SIFT_HOME: this.home }
+    );
+  }
   analysisPath(analysisId) {
-    return join22(this.home, "integrations", "mobile-dev", `${createHash8("sha256").update(analysisId).digest("hex")}.json`);
+    return join20(this.home, "integrations", "mobile-dev", `${createHash8("sha256").update(analysisId).digest("hex")}.json`);
   }
   viewPath(viewId) {
     const key = createHash8("sha256").update(JSON.stringify(viewId)).digest("hex");
-    return join22(this.home, "integrations", "mobile-dev", `view-${key}.json`);
+    return join20(this.home, "integrations", "mobile-dev", `view-${key}.json`);
   }
   inputPath(path, profileType) {
     const key = createHash8("sha256").update(JSON.stringify({ path, profileType })).digest("hex");
-    return join22(this.home, "integrations", "mobile-dev", `input-${key}.json`);
+    return join20(this.home, "integrations", "mobile-dev", `input-${key}.json`);
   }
   async writePrivateJson(file3, value) {
-    const directory2 = join22(this.home, "integrations", "mobile-dev");
-    const temporary = join22(directory2, `.analysis-${randomUUID8()}`);
+    const directory2 = join20(this.home, "integrations", "mobile-dev");
+    const temporary = join20(directory2, `.analysis-${randomUUID8()}`);
     try {
       await writeFile12(temporary, `${JSON.stringify(value)}
 `, { flag: "wx", mode: 384 });
@@ -43942,25 +44176,25 @@ var TraceSiftClient = class {
     }
   }
   async persistAnalysis(analysis) {
-    const directory2 = join22(this.home, "integrations", "mobile-dev");
+    const directory2 = join20(this.home, "integrations", "mobile-dev");
     await mkdir8(directory2, { recursive: true, mode: 448 });
     await this.writePrivateJson(this.analysisPath(analysis.analysisId), analysis);
   }
   async remember(viewId, analysisId) {
     const analysis = await stat11(this.analysisPath(analysisId)).catch(() => void 0);
     if (!analysis?.isFile()) throw new TraceSiftError("This TraceSift analysis is no longer available. Run it again.", "request");
-    const directory2 = join22(this.home, "integrations", "mobile-dev");
+    const directory2 = join20(this.home, "integrations", "mobile-dev");
     await mkdir8(directory2, { recursive: true, mode: 448 });
     await this.writePrivateJson(this.viewPath(viewId), { apiVersion: 1, analysisId });
   }
   async rememberInput(path, profileType, analysisId) {
-    const directory2 = join22(this.home, "integrations", "mobile-dev");
+    const directory2 = join20(this.home, "integrations", "mobile-dev");
     await mkdir8(directory2, { recursive: true, mode: 448 });
     await this.writePrivateJson(this.inputPath(path, profileType), { apiVersion: 1, analysisId });
   }
   // The investigation's source folder: the plugin's choice, not TraceSift's, stored beside the analyses to inherit their 0700 directory.
   projectPath() {
-    return join22(this.home, "integrations", "mobile-dev", "project.json");
+    return join20(this.home, "integrations", "mobile-dev", "project.json");
   }
   async readProject() {
     let stored;
@@ -43979,7 +44213,7 @@ var TraceSiftClient = class {
     const directory2 = await stat11(path).catch(() => void 0);
     if (!directory2?.isDirectory()) throw new TraceSiftError("That project folder does not exist.", "request");
     const resolved = await realpath2(path);
-    await mkdir8(join22(this.home, "integrations", "mobile-dev"), { recursive: true, mode: 448 });
+    await mkdir8(join20(this.home, "integrations", "mobile-dev"), { recursive: true, mode: 448 });
     await this.writePrivateJson(this.projectPath(), { apiVersion: 1, path: resolved });
     return resolved;
   }
@@ -44098,7 +44332,7 @@ var TraceSiftClient = class {
     await this.launchExplore(["explore", analysisPath, "--commit", `${rootId}.${commitIndex}`], signal);
   }
   async launchExplore(args, signal) {
-    await new Promise((resolve5, reject) => {
+    await new Promise((resolve6, reject) => {
       let diagnostics = "";
       let settled = false;
       const child = spawn9(this.command, args, {
@@ -44115,7 +44349,7 @@ var TraceSiftClient = class {
         clearTimeout(timeout);
         signal?.removeEventListener("abort", abort);
         if (error51) reject(error51);
-        else resolve5();
+        else resolve6();
       };
       const abort = () => {
         child.kill("SIGTERM");
@@ -44163,7 +44397,7 @@ var TraceSiftClient = class {
     this.child = void 0;
     this.ready = void 0;
     if (!child || child.exitCode !== null || child.signalCode !== null) return;
-    const exited = new Promise((resolve5) => child.once("exit", () => resolve5()));
+    const exited = new Promise((resolve6) => child.once("exit", () => resolve6()));
     child.kill("SIGTERM");
     await Promise.race([exited, delay5(3e3, void 0, { ref: false })]);
   }
@@ -44198,90 +44432,12 @@ function traceSiftPayloadTooDeep(value, maxDepth2 = TRACE_SIFT_PAYLOAD_MAX_DEPTH
   return false;
 }
 
-// packages/core/src/profile-picker.ts
-import { execFile as execFile12 } from "node:child_process";
-import { platform as platform4 } from "node:os";
-var PICKER_TIMEOUT_MS = 5 * 60 * 1e3;
-var ProfilePickerError = class extends Error {
-  constructor(message3) {
-    super(message3);
-    this.name = "ProfilePickerError";
-  }
-};
-var APPLESCRIPT = `set chosen to choose file with prompt "Choose a CPU or React profile" of type {"public.json", "json"}
-POSIX path of chosen`;
-var APPLESCRIPT_FOLDER = `set chosen to choose folder with prompt "Choose a project folder"
-POSIX path of chosen`;
-var POWERSHELL = `Add-Type -AssemblyName System.Windows.Forms
-$dialog = New-Object System.Windows.Forms.OpenFileDialog
-$dialog.Filter = 'Profiles (*.json;*.cpuprofile)|*.json;*.cpuprofile|All files (*.*)|*.*'
-$dialog.Title = 'Choose a CPU or React profile'
-if ($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) { Write-Output $dialog.FileName }`;
-var POWERSHELL_FOLDER = `Add-Type -AssemblyName System.Windows.Forms
-$dialog = New-Object System.Windows.Forms.FolderBrowserDialog
-$dialog.Description = 'Choose a project folder'
-if ($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) { Write-Output $dialog.SelectedPath }`;
-function command2() {
-  switch (platform4()) {
-    case "darwin":
-      return { file: "osascript", args: ["-e", APPLESCRIPT] };
-    case "win32":
-      return { file: "powershell", args: ["-NoProfile", "-STA", "-Command", POWERSHELL] };
-    // zenity ships with GNOME; kdialog is the KDE equivalent and is tried next.
-    default:
-      return { file: "zenity", args: ["--file-selection", "--title=Choose a CPU or React profile", "--file-filter=Profiles | *.json *.cpuprofile"] };
-  }
-}
-function folderCommand() {
-  switch (platform4()) {
-    case "darwin":
-      return { file: "osascript", args: ["-e", APPLESCRIPT_FOLDER] };
-    case "win32":
-      return { file: "powershell", args: ["-NoProfile", "-STA", "-Command", POWERSHELL_FOLDER] };
-    default:
-      return { file: "zenity", args: ["--file-selection", "--directory", "--title=Choose a project folder"] };
-  }
-}
-function run3(file3, args) {
-  return new Promise((resolve5, reject) => {
-    execFile12(file3, args, { timeout: PICKER_TIMEOUT_MS, maxBuffer: 64 * 1024 }, (error51, stdout, stderr) => {
-      const code = error51 && typeof error51 === "object" && "code" in error51 ? error51.code : 0;
-      if (typeof code === "string") {
-        reject(error51);
-        return;
-      }
-      resolve5({ code: typeof code === "number" ? code : 0, stdout, stderr });
-    });
-  });
-}
-async function pick3(chooser, fallback) {
-  const { file: file3, args } = chooser();
-  let result4;
-  try {
-    result4 = await run3(file3, args);
-  } catch (error51) {
-    if (platform4() === "linux" && error51 instanceof Error && "code" in error51 && error51.code === "ENOENT") {
-      try {
-        result4 = await run3("kdialog", fallback);
-      } catch {
-        throw new ProfilePickerError("No file dialog is available on this host. Install zenity or kdialog, or ask the agent to work by path.");
-      }
-    } else {
-      throw new ProfilePickerError("This host could not open a file dialog. Ask the agent to work by path instead.");
-    }
-  }
-  const path = result4.stdout.trim();
-  if (result4.code !== 0 || path === "") return { picked: false };
-  return { picked: true, path };
-}
-var pickProfileFile = () => pick3(command2, ["--getopenfilename", ".", "*.json *.cpuprofile"]);
-var pickProjectFolder = () => pick3(folderCommand, ["--getexistingdirectory", "."]);
-
 // packages/core/src/tracesift-tools.ts
 var gzip = promisify11(gzipCallback);
 var read6 = { readOnlyHint: true, destructiveHint: false, openWorldHint: false };
 var persist = { readOnlyHint: false, destructiveHint: true, openWorldHint: false };
 var localService = { readOnlyHint: false, destructiveHint: false, openWorldHint: false };
+var setupMutation = { readOnlyHint: false, destructiveHint: true, openWorldHint: true };
 var visibility2 = ["app", "model"];
 var analysisOutput = {
   apiVersion: external_exports.literal(1),
@@ -44297,6 +44453,75 @@ function failure(error51, operation, startedAt, signal) {
   return { isError: true, content: [{ type: "text", text: errorMessage(error51) }] };
 }
 function registerTraceSiftTools(server, client) {
+  K3(server, "mobile_tracesift_status", {
+    title: "Check TraceSift readiness",
+    description: "Check whether TraceSift is installed, initialized, compatible, and ready for profile analysis. Reuses a compatible local service or starts `tracesift start --no-open`. Call this before asking the user to capture or choose a profile when no profile path has been provided yet. Setup requirements are returned as a normal structured status with the exact next step.",
+    inputSchema: {},
+    outputSchema: {
+      apiVersion: external_exports.literal(1),
+      status: external_exports.enum(["ready", "setup_required"]),
+      reason: traceSiftSetupReasonSchema.optional(),
+      message: external_exports.string().optional()
+    },
+    annotations: localService,
+    _meta: { ui: { visibility: visibility2 } }
+  }, async (_input, context2) => {
+    const startedAt = performance.now();
+    try {
+      await client.readyService(context2.signal);
+      recordTraceSiftOperation("ready", "success", performance.now() - startedAt);
+      return {
+        content: [{ type: "text", text: "TraceSift is installed, initialized, and ready for profile analysis." }],
+        structuredContent: { apiVersion: 1, status: "ready" }
+      };
+    } catch (error51) {
+      if (error51 instanceof TraceSiftError && (error51.kind === "setup" || error51.kind === "version" || error51.kind === "startup")) {
+        recordTraceSiftOperation("ready", "failed", performance.now() - startedAt);
+        const reason = error51.setupReason ?? (error51.kind === "version" ? "unsupported" : "startup_failed");
+        return {
+          content: [{ type: "text", text: error51.message }],
+          structuredContent: { apiVersion: 1, status: "setup_required", reason, message: error51.message }
+        };
+      }
+      return failure(error51, "ready", startedAt, context2.signal);
+    }
+  });
+  K3(server, "mobile_install_tracesift_cli", {
+    title: "Install the TraceSift CLI",
+    description: "Install the TraceSift CLI globally with the fixed command `npm install -g @callstack/tracesift`. App-only: called after the user presses Install in the TraceSift setup panel. Modifies the global npm installation and may access the npm registry.",
+    inputSchema: {},
+    outputSchema: traceSiftSetupActionResultSchema.shape,
+    annotations: setupMutation,
+    _meta: { ui: { visibility: ["app"] } }
+  }, async (_input, context2) => {
+    const startedAt = performance.now();
+    try {
+      await client.installCli(context2.signal);
+      recordTraceSiftOperation("install", "success", performance.now() - startedAt);
+      const structuredContent = { apiVersion: 1, action: "install", completed: true, message: "TraceSift CLI installed. Checking setup\u2026" };
+      return { content: [{ type: "text", text: structuredContent.message }], structuredContent };
+    } catch (error51) {
+      return failure(error51, "install", startedAt, context2.signal);
+    }
+  });
+  K3(server, "mobile_initialize_tracesift", {
+    title: "Initialize TraceSift",
+    description: "Initialize or replace the local TraceSift app with the fixed command `tracesift init`. App-only: called after the user presses Initialize in the TraceSift setup panel. Modifies the user's local TraceSift installation and may download the matching app release.",
+    inputSchema: {},
+    outputSchema: traceSiftSetupActionResultSchema.shape,
+    annotations: setupMutation,
+    _meta: { ui: { visibility: ["app"] } }
+  }, async (_input, context2) => {
+    const startedAt = performance.now();
+    try {
+      await client.initialize(context2.signal);
+      recordTraceSiftOperation("init", "success", performance.now() - startedAt);
+      const structuredContent = { apiVersion: 1, action: "init", completed: true, message: "TraceSift initialized. Checking readiness\u2026" };
+      return { content: [{ type: "text", text: structuredContent.message }], structuredContent };
+    } catch (error51) {
+      return failure(error51, "init", startedAt, context2.signal);
+    }
+  });
   K3(server, "mobile_analyze_profile", {
     title: "Analyze a CPU or React profile with TraceSift",
     description: "Upload a local CPU profile or React DevTools profiling export to the local TraceSift service and render its measured findings as inline cards, each dividing its task between the features it entered, with an Explore view for the call tree and timeline. Use when the user provides a profile path and asks to investigate performance or find a root cause. Set profileType only when the format is known; auto detects supported JSON formats. May start the local TraceSift service, saves analysis files, and replaces the latest analysis reference for this profile input. After rendering, wait for the user to choose Investigate before changing code.",
@@ -44528,7 +44753,7 @@ function registerTraceSiftTools(server, client) {
 
 // packages/core/src/storage-metrics.ts
 import { readdir as readdir8, stat as stat12 } from "node:fs/promises";
-import { join as join23 } from "node:path";
+import { join as join21 } from "node:path";
 async function directoryBytes(directory2) {
   let entries;
   try {
@@ -44539,7 +44764,7 @@ async function directoryBytes(directory2) {
   }
   let bytes = 0;
   for (const entry2 of entries) {
-    const path = join23(directory2, entry2.name);
+    const path = join21(directory2, entry2.name);
     if (entry2.isDirectory()) bytes += await directoryBytes(path);
     else if (entry2.isFile()) {
       try {
@@ -44604,14 +44829,14 @@ async function collectorProcess(command3, args, options) {
   let ready;
   let watchdog;
   let startedSuccessfully = false;
-  const closed = new Promise((resolve5) => {
-    end = resolve5;
+  const closed = new Promise((resolve6) => {
+    end = resolve6;
   });
-  const exit = new Promise((resolve5) => {
-    exited = resolve5;
+  const exit = new Promise((resolve6) => {
+    exited = resolve6;
   });
-  const started = new Promise((resolve5) => {
-    ready = resolve5;
+  const started = new Promise((resolve6) => {
+    ready = resolve6;
   });
   const stop = () => {
     if (stopping) return stopping;
@@ -44708,7 +44933,7 @@ import { execFile as execFile13 } from "node:child_process";
 import { promisify as promisify12 } from "node:util";
 import { mkdtemp as mkdtemp3, readFile as readFile12, rm as rm9, writeFile as writeFile13 } from "node:fs/promises";
 import { tmpdir as tmpdir4 } from "node:os";
-import { join as join24 } from "node:path";
+import { join as join22 } from "node:path";
 var execute10 = promisify12(execFile13);
 var abiSchema2 = external_exports.enum(["arm64-v8a", "armeabi-v7a", "x86", "x86_64"]);
 var checksumString = external_exports.string();
@@ -44734,9 +44959,9 @@ async function deployFpsHelper(adb, deviceId3, signal, root) {
   if (sha256 !== release.binaries[abi].sha256) throw new Error("The bundled Android FPS helper failed its integrity check.");
   const remote = `/data/local/tmp/mobile-dev-fps-${sha256}`;
   const temporaryRoot = tmpdir4();
-  const temporaryPrefix = join24(temporaryRoot, "mobile-dev-fps-");
+  const temporaryPrefix = join22(temporaryRoot, "mobile-dev-fps-");
   const directory2 = await mkdtemp3(temporaryPrefix);
-  const local = join24(directory2, "mobile-dev-fps");
+  const local = join22(directory2, "mobile-dev-fps");
   const token = randomBytes5(8);
   const id2 = token.toString("hex");
   const temporary = `${remote}-${id2}`;
@@ -44998,6 +45223,25 @@ var FrameTimeline = class {
   }
 };
 
+// packages/core/src/fps/windows-adb-trace.ts
+var WindowsAdbTrace = class {
+  textMode;
+  pendingCR = false;
+  decode(chunk) {
+    if (!chunk.length) return chunk;
+    this.textMode ??= chunk[0] === 13;
+    if (!this.textMode) return chunk;
+    const bytes = Buffer.allocUnsafe(chunk.length + Number(this.pendingCR));
+    let length = 0;
+    for (const byte of chunk) {
+      if (this.pendingCR && byte !== 10) bytes[length++] = 13;
+      this.pendingCR = byte === 13;
+      if (!this.pendingCR) bytes[length++] = byte;
+    }
+    return bytes.subarray(0, length);
+  }
+};
+
 // packages/core/src/fps/source.ts
 var execute11 = promisify13(execFile14);
 var fpsNumber = external_exports.number();
@@ -45051,12 +45295,13 @@ async function startAndroid(options, root) {
     options.onSample(reading3);
     firstReady?.();
   });
+  const windowsTrace = process.platform === "win32" ? new WindowsAdbTrace() : void 0;
   const command3 = nativeCollectorCommand(remote);
   return collectorProcess(adb, [...prefix2, "shell", "-T", command3], {
     signal: options.signal,
     data(chunk, ready) {
       firstReady = ready;
-      timeline.push(chunk);
+      timeline.push(windowsTrace ? windowsTrace.decode(chunk) : chunk);
     }
   });
 }
@@ -45146,11 +45391,11 @@ var DisplayFpsSessions = class {
     if (session === void 0) throw new ExpectedOperationError("session_expired", "This Display FPS session expired or closed.");
     session.expires = Date.now() + 3e5;
     if (after >= session.revision && waitMs > 0 && session.stopping === void 0) {
-      await new Promise((resolve5) => {
+      await new Promise((resolve6) => {
         const done = () => {
           clearTimeout(timer);
           session.waiters.delete(done);
-          resolve5();
+          resolve6();
         };
         const timer = setTimeout(done, waitMs);
         session.waiters.add(done);
@@ -45302,6 +45547,13 @@ function registerEarlierReleases(server, name, page, read12) {
 import { execFile as execFile15 } from "node:child_process";
 import { promisify as promisify14 } from "node:util";
 var execute12 = promisify14(execFile15);
+async function runSimctl(args) {
+  const { stdout } = await execute12("xcrun", args, { timeout: 15e3, maxBuffer: 8 * 1024 * 1024 });
+  return stdout;
+}
+function unavailableLocalIosStatus() {
+  return { connected: false, managed: false, baseUrl: "", devices: [], localIosSupported: false };
+}
 var listing = external_exports.object({
   devices: external_exports.record(external_exports.string(), external_exports.array(external_exports.object({
     udid: external_exports.string(),
@@ -45328,10 +45580,11 @@ function parseSimulatorList(output) {
 }
 var Simctl = class {
   run;
-  constructor(run5 = async (args) => (await execute12("xcrun", args, { timeout: 15e3, maxBuffer: 8 * 1024 * 1024 })).stdout) {
+  constructor(run5 = process.platform === "win32" ? void 0 : runSimctl) {
     this.run = run5;
   }
   async list() {
+    if (!this.run) return unavailableLocalIosStatus();
     try {
       const devices3 = parseSimulatorList(await this.run(["simctl", "list", "devices", "--json"]));
       return { connected: true, managed: false, baseUrl: "", devices: devices3 };
@@ -45358,9 +45611,9 @@ import { Worker } from "node:worker_threads";
 import { createHash as createHash10 } from "node:crypto";
 import { mkdir as mkdir9, readFile as readFile13, realpath as realpath3, rename as rename8, rm as rm10, stat as stat13, writeFile as writeFile14 } from "node:fs/promises";
 import { homedir as homedir7 } from "node:os";
-import { join as join25 } from "node:path";
-var APP_INTEL_DIRECTORY = join25(homedir7(), "Library/Application Support/mobile-dev/app-intelligence");
-var preferencePath = join25(APP_INTEL_DIRECTORY, "preferences.json");
+import { join as join23 } from "node:path";
+var APP_INTEL_DIRECTORY = join23(homedir7(), "Library/Application Support/mobile-dev/app-intelligence");
+var preferencePath = join23(APP_INTEL_DIRECTORY, "preferences.json");
 var projectKey = (path) => createHash10("sha256").update(path).digest("hex");
 async function validateProjectPath(path) {
   if (!path || path.length > 4096) throw new Error("Choose a valid project folder.");
@@ -45397,7 +45650,7 @@ async function rememberProject(projectPath3) {
   const next = [projectPath3, ...recents.filter((entry2) => entry2 !== projectPath3)].slice(0, RECENT_LIMIT);
   await atomicWrite(preferencePath, JSON.stringify({ projectPath: projectPath3, recents: next }));
 }
-var snapshotPath = (projectPath3) => join25(APP_INTEL_DIRECTORY, `${projectKey(projectPath3)}.json`);
+var snapshotPath = (projectPath3) => join23(APP_INTEL_DIRECTORY, `${projectKey(projectPath3)}.json`);
 async function readAppIntel(projectPath3) {
   try {
     const value = JSON.parse(await readFile13(snapshotPath(projectPath3), "utf8"));
@@ -45451,7 +45704,7 @@ var AppIntelligenceService = class {
     const run5 = { runId: randomUUID9(), phase: "discovering", message: "Discovering project", controller };
     this.runs.set(projectPath3, run5);
     try {
-      const snapshot2 = await new Promise((resolve5, reject) => {
+      const snapshot2 = await new Promise((resolve6, reject) => {
         const worker = new Worker(workerUrl(), { workerData: { projectPath: projectPath3 } });
         run5.worker = worker;
         let settled = false;
@@ -45470,7 +45723,7 @@ var AppIntelligenceService = class {
           if (message3.type === "progress") {
             run5.phase = "analyzing";
             run5.message = message3.message;
-          } else if (message3.type === "result") finish(() => resolve5(message3.snapshot));
+          } else if (message3.type === "result") finish(() => resolve6(message3.snapshot));
           else {
             const error51 = new Error(message3.message);
             error51.name = message3.name;
@@ -45711,7 +45964,7 @@ function registerAppIntelligenceTools(server, service) {
 }
 
 // packages/core/src/plugin.ts
-var INSTRUCTIONS = "For mobile app development, read logs, record CPU, memory and FPS, inspect app storage, and query App Intelligence with these tools; control devices with the device_* tools when the server has them. Use mobile_open_app_intel when the user asks to see the app's screen/dependency map, mobile_generate_app_intel to create it, and mobile_app_intel for screen or file dependency questions. Mobile Dev shows no device view here: when the user asks to open or see a simulator or emulator, use the host's own simulator view if it has one, such as Claude Code's iOS Simulator or Android Emulator. Use device IDs from tool results; never invent them. If a task has ambiguous device targets, ask the user with your own question tool when you have one, otherwise in chat; proceed only after they choose. Show recordings with mobile_render_performance_recording and comparisons with mobile_compare_performance_recordings. For a local CPU or React profile path, use mobile_analyze_profile to show TraceSift findings. See the Mobile Dev skill, when installed, for logs, profiles, App Intelligence, and performance workflows.";
+var INSTRUCTIONS = "For mobile app development, read logs, record CPU, memory and FPS, inspect app storage, and query App Intelligence with these tools; control devices with the device_* tools when the server has them. Use mobile_open_app_intel when the user asks to see the app's screen/dependency map, mobile_generate_app_intel to create it, and mobile_app_intel for screen or file dependency questions. Mobile Dev shows no device view here: when the user asks to open or see a simulator or emulator, use the host's own simulator view if it has one, such as Claude Code's iOS Simulator or Android Emulator. Use device IDs from tool results; never invent them. If a task has ambiguous device targets, ask the user with your own question tool when you have one, otherwise in chat; proceed only after they choose. Show recordings with mobile_render_performance_recording and comparisons with mobile_compare_performance_recordings. Before asking the user to capture or choose a TraceSift profile when no path exists yet, use mobile_tracesift_status and report any setup step. For a local CPU or React profile path, use mobile_analyze_profile to show TraceSift findings. See the Mobile Dev skill, when installed, for logs, profiles, App Intelligence, and performance workflows.";
 function configureUI(content) {
   const telemetryEnvironment = resolveTelemetryEnvironment();
   const identity2 = getTelemetryIdentity();
@@ -45992,6 +46245,9 @@ var SharedTransport = class {
 
 // packages/core/src/stdio-server.ts
 async function runStdioServer({ panel, features } = {}) {
+  if (process.platform === "win32") {
+    process.env.PATH = androidToolPath(await Promise.all([sdkToolPath("adb"), sdkToolPath("emulator")]));
+  }
   const html = await readFile14(new URL("./app.html", import.meta.url), "utf8");
   const transport = new SharedTransport(new StdioServerTransport());
   const plugin = await createPlugin(() => loadUIResource(html, new URL("../ui-dev.json", import.meta.url)), { panel, features, connections: transport });
@@ -46035,7 +46291,7 @@ async function runStdioServer({ panel, features } = {}) {
 }
 
 // packages/core/src/agent-device-tools.ts
-import { readFileSync } from "node:fs";
+import { readFileSync as readFileSync2 } from "node:fs";
 import { readFile as readFile15 } from "node:fs/promises";
 
 // packages/core/src/agent-device-catalog.ts
@@ -46843,7 +47099,7 @@ var StdioClientTransport = class {
     if (this._process) {
       throw new Error("StdioClientTransport already started! If using Client class, note that connect() calls start() automatically.");
     }
-    return new Promise((resolve5, reject) => {
+    return new Promise((resolve6, reject) => {
       this._process = (0, import_cross_spawn.default)(this._serverParams.command, this._serverParams.args ?? [], {
         // merge default env with server env because mcp server needs some env vars
         env: {
@@ -46860,7 +47116,7 @@ var StdioClientTransport = class {
         this.onerror?.(error51);
       });
       this._process.on("spawn", () => {
-        resolve5();
+        resolve6();
       });
       this._process.on("close", (_code) => {
         this._process = void 0;
@@ -46925,22 +47181,22 @@ var StdioClientTransport = class {
     if (this._process) {
       const processToClose = this._process;
       this._process = void 0;
-      const closePromise = new Promise((resolve5) => {
+      const closePromise = new Promise((resolve6) => {
         processToClose.once("close", () => {
-          resolve5();
+          resolve6();
         });
       });
       try {
         processToClose.stdin?.end();
       } catch {
       }
-      await Promise.race([closePromise, new Promise((resolve5) => setTimeout(resolve5, 2e3).unref())]);
+      await Promise.race([closePromise, new Promise((resolve6) => setTimeout(resolve6, 2e3).unref())]);
       if (processToClose.exitCode === null) {
         try {
           processToClose.kill("SIGTERM");
         } catch {
         }
-        await Promise.race([closePromise, new Promise((resolve5) => setTimeout(resolve5, 2e3).unref())]);
+        await Promise.race([closePromise, new Promise((resolve6) => setTimeout(resolve6, 2e3).unref())]);
       }
       if (processToClose.exitCode === null) {
         try {
@@ -46952,15 +47208,15 @@ var StdioClientTransport = class {
     this._readBuffer.clear();
   }
   send(message3) {
-    return new Promise((resolve5) => {
+    return new Promise((resolve6) => {
       if (!this._process?.stdin) {
         throw new Error("Not connected");
       }
       const json3 = serializeMessage(message3);
       if (this._process.stdin.write(json3)) {
-        resolve5();
+        resolve6();
       } else {
-        this._process.stdin.once("drain", resolve5);
+        this._process.stdin.once("drain", resolve6);
       }
     });
   }
@@ -46968,12 +47224,21 @@ var StdioClientTransport = class {
 
 // packages/core/src/agent-device-runtime.ts
 import { execFile as execFile16 } from "node:child_process";
-import { mkdtemp as mkdtemp4 } from "node:fs/promises";
+import { mkdir as mkdir10, mkdtemp as mkdtemp4 } from "node:fs/promises";
 import { homedir as homedir8, tmpdir as tmpdir5 } from "node:os";
-import { join as join26 } from "node:path";
+import { join as join24, resolve as resolve5 } from "node:path";
 import { fileURLToPath as fileURLToPath9 } from "node:url";
 import { promisify as promisify15 } from "node:util";
 var run4 = promisify15(execFile16);
+async function claimAgentDeviceStateDirectory(env = process.env, create = mkdtemp4) {
+  const configured = env.AGENT_DEVICE_STATE_DIR?.trim();
+  if (configured) return resolve5(configured);
+  const directory2 = await create(join24(tmpdir5(), "mobile-dev-agent-device-"));
+  const concurrentlyConfigured = env.AGENT_DEVICE_STATE_DIR?.trim();
+  if (concurrentlyConfigured) return resolve5(concurrentlyConfigured);
+  env.AGENT_DEVICE_STATE_DIR = directory2;
+  return directory2;
+}
 var AgentDeviceRuntime = class {
   cli;
   config;
@@ -46984,8 +47249,8 @@ var AgentDeviceRuntime = class {
   closing = false;
   constructor(root = new URL("./agent-device/", import.meta.url)) {
     const directory2 = fileURLToPath9(root);
-    this.cli = join26(directory2, "node_modules/agent-device/bin/agent-device.mjs");
-    this.config = join26(directory2, "config.json");
+    this.cli = join24(directory2, "node_modules/agent-device/bin/agent-device.mjs");
+    this.config = join24(directory2, "config.json");
   }
   /** Starts the runtime if it is not running. Callers report a failed start. */
   async connect() {
@@ -47015,14 +47280,15 @@ var AgentDeviceRuntime = class {
     return env;
   }
   async createState() {
-    const directory2 = await mkdtemp4(join26(tmpdir5(), "mobile-dev-agent-device-"));
+    const directory2 = await claimAgentDeviceStateDirectory();
+    await mkdir10(directory2, { recursive: true, mode: 448 });
     console.error(`[mobile-dev] agent-device state directory: ${directory2}`);
-    const stopStorageMetrics = startStorageMetrics({ agent_device_state: directory2, apple_runner_cache: join26(homedir8(), ".agent-device/apple-runner") });
+    const stopStorageMetrics = startStorageMetrics({ agent_device_state: directory2, apple_runner_cache: join24(homedir8(), ".agent-device/apple-runner") });
     return { directory: directory2, stopStorageMetrics };
   }
   async start() {
     const startedAt = performance.now();
-    const { directory: directory2 } = await (this.state ??= this.createState());
+    const { directory: directory2 } = this.state ??= await this.createState();
     const client = new Client({ name: "mobile-dev-agent-device", version: "1" });
     const transport = new StdioClientTransport({ command: process.execPath, args: [this.cli, "mcp"], cwd: directory2, env: this.environment(directory2), stderr: "inherit" });
     client.onclose = () => {
@@ -47039,7 +47305,8 @@ var AgentDeviceRuntime = class {
   async close() {
     if (this.closing) return;
     this.closing = true;
-    const [client, state2] = await Promise.all([this.starting?.catch(() => void 0), this.state?.catch(() => void 0)]);
+    const client = await this.starting?.catch(() => void 0);
+    const state2 = this.state;
     try {
       await client?.close();
     } finally {
@@ -47066,7 +47333,7 @@ var AgentDeviceRuntime = class {
 
 // packages/core/src/agent-device-tools.ts
 function readAgentDeviceCatalog(url2 = new URL("./agent-device/tools.json", import.meta.url)) {
-  return JSON.parse(readFileSync(url2, "utf8"));
+  return JSON.parse(readFileSync2(url2, "utf8"));
 }
 function agentDeviceTools(catalog, runtime = new AgentDeviceRuntime()) {
   return (server) => {
@@ -47228,7 +47495,7 @@ async function readBezel(baguette, udid, screen) {
 import { execFile as execFile17, spawn as spawn12 } from "node:child_process";
 import { promisify as promisify16 } from "node:util";
 import { access as access10 } from "node:fs/promises";
-import { constants as constants5 } from "node:fs";
+import { constants as constants6 } from "node:fs";
 import { createServer as createServer4 } from "node:net";
 import { setTimeout as delay6 } from "node:timers/promises";
 var NO_ACCESSIBILITY_DATA = "no accessibility data";
@@ -47245,7 +47512,7 @@ function listError(status) {
 async function bundledExecutable() {
   const path = await panelRuntimePath("baguette/Baguette");
   try {
-    await access10(path, constants5.X_OK);
+    await access10(path, constants6.X_OK);
   } catch (error51) {
     if (isMissingFile(error51)) throw new MissingRuntimeError("baguette");
     throw new Error("Mobile Dev cannot run its bundled simulator backend. Reinstall Mobile Dev, then restart the app running it.");
@@ -47384,6 +47651,11 @@ var Baguette = class {
       return status;
     }
   }
+  /** Opening the panel also discovers Android, even on a host without a local iOS backend. */
+  async list() {
+    if (process.platform === "win32" && this.embedded) return unavailableLocalIosStatus();
+    return this.start();
+  }
   async start() {
     if (this.disposed) throw new Error("The plugin server has closed.");
     if (this.starting) return this.starting;
@@ -47402,13 +47674,13 @@ var Baguette = class {
   }
   async allocatePort() {
     const socket = createServer4();
-    await new Promise((resolve5, reject) => {
+    await new Promise((resolve6, reject) => {
       socket.once("error", reject);
-      socket.listen(0, "127.0.0.1", resolve5);
+      socket.listen(0, "127.0.0.1", resolve6);
     });
     const address2 = socket.address();
     if (!address2 || typeof address2 === "string") throw new Error("Could not allocate a port for the bundled simulator backend.");
-    await new Promise((resolve5) => socket.close(() => resolve5()));
+    await new Promise((resolve6) => socket.close(() => resolve6()));
     return address2.port;
   }
   async ensureStarted() {
@@ -47571,8 +47843,8 @@ var Baguette = class {
     await this.device(udid, true);
     const executable3 = await bundledExecutable();
     const environment = await baguetteEnvironment(executable3, this.lifecycle.signal);
-    const execute18 = promisify16(execFile17);
-    const { stdout, stderr } = await execute18(executable3, ["heal", "--udid", udid], {
+    const execute17 = promisify16(execFile17);
+    const { stdout, stderr } = await execute17(executable3, ["heal", "--udid", udid], {
       timeout: 45e3,
       maxBuffer: 1024 * 1024,
       encoding: "utf8",
@@ -47745,7 +48017,7 @@ var AndroidStreams = class {
       this.notify(session);
     });
     try {
-      await new Promise((resolve5, reject) => {
+      await new Promise((resolve6, reject) => {
         const cleanup = () => {
           socket.off("open", opened);
           socket.off("error", failed);
@@ -47753,7 +48025,7 @@ var AndroidStreams = class {
         };
         const opened = () => {
           cleanup();
-          resolve5();
+          resolve6();
         };
         const failed = (error51) => {
           cleanup();
@@ -47808,11 +48080,11 @@ var AndroidStreams = class {
     const session = this.session(id2);
     await this.backend.assertDevice(session.deviceId, session.url);
     if (!session.error && !session.packets.some((packet) => packet.sequence > after)) {
-      await new Promise((resolve5) => {
+      await new Promise((resolve6) => {
         const done = () => {
           clearTimeout(timer);
           session.waiters.delete(done);
-          resolve5();
+          resolve6();
         };
         const timer = setTimeout(done, 1e3);
         session.waiters.add(done);
@@ -47859,7 +48131,7 @@ var AndroidStreams = class {
 // packages/core/src/android-booking-names.ts
 import { readFile as readFile16 } from "node:fs/promises";
 import { homedir as homedir9 } from "node:os";
-import { join as join27 } from "node:path";
+import { join as join25 } from "node:path";
 
 // packages/shared/src/android-devices.ts
 var androidBookingNameSchema = external_exports.string().regex(/^.{1,120}$/su);
@@ -47875,7 +48147,7 @@ async function readBookingName(directory2, device2) {
   if (device2.model !== "ADC" && device2.model?.startsWith("ADC ") !== true) return;
   const match = /^127\.0\.0\.1:([1-9]\d{0,4})$/.exec(device2.udid);
   if (!match || Number(match[1]) > 65535) return;
-  const path = join27(directory2, `${match[1]}.json`);
+  const path = join25(directory2, `${match[1]}.json`);
   try {
     const contents = await readFile16(path, "utf8");
     const data = JSON.parse(contents);
@@ -47887,7 +48159,7 @@ async function readBookingName(directory2, device2) {
   }
 }
 async function androidBookingNames(devices3) {
-  const directory2 = join27(homedir9(), ".local", "state", "agent-device-cloud", "adb-labels");
+  const directory2 = join25(homedir9(), ".local", "state", "agent-device-cloud", "adb-labels");
   const names = {};
   await Promise.all(devices3.map(async (device2) => {
     const name = await readBookingName(directory2, device2);
@@ -47924,12 +48196,12 @@ function registerAndroidTools(server, android2, appUri, copyScreenshot, closeCpu
   const streams = new AndroidStreams(android2);
   server.registerTool("mobile_list_android_devices", {
     title: "List Android devices",
-    description: "Discover physical Android devices over USB or Wi-Fi and list running emulators and installed AVDs through ADB. Returns device kind, serial, model when available, transport for physical devices, and device/offline/unauthorized state (authorized devices use Booted). Listing does not boot, pair, authorize, or stream a device.",
+    description: "Discover physical Android devices over USB or Wi-Fi, running emulators and installed AVDs through ADB. Returns device kind, ADB serial (udid), model when available, transport for physical devices, and state (authorized devices use Booted). Pass the serial as deviceId to select a running device in the Android panel. Listing does not boot, pair, authorize, or stream a device.",
     inputSchema: {},
     annotations: read10
   }, guarded(async () => {
     const status = await android2.list();
-    const text7 = status.connected ? JSON.stringify(status.devices) : status.error;
+    const text7 = status.error ?? status.setupHint ?? JSON.stringify(status.devices);
     return deviceListResult(status, text7);
   }));
   for (const action2 of ["boot", "shutdown"]) server.registerTool(`mobile_${action2}_android_emulator`, {
@@ -48088,7 +48360,7 @@ var maximumReplyBytes = 16 * 1024 * 1024;
 
 // packages/core/src/ios-mirror-client.ts
 async function connect(path) {
-  return new Promise((resolve5, reject) => {
+  return new Promise((resolve6, reject) => {
     const socket = createConnection2(path);
     const timer = setTimeout(() => {
       const error51 = new Error("Shared iOS capture connection timed out.");
@@ -48098,7 +48370,7 @@ async function connect(path) {
     socket.once("connect", () => {
       clearTimeout(timer);
       socket.removeListener("error", reject);
-      resolve5(socket);
+      resolve6(socket);
     });
     socket.once("close", () => clearTimeout(timer));
   });
@@ -48194,9 +48466,9 @@ async function connectIosCapture(path, udid) {
       return Promise.reject(error51);
     }
     const id2 = ++sequence4;
-    return new Promise((resolve5, reject) => {
+    return new Promise((resolve6, reject) => {
       const timer = setTimeout(() => disconnect("Shared iOS capture request timed out."), 3e4);
-      pending.set(id2, { resolve: resolve5, reject, timer });
+      pending.set(id2, { resolve: resolve6, reject, timer });
       const encoded2 = JSON.stringify({ ...command3, id: id2 });
       socket.write(encoded2 + "\n");
     });
@@ -48339,7 +48611,7 @@ var IosMirrorSessions = class {
 import { execFile as execFile18 } from "node:child_process";
 import { mkdtemp as mkdtemp5, readFile as readFile17, rm as rm11 } from "node:fs/promises";
 import { tmpdir as tmpdir6 } from "node:os";
-import { join as join28 } from "node:path";
+import { join as join26 } from "node:path";
 import { fileURLToPath as fileURLToPath11 } from "node:url";
 import { promisify as promisify17 } from "node:util";
 var execute13 = promisify17(execFile18);
@@ -48365,11 +48637,11 @@ function pngDataUri(bytes) {
   return `data:image/png;base64,${encoded2}`;
 }
 async function readMask(identifier3, run5) {
-  const prefix2 = join28(tmpdir6(), "mobile-dev-device-mask-");
+  const prefix2 = join26(tmpdir6(), "mobile-dev-device-mask-");
   const directory2 = await mkdtemp5(prefix2);
   try {
     const input = `/Library/Developer/DeviceKit/FramebufferMasks/${identifier3}.pdf`;
-    const output = join28(directory2, "mask.png");
+    const output = join26(directory2, "mask.png");
     await run5("/usr/bin/sips", ["-s", "format", "png", input, "--out", output], commandOptions);
     const bytes = await readFile17(output);
     return pngDataUri(bytes);
@@ -48391,7 +48663,7 @@ async function renderBezel(device2, run5, runtime) {
   });
   let selected;
   for (const type2 of candidates) {
-    const profilePath = join28(type2.bundlePath, "Contents", "Resources", "profile.plist");
+    const profilePath = join26(type2.bundlePath, "Contents", "Resources", "profile.plist");
     const profileOutput = await run5("/usr/bin/plutil", ["-convert", "json", "-o", "-", profilePath], commandOptions);
     const profileJson = profileOutput.stdout.toString("utf8");
     const profilePayload = JSON.parse(profileJson);
@@ -48443,17 +48715,27 @@ var readPhysicalIosBezel = createPhysicalIosBezelReader();
 import { execFile as execFile19 } from "node:child_process";
 import { mkdtemp as mkdtemp6, writeFile as writeFile15, rm as rm12 } from "node:fs/promises";
 import { tmpdir as tmpdir7 } from "node:os";
-import { join as join29 } from "node:path";
+import { join as join27 } from "node:path";
 import { promisify as promisify18 } from "node:util";
 var execute14 = promisify18(execFile19);
 async function copyPNGToClipboard(bytes) {
-  const directory2 = await mkdtemp6(join29(tmpdir7(), "mobile-dev-screenshot-"));
+  const directory2 = await mkdtemp6(join27(tmpdir7(), "mobile-dev-screenshot-"));
   try {
-    const path = join29(directory2, "screenshot.png");
+    const path = join27(directory2, "screenshot.png");
     await writeFile15(path, bytes, { mode: 384 });
+    const options = { timeout: 5e3, maxBuffer: 64 * 1024 };
+    if (process.platform === "win32") {
+      await execute14("powershell.exe", ["-NoProfile", "-NonInteractive", "-STA", "-Command", `
+$ErrorActionPreference = 'Stop'
+Add-Type -AssemblyName System.Windows.Forms, System.Drawing
+$image = [System.Drawing.Image]::FromFile($env:MOBILE_DEV_SCREENSHOT_FILE)
+try { [System.Windows.Forms.Clipboard]::SetImage($image) } finally { $image.Dispose() }
+`], { ...options, windowsHide: true, env: { ...process.env, MOBILE_DEV_SCREENSHOT_FILE: path } });
+      return;
+    }
     await execute14("/usr/bin/osascript", ["-e", `on run argv
 set the clipboard to (read (POSIX file (item 1 of argv)) as \xABclass PNGf\xBB)
-end run`, path], { timeout: 5e3, maxBuffer: 64 * 1024 });
+end run`, path], options);
   } finally {
     await rm12(directory2, { recursive: true, force: true });
   }
@@ -48564,10 +48846,6 @@ function registerIosMirrorTools(server, appUri, sessions = new IosMirrorSessions
   });
   return () => sessions.close();
 }
-
-// packages/core/src/inspection-tools.ts
-import { execFile as execFile20 } from "node:child_process";
-import { promisify as promisify19 } from "node:util";
 
 // packages/core/src/react-native-inspector.ts
 import { randomUUID as randomUUID10 } from "node:crypto";
@@ -48846,7 +49124,7 @@ async function inspectReactNative(request, signal) {
 }
 function readSnapshot(url2, signal) {
   if (signal?.aborted) return Promise.reject(new Error("Component inspection cancelled."));
-  return new Promise((resolve5, reject) => {
+  return new Promise((resolve6, reject) => {
     const origin = new URL(url2);
     origin.protocol = "http:";
     const binding = `__mobile_dev_inspection_${randomUUID10().replaceAll("-", "")}`;
@@ -48865,7 +49143,7 @@ function readSnapshot(url2, signal) {
         if (socket.readyState === import_websocket.default.OPEN) socket.close();
         else socket.terminate();
         if (error51) reject(error51);
-        else resolve5(result4);
+        else resolve6(result4);
       };
       if (socket.readyState !== import_websocket.default.OPEN) {
         cleanup();
@@ -48923,7 +49201,6 @@ function readSnapshot(url2, signal) {
 }
 
 // packages/core/src/inspection-tools.ts
-var execute15 = promisify19(execFile20);
 async function iosSnapshot(baguette, deviceId3, signal) {
   const udid = udidSchema.parse(deviceId3);
   const device2 = await baguette.device(udid, true);
@@ -48949,7 +49226,7 @@ async function androidSnapshot(android2, deviceId3, deviceName, screenWidth) {
 async function androidAliases(deviceId3) {
   try {
     const adb = await adbPath();
-    const properties2 = await Promise.all(["ro.product.model", "ro.build.version.release", "ro.build.version.sdk"].map((property) => execute15(adb, ["-s", deviceId3, "shell", "getprop", property], { timeout: 3e3, maxBuffer: 4096 }).then((result4) => result4.stdout.trim())));
+    const properties2 = await Promise.all(["ro.product.model", "ro.build.version.release", "ro.build.version.sdk"].map((property) => systemCommands.run(adb, ["-s", deviceId3, "shell", "getprop", property], { timeout: 3e3, maxBuffer: 4096 }).then((output) => output.trim())));
     return properties2.every(Boolean) ? [properties2[0], `${properties2[0]} - ${properties2[1]} - API ${properties2[2]}`] : [];
   } catch {
     return [];
@@ -49101,9 +49378,9 @@ var ThrottleProxy = class {
     this.link.up.profile = profile;
   }
   listen() {
-    return new Promise((resolve5, reject) => {
+    return new Promise((resolve6, reject) => {
       this.server.once("error", reject);
-      this.server.listen(0, "127.0.0.1", () => resolve5(this.server.address().port));
+      this.server.listen(0, "127.0.0.1", () => resolve6(this.server.address().port));
     });
   }
   // Local destinations get no pacers, so they pass through at full speed.
@@ -49177,7 +49454,7 @@ var ThrottleProxy = class {
   }
   close() {
     for (const socket of this.sockets) socket.destroy();
-    return new Promise((resolve5) => this.server.close(() => resolve5()));
+    return new Promise((resolve6) => this.server.close(() => resolve6()));
   }
 };
 async function proxyToken(port2) {
@@ -49561,16 +49838,16 @@ function registerDeviceSettingsTools(server, baguette, android2) {
 }
 
 // packages/core/src/resource-saving.ts
-import { execFile as execFile21 } from "node:child_process";
+import { execFile as execFile20 } from "node:child_process";
 import { createHash as createHash11, randomUUID as randomUUID12 } from "node:crypto";
-import { access as access11, mkdir as mkdir10, readFile as readFile18, rename as rename9, rm as rm13, writeFile as writeFile16 } from "node:fs/promises";
-import { constants as constants6 } from "node:fs";
+import { access as access11, mkdir as mkdir11, readFile as readFile18, rename as rename9, rm as rm13, writeFile as writeFile16 } from "node:fs/promises";
+import { constants as constants7 } from "node:fs";
 import { homedir as homedir10 } from "node:os";
-import { dirname as dirname8, isAbsolute as isAbsolute8, join as join30 } from "node:path";
-import { promisify as promisify20 } from "node:util";
-var execute16 = promisify20(execFile21);
+import { dirname as dirname8, isAbsolute as isAbsolute9, join as join28 } from "node:path";
+import { promisify as promisify19 } from "node:util";
+var execute15 = promisify19(execFile20);
 var home = homedir10();
-var directory = join30(home, "Library/Application Support/mobile-dev/resource-saving");
+var directory = join28(home, "Library/Application Support/mobile-dev/resource-saving");
 var preferenceSchema = external_exports.object({ enabled: external_exports.boolean() });
 var androidStateSchema = external_exports.object({ disabled_packages: external_exports.array(external_exports.string()), settings: external_exports.record(external_exports.string(), external_exports.string().nullable()) });
 var IOS_RESOURCE_SAVING_EXCEPT = "store,web,pim,photos,connectivity,telemetry";
@@ -49592,7 +49869,7 @@ async function executable2(platform5) {
   const name = platform5 === "ios" ? "simslim" : "avdslim";
   const path = await panelRuntimePath(`resource-saving/${name}`);
   try {
-    await access11(path, constants6.X_OK);
+    await access11(path, constants7.X_OK);
   } catch (error51) {
     if (isMissingFile(error51)) throw new MissingRuntimeError("resource-saving");
     throw error51;
@@ -49601,14 +49878,16 @@ async function executable2(platform5) {
 }
 var ResourceSaving = class {
   directory;
+  supported;
   run;
   locate;
   adb;
   applied = /* @__PURE__ */ new Map();
   pending = /* @__PURE__ */ new Map();
   constructor(options = {}) {
+    this.supported = options.executable !== void 0 || process.platform === "darwin" && process.arch === "arm64";
     this.directory = options.directory ?? directory;
-    this.run = options.run ?? execute16;
+    this.run = options.run ?? execute15;
     this.locate = options.executable ?? executable2;
     this.adb = options.adb ?? adbPath;
   }
@@ -49616,7 +49895,7 @@ var ResourceSaving = class {
     const hash2 = createHash11("sha256");
     hash2.update(`${device2.platform}:${device2.key}`);
     const key = hash2.digest("hex");
-    return join30(this.directory, `${key}.json`);
+    return join28(this.directory, `${key}.json`);
   }
   async enabled(device2) {
     const path = this.filename(device2);
@@ -49638,7 +49917,7 @@ var ResourceSaving = class {
     return { enabled, running, restartRequired: running && this.applied.get(key) !== enabled };
   }
   async set(device2, enabled) {
-    await mkdir10(this.directory, { recursive: true, mode: 448 });
+    await mkdir11(this.directory, { recursive: true, mode: 448 });
     const path = this.filename(device2);
     const suffix = randomUUID12();
     const temporary = `${path}.${suffix}.tmp`;
@@ -49703,12 +49982,12 @@ var ResourceSaving = class {
     const adb = await this.adb();
     const adbDirectory = dirname8(adb);
     const sdk = dirname8(adbDirectory);
-    const cliHome = join30(this.directory, "avdslim-home");
-    await mkdir10(cliHome, { recursive: true, mode: 448 });
-    const androidHome = process.env.ANDROID_USER_HOME ?? join30(home, ".android");
-    const adbKeys = process.env.ADB_VENDOR_KEYS ?? join30(androidHome, "adbkey");
+    const cliHome = join28(this.directory, "avdslim-home");
+    await mkdir11(cliHome, { recursive: true, mode: 448 });
+    const androidHome = process.env.ANDROID_USER_HOME ?? join28(home, ".android");
+    const adbKeys = process.env.ADB_VENDOR_KEYS ?? join28(androidHome, "adbkey");
     const env = { ...process.env, HOME: cliHome, ANDROID_USER_HOME: androidHome, ADB_VENDOR_KEYS: adbKeys };
-    if (isAbsolute8(adb)) {
+    if (isAbsolute9(adb)) {
       env.ANDROID_HOME = sdk;
       env.ANDROID_SDK_ROOT = sdk;
       env.PATH = `${adbDirectory}:${process.env.PATH ?? ""}`;
@@ -49755,8 +50034,8 @@ var targetSchema2 = external_exports.discriminatedUnion("platform", [
   external_exports.object({ platform: external_exports.literal("android"), id: androidIdSchema }).strict()
 ]);
 function registerResourceSavingTools(server, baguette, android2, saving = new ResourceSaving()) {
-  baguette.resourceSaving = saving;
-  android2.resourceSaving = saving;
+  baguette.resourceSaving = saving.supported ? saving : void 0;
+  android2.resourceSaving = saving.supported ? saving : void 0;
   const device2 = async (target2) => {
     const found = target2.platform === "ios" ? await baguette.device(target2.id) : await android2.device(target2.id);
     if (found.kind === "physical") throw new ExpectedOperationError("invalid_input", "Resource saving is available only for simulators and emulators.");
@@ -49780,6 +50059,7 @@ function registerResourceSavingTools(server, baguette, android2, saving = new Re
     _meta: { ui: { visibility: ["app"] } }
   }, guarded3("read", async (target2) => {
     const selected = await device2(target2);
+    if (!saving.supported) return { supported: false, enabled: false, running: selected.state === "Booted", restartRequired: false };
     return saving.state(selected);
   }));
   K3(server, "mobile_set_resource_saving", {
@@ -49789,6 +50069,7 @@ function registerResourceSavingTools(server, baguette, android2, saving = new Re
     annotations: { readOnlyHint: false, destructiveHint: false, openWorldHint: false },
     _meta: { ui: { visibility: ["app"] } }
   }, guarded3("set", async (target2, enabled) => {
+    if (!saving.supported) throw new ExpectedOperationError("unsupported_platform", "The bundled resource-saving tools require an Apple silicon Mac.");
     const selected = await device2(target2);
     return saving.set(selected, enabled);
   }));
@@ -49833,7 +50114,7 @@ var StreamSessions = class {
     this.expiry.unref();
   }
   notify(session) {
-    for (const resolve5 of session.waiters) resolve5();
+    for (const resolve6 of session.waiters) resolve6();
     session.waiters.clear();
   }
   async open(udid, fps) {
@@ -49907,10 +50188,10 @@ var StreamSessions = class {
       this.notify(session);
     });
     try {
-      await new Promise((resolve5, reject) => {
+      await new Promise((resolve6, reject) => {
         const opened = () => {
           cleanup();
-          resolve5();
+          resolve6();
         };
         const failed = (error51) => {
           cleanup();
@@ -50003,12 +50284,12 @@ var StreamSessions = class {
     if (session.error) throw new Error(session.error);
     this.reconnect(session);
     if (!session.error && (!session.frame || session.frame.sequence <= after)) {
-      await new Promise((resolve5) => {
+      await new Promise((resolve6) => {
         const done = () => {
           clearTimeout(timer);
           signal?.removeEventListener("abort", done);
           session.waiters.delete(done);
-          resolve5();
+          resolve6();
         };
         const timer = setTimeout(done, 1e3);
         session.waiters.add(done);
@@ -50081,12 +50362,12 @@ var StreamSessions = class {
 };
 
 // packages/core/src/simulator-input.ts
-import { execFile as execFile22 } from "node:child_process";
-import { promisify as promisify21 } from "node:util";
-var execute17 = promisify21(execFile22);
+import { execFile as execFile21 } from "node:child_process";
+import { promisify as promisify20 } from "node:util";
+var execute16 = promisify20(execFile21);
 var deviceHubKey = "com.apple.coredevice.dtuhidd.active";
 async function readDeviceHubState(udid) {
-  const { stdout } = await execute17("/usr/bin/xcrun", ["simctl", "spawn", udid, "notifyutil", "-g", deviceHubKey], {
+  const { stdout } = await execute16("/usr/bin/xcrun", ["simctl", "spawn", udid, "notifyutil", "-g", deviceHubKey], {
     timeout: 5e3,
     maxBuffer: 1024 * 1024,
     encoding: "utf8"
@@ -50177,7 +50458,8 @@ var statusOutput = {
   managed: external_exports.boolean(),
   baseUrl: external_exports.string().describe("The bundled backend's private address, for Mobile Dev's own requests. It is not a page: never open it or show it to the user."),
   devices: external_exports.array(deviceSchema),
-  error: external_exports.string().optional()
+  error: external_exports.string().optional(),
+  localIosSupported: external_exports.boolean().optional()
 };
 function result3(data, message3) {
   return { content: [{ type: "text", text: message3 }], structuredContent: data };
@@ -50192,7 +50474,7 @@ function guarded2(handler) {
     }
   };
 }
-var INSTRUCTIONS2 = "For mobile app development, open mobile_open_simulator before the first device launch, or reuse the open view. Use selected device IDs. Control apps with the device_* tools when the server has them. Use mobile_generate_app_intel to create the app's screen/dependency map, then mobile_open_app_intel to show it in chat. For a specific screen's dependencies, look its ID up with mobile_app_intel and pass it as mobile_open_app_intel's appIntelScreen to render that screen's graph; use mobile_app_intel alone, without opening the panel, for a file's importers/imports or when the user wants the answer as text, not a view. When the user asks to see their devices, open or reuse the view, whose device menu lists them. If a task has ambiguous device targets, ask the user with mobile_choose_devices when it is available, otherwise in chat; proceed only after they choose. For a local CPU or React profile path, use mobile_analyze_profile to show TraceSift findings, then wait for the user to choose Investigate. See the Mobile Dev skill, when installed, for device control, logs, profiles, App Intelligence, and performance workflows.";
+var INSTRUCTIONS2 = "Use mobile_open_simulator before the first device launch or reuse the open panel. Use the Mobile Dev panel to show or control Android devices. Open a separate scrcpy window only if the user explicitly asks for one. When mobile_read_panel_context is available, read the panel's active device before targeting it. Use selected IDs with available device_* tools. Show devices in the panel menu. If targets are ambiguous, ask with mobile_choose_devices when it is available, otherwise in chat. Generate screen maps with mobile_generate_app_intel and show them with mobile_open_app_intel. For screen dependencies, find the ID with mobile_app_intel and pass it as appIntelScreen to mobile_open_app_intel. Use mobile_app_intel alone for file imports/importers or text answers. Before asking the user to capture or choose a TraceSift profile when no path exists yet, use mobile_tracesift_status and report any setup step. For local CPU or React profiles use mobile_analyze_profile and await the user's Investigate action. See the Mobile Dev skill.";
 function createPanel({ baguette = new Baguette(), simulatorInput, copyScreenshot = copyPNGToClipboard, resourceSaving = new ResourceSaving(), inline = true } = {}) {
   return {
     inline,
@@ -50291,15 +50573,21 @@ function registerPanel(server, { android: android2, cpu, fps, drivers, page, sho
   });
   const openPanel = (tool, defaults = {}, startBackend = true) => guarded2(async (input) => {
     const panelTarget = { ...input, ...defaults };
-    let status = { connected: false, managed: false, baseUrl: "", devices: [], error: void 0 };
+    let status = { connected: false, managed: false, baseUrl: "", devices: [] };
     if (startBackend) try {
-      status = { ...await baguette.start(), error: void 0 };
+      status = await baguette.list();
     } catch (error51) {
       const fallback = await baguette.status(AbortSignal.timeout(2e3));
       status = { ...fallback, error: errorMessage(error51) };
     }
     const opening = await opened({ tool, target: panelTarget });
-    const response3 = result3({ ...status, panelTarget, ...opening ? { browserPanel: opening } : {} }, startBackend ? status.connected ? `Found ${status.devices.length} simulators.` : status.error ?? "The bundled simulator backend could not start." : "Opened App Intelligence.");
+    let message3 = "Opened App Intelligence.";
+    if (startBackend) {
+      if (status.connected) message3 = `Found ${status.devices.length} simulators.`;
+      else if (status.localIosSupported === false) message3 = "Opened Mobile Dev. Local iOS devices require macOS.";
+      else message3 = status.error ?? "The bundled simulator backend could not start.";
+    }
+    const response3 = result3({ ...status, panelTarget, ...opening ? { browserPanel: opening } : {} }, message3);
     if (opening) response3.content.push({ type: "text", text: opening.instructions });
     return response3;
   });
@@ -50329,7 +50617,7 @@ function registerPanel(server, { android: android2, cpu, fps, drivers, page, sho
     entrypoint: "global"
   });
   openingTool("mobile_open_simulator", {
-    description: "Open Mobile Dev alongside the chat for local mobile app development, before the first device launch unless a view is open or the workflow is tool-only. Pass established platform, kind, or discovered deviceId to select the initial device; omit undecided fields. Starts the bundled backend without booting devices.",
+    description: "Open or reuse the Mobile Dev panel alongside the chat to view and control a device. For app development, open before the first device launch unless the workflow is tool-only. Pass the requested platform, kind, or a discovered deviceId to select the device. Omit undecided fields. Starts the bundled backend without booting devices.",
     resourceUri: APP_URI,
     entrypoint: "thread"
   });
@@ -50347,8 +50635,8 @@ function registerPanel(server, { android: android2, cpu, fps, drivers, page, sho
     outputSchema: statusOutput,
     annotations: write9
   }, guarded2(async () => {
-    const status = await baguette.start();
-    return result3(status, status.connected ? JSON.stringify(status.devices) : status.error ?? "Baguette is offline.");
+    const status = await baguette.list();
+    return result3(status, status.localIosSupported === false ? "Local iOS simulators require macOS." : status.connected ? JSON.stringify(status.devices) : status.error ?? "Baguette is offline.");
   }));
   server.registerTool("mobile_start_baguette", {
     title: "Start simulator backend",
@@ -50512,7 +50800,7 @@ var X_ALREADY_SENT = "x-hono-already-sent";
 
 // node_modules/@hono/node-server/dist/index.mjs
 import { STATUS_CODES, ServerResponse, createServer as createServer6 } from "node:http";
-import { Http2ServerRequest, constants as constants7 } from "node:http2";
+import { Http2ServerRequest, constants as constants8 } from "node:http2";
 import { Readable as Readable2 } from "node:stream";
 
 // node_modules/hono/dist/helper/websocket/index.js
@@ -50925,7 +51213,7 @@ var readBodyDirect = (request) => {
     request[bodyBufferKey] = buffered;
     return Promise.resolve(buffered);
   }
-  const promise2 = new Promise((resolve5, reject) => {
+  const promise2 = new Promise((resolve6, reject) => {
     const chunks = [];
     let settled = false;
     const finish = (callback) => {
@@ -50943,7 +51231,7 @@ var readBodyDirect = (request) => {
         else if (recovered === void 0) reject(error51 ?? normalizeAbortError(request, incoming));
         else {
           request[bodyBufferKey] = recovered;
-          resolve5(recovered);
+          resolve6(recovered);
         }
       });
       return true;
@@ -50955,7 +51243,7 @@ var readBodyDirect = (request) => {
       finish(() => {
         const buffer = chunks.length === 1 ? chunks[0] : Buffer.concat(chunks);
         request[bodyBufferKey] = buffer;
-        resolve5(buffer);
+        resolve6(buffer);
       });
     };
     const onError = (error51) => {
@@ -51329,7 +51617,7 @@ var drainIncoming = (incoming) => {
   incomingWithDrainState[incomingDraining] = true;
   if (incoming instanceof Http2ServerRequest) {
     try {
-      incoming.stream?.close?.(constants7.NGHTTP2_NO_ERROR);
+      incoming.stream?.close?.(constants8.NGHTTP2_NO_ERROR);
     } catch {
     }
     return;
@@ -51502,7 +51790,7 @@ var responseViaResponseObject = async (res, outgoing, options = {}) => {
         });
         if (!chunk) {
           if (i === 1) {
-            await new Promise((resolve5) => setTimeout(resolve5));
+            await new Promise((resolve6) => setTimeout(resolve6));
             maxReadCount = 3;
             continue;
           }
@@ -52237,9 +52525,9 @@ data:
       const initRequest = messages.find((m2) => isInitializeRequest(m2));
       const clientProtocolVersion = initRequest ? initRequest.params.protocolVersion : req.headers.get("mcp-protocol-version") ?? DEFAULT_NEGOTIATED_PROTOCOL_VERSION;
       if (this._enableJsonResponse) {
-        return new Promise((resolve5) => {
+        return new Promise((resolve6) => {
           this._streamMapping.set(streamId, {
-            resolveJson: resolve5,
+            resolveJson: resolve6,
             cleanup: () => {
               this._streamMapping.delete(streamId);
             }
@@ -52689,11 +52977,11 @@ async function startPanelPage(connections, host, page = PAGE) {
       else reply(response3, 500);
     });
   });
-  await new Promise((resolve5, reject) => {
+  await new Promise((resolve6, reject) => {
     http.once("error", reject);
     http.listen(0, "127.0.0.1", () => {
       http.off("error", reject);
-      resolve5();
+      resolve6();
     });
   });
   const { port: port2 } = http.address();
@@ -52809,7 +53097,7 @@ async function startPanelPage(connections, host, page = PAGE) {
     async close() {
       closing = true;
       clearInterval(expiry);
-      const stopped = new Promise((resolve5) => http.close(() => resolve5()));
+      const stopped = new Promise((resolve6) => http.close(() => resolve6()));
       const connectionsClosing = Array.from(sessions.values(), (session) => session.transport.close());
       await Promise.allSettled(connectionsClosing);
       http.closeAllConnections();
@@ -52835,7 +53123,7 @@ function reply(response3, status, headers = {}) {
 // apps/antigravity/server/server.ts
 var isStandalone = process.env.MOBILE_DEV_SIDECAR_STANDALONE === "1";
 var stateFile = isStandalone ? "antigravity-standalone.json" : "antigravity-panel.json";
-var statePath = join31(homedir11(), "Library", "Caches", "mobile-dev", stateFile);
+var statePath = join29(homedir11(), "Library", "Caches", "mobile-dev", stateFile);
 var lastWrittenUrl = "";
 var writeQueue = Promise.resolve();
 function writePanelState(url2) {
@@ -52843,7 +53131,7 @@ function writePanelState(url2) {
   lastWrittenUrl = url2;
   const run5 = async () => {
     try {
-      await mkdir11(dirname9(statePath), { recursive: true });
+      await mkdir12(dirname9(statePath), { recursive: true });
       const tmpPath = `${statePath}.${process.pid}.tmp`;
       await writeFile17(tmpPath, JSON.stringify({ pid: process.pid, url: url2, updatedAt: Date.now() }) + "\n");
       await rename10(tmpPath, statePath);
@@ -52876,4 +53164,4 @@ content-type/index.js:
    *)
 */
 
-//# debugId=74d12f16-e7dd-5ffc-a592-c8104a650a7e
+//# debugId=bf6631ab-b9e9-5519-a9dc-43e01f42c3ef
