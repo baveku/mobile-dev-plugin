@@ -9,6 +9,7 @@ import { z } from "zod";
 import { PLUGIN_VERSION } from "@mobile-dev/shared/version.ts";
 import { SENTRY_ORIGIN } from "@mobile-dev/shared/telemetry.ts";
 import { errorMessage, streamMessageSchema, udidSchema } from "@mobile-dev/shared/protocol.ts";
+import type { Status } from "@mobile-dev/shared/protocol.ts";
 import { PANEL_PAGE_META, panelTargetSchema } from "@mobile-dev/shared/panel-target.ts";
 import type { PanelTarget } from "@mobile-dev/shared/panel-target.ts";
 import type { PanelOpener } from "./server-feature.ts";
@@ -53,7 +54,7 @@ const browserPanelOutput = z.object({ url: z.string(), instructions: z.string() 
 const statusOutput = {
   connected: z.boolean(), managed: z.boolean(),
   baseUrl: z.string().describe("The bundled backend's private address, for Mobile Dev's own requests. It is not a page: never open it or show it to the user."),
-  devices: z.array(deviceSchema), error: z.string().optional(),
+  devices: z.array(deviceSchema), error: z.string().optional(), localIosSupported: z.boolean().optional(),
 };
 
 function result(data: Record<string, unknown>, message: string): CallToolResult {
@@ -75,6 +76,7 @@ const INSTRUCTIONS = "Use mobile_open_simulator before the first device launch o
   + "When mobile_read_panel_context is available, read the panel's active device before targeting it. Use selected IDs with available device_* tools. "
   + "Show devices in the panel menu. If targets are ambiguous, ask with mobile_choose_devices when it is available, otherwise in chat. "
   + "Generate screen maps with mobile_generate_app_intel and show them with mobile_open_app_intel. For screen dependencies, find the ID with mobile_app_intel and pass it as appIntelScreen to mobile_open_app_intel. Use mobile_app_intel alone for file imports/importers or text answers. "
+  + "Before asking the user to capture or choose a TraceSift profile when no path exists yet, use mobile_tracesift_status and report any setup step. "
   + "For local CPU or React profiles use mobile_analyze_profile and await the user's Investigate action. See the Mobile Dev skill.";
 
 /** Mobile Dev's own device views, which a host adds to the server it runs (see createPanel). */
@@ -224,8 +226,8 @@ function registerPanel(server: McpServer, { android, cpu, fps, drivers, page, sh
 
   const openPanel = (tool: string, defaults: Partial<PanelTarget> = {}, startBackend = true) => guarded(async (input: PanelTarget) => {
     const panelTarget = { ...input, ...defaults };
-    let status = { connected: false, managed: false, baseUrl: "", devices: [] as Awaited<ReturnType<Baguette["status"]>>["devices"], error: undefined as string | undefined };
-    if (startBackend) try { status = { ...(await baguette.start()), error: undefined }; }
+    let status: Status = { connected: false, managed: false, baseUrl: "", devices: [] };
+    if (startBackend) try { status = await baguette.list(); }
     catch (error) {
       // The start already waited on the device list, so don't wait its full timeout again.
       const fallback = await baguette.status(AbortSignal.timeout(2000));
@@ -234,7 +236,13 @@ function registerPanel(server: McpServer, { android, cpu, fps, drivers, page, sh
     // Hosts can pass the model either form of a result, and Claude Code passes only the
     // structured one, so another place to show the panel goes into both.
     const opening = await opened({ tool, target: panelTarget });
-    const response = result({ ...status, panelTarget, ...opening ? { browserPanel: opening } : {} }, startBackend ? (status.connected ? `Found ${status.devices.length} simulators.` : status.error ?? "The bundled simulator backend could not start.") : "Opened App Intelligence.");
+    let message = "Opened App Intelligence.";
+    if (startBackend) {
+      if (status.connected) message = `Found ${status.devices.length} simulators.`;
+      else if (status.localIosSupported === false) message = "Opened Mobile Dev. Local iOS devices require macOS.";
+      else message = status.error ?? "The bundled simulator backend could not start.";
+    }
+    const response = result({ ...status, panelTarget, ...opening ? { browserPanel: opening } : {} }, message);
     if (opening) response.content.push({ type: "text", text: opening.instructions });
     return response;
   });
@@ -278,8 +286,8 @@ function registerPanel(server: McpServer, { android, cpu, fps, drivers, page, sh
     title: "List iOS simulators", description: "Start the plugin's bundled backend if needed and list available and booted simulators.",
     inputSchema: {}, outputSchema: statusOutput, annotations: write,
   }, guarded(async () => {
-    const status = await baguette.start();
-    return result(status, status.connected ? JSON.stringify(status.devices) : status.error ?? "Baguette is offline.");
+    const status = await baguette.list();
+    return result(status, status.localIosSupported === false ? "Local iOS simulators require macOS." : status.connected ? JSON.stringify(status.devices) : status.error ?? "Baguette is offline.");
   }));
 
   server.registerTool("mobile_start_baguette", {

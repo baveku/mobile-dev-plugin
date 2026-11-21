@@ -58,7 +58,9 @@ const run = promisify(execFile);
 /** The persistent folder for downloaded runtimes: the plugin's data folder in the host, else the user's cache. */
 export function panelRuntimeDirectory(env: NodeJS.ProcessEnv = process.env) {
   const data = env.CLAUDE_PLUGIN_DATA || env.PLUGIN_DATA;
-  return data ? join(data, "panel-runtime") : join(homedir(), "Library", "Caches", "mobile-dev", "panel-runtime");
+  if (data) return join(data, "panel-runtime");
+  const cache = process.platform === "win32" ? env.LOCALAPPDATA || join(homedir(), "AppData", "Local") : join(homedir(), "Library", "Caches");
+  return join(cache, "mobile-dev", "panel-runtime");
 }
 
 /**
@@ -159,18 +161,19 @@ async function download(url: URL, destination: string, release: PanelRuntimeRele
 }
 
 async function extract(archive: string, staging: string) {
-  const { stdout } = await run("/usr/bin/tar", ["-tzf", archive], { maxBuffer: 16 * 1024 * 1024 }).catch(error => {
+  const tar = process.platform === "win32" ? "tar.exe" : "/usr/bin/tar";
+  const { stdout } = await run(tar, ["-tzf", archive], { maxBuffer: 16 * 1024 * 1024 }).catch(error => {
     throw new RuntimeFailure("archive", `the archive could not be read (${errorText(error)}).`);
   });
-  for (const member of stdout.split("\n").filter(Boolean)) {
+  for (const member of stdout.split(/\r?\n/).filter(Boolean)) {
     const segments = member.replace(/^\.\//, "").split("/");
-    if (member.startsWith("/") || segments.includes("..") || (PANEL_RUNTIME_PARTS as readonly string[]).includes(segments[0]) === false) {
+    if (/[\\:]/.test(member) || member.startsWith("/") || segments.includes("..") || (PANEL_RUNTIME_PARTS as readonly string[]).includes(segments[0]) === false) {
       throw new RuntimeFailure("archive", "the archive holds files outside the device runtime.");
     }
   }
   await mkdir(staging);
   // Without -P, bsdtar refuses absolute paths, .. and writes through symlinks.
-  await run("/usr/bin/tar", ["-xzf", archive, "-C", staging, "--no-same-owner"]).catch(error => {
+  await run(tar, ["-xzf", archive, "-C", staging, "--no-same-owner"]).catch(error => {
     throw new RuntimeFailure("archive", `the archive could not be extracted (${errorText(error)}).`);
   });
   await assertPlainFiles(staging);
