@@ -33,7 +33,7 @@ A message that starts with "Apply these annotations." or "Apply these notes." ca
 1. Edit the code directly. Open the Source first; when missing, search for the Target text, testID or identifier, then React owner names. Skip `device_open`, snapshots, and `mobile_inspect_ui` before editing unless a note has neither a source nor searchable text or identifier.
 2. Make every note's edit before checking anything. Apply grouped notes targeting one source with the same edit once at the source.
 3. Rely on Fast Refresh for JavaScript and style changes in a running React Native or Expo app; do not rebuild, reinstall, relaunch, or start another dev server. Native changes still require a build.
-4. Check once after all edits: open the panel's device with `device_open` without relaunching the app, take one `device_screenshot`, and close the session without `shutdown`. Read Metro or app logs before editing again if the screenshot misses the change.
+4. Check once after all edits: open the panel's device with `device_open` without relaunching the app, take one `device_screenshot`, and release the session with `device_close` omitting both `app` and `shutdown` so the app stays open. Read Metro or app logs before editing again if the screenshot misses the change.
 
 ## App Intelligence
 
@@ -51,5 +51,5 @@ After a code change the user can see on screen, check it on the device and leave
 
 - **Logs:** start `mobile_logs_session` with sources (`ios_Sim`, `android`, `ios_physical`, or `metro`), read with `mobile_read_logs`, and close with `mobile_logs_close` when done.
 - **App storage:** inspect UserDefaults, SharedPreferences, AsyncStorage, MMKV, Keychain, and SQLite with `mobile_app_storage`, `mobile_app_storage_table`, and `mobile_app_storage_file`.
-- **Performance:** record CPU, memory, and FPS with `mobile_record_performance`, finish with `mobile_finish_performance_recording`, and render or compare in chat with `mobile_render_performance_recording` and `mobile_compare_performance_recordings`. The chart renders in the chat; the device panel stays in the Auxiliary Pane.
+- **Performance:** record CPU, memory, and FPS with `mobile_record_performance`, finish with `mobile_finish_performance_recording`, and render or compare in chat with `mobile_render_performance_recording` and `mobile_compare_performance_recordings`. The chart renders in the chat; the device panel stays in the Auxiliary Pane. Use `summary.hitchStats` for physical iPhone visible hitches, and inspect Android FPS frame diamonds or `mobile_read_performance_frames` for late, dropped, or janky frames.
 - **TraceSift profiles:** before asking the user to capture or pick a profile when no local path exists, call `mobile_tracesift_status` and stop to report any returned setup guidance. When a local CPU or React DevTools profile path is provided, call `mobile_analyze_profile` directly and wait for the user to choose a task before calling `mobile_get_tracesift_handoff`.
