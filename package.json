@@ -1,6 +1,6 @@
 {
   "name": "mobile-dev",
-  "version": "0.1.189",
+  "version": "0.1.195",
   "private": true,
   "workspaces": [
     "packages/shared",
@@ -26,6 +26,7 @@
     "vendor:baguette": "node tooling/vendor-baguette.mjs",
     "vendor:resource-saving": "node tooling/vendor-resource-saving.mjs",
     "vendor:agent-device": "npm ci --prefix packages/runtimes/agent-device --ignore-scripts --no-audit --no-fund",
+    "vendor:e2e": "node tooling/vendor-e2e.mjs",
     "catalog:agent-device": "node tooling/agent-device-catalog.mjs",
     "rebuild:baguette": "node tooling/rebuild-baguette.mjs",
     "rebuild:ios-fps": "node tooling/build-fps.mjs ios",
@@ -92,6 +93,7 @@
     "ajv": "8.20.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dockview-react": "^8.9.1",
     "enhanced-resolve": "^5.26.1",
     "lucide-react": "^1.49.0",
     "radix-ui": "^1.6.7",
@@ -99,6 +101,7 @@
     "react-dom": "^19.3.0",
     "react-resizable-panels": "^4.14.1",
     "recharts": "^3.10.1",
+    "saxes": "6.0.0",
     "tailwind-merge": "^3.7.0",
     "undici": "8.12.1",
     "ws": "8.22.0",

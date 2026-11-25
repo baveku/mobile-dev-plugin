@@ -157,7 +157,7 @@ relevant checks, and packaging steps again.
 
 `vendor:agent-device` installs the exact npm packages in `packages/runtimes/agent-device/package-lock.json` with package scripts disabled. `build` copies this full runtime into `dist/agent-device`, records its integrity and lockfile hash in `release.json`, and copies the commands the plugin servers serve, `packages/runtimes/agent-device/tools.json`. After changing the pin, run `npm run catalog:agent-device` to rewrite that catalog and the agent-device skill's workflow guide (`packages/skills/agent-device/references/workflow.md`, the runtime's `help workflow`); unit tests check both against the pinned runtime, and the weekly dependency update rewrites them. The installed plugin needs no npm install or runtime download. Xcode compiles the shipped Apple runner source on its first use.
 
-agent-device is held at 0.21.33 in the weekly dependency updater. Versions 0.21.34 and 0.21.35 reject iOS input when an obsolete Xcode selection link points at a deleted installation, even when `xcode-select -p` and `xcrun` resolve the installed Xcode. See [upstream #3995](https://github.com/callstack/agent-device/pull/3995). Verify that case before raising the pin and removing the updater hold.
+agent-device is pinned by hand at the version `@e2e-dev/mobile` installs in `packages/runtimes/e2e` (0.21.37 now). The bundled e2e runner and Mobile Dev's own client share one agent-device state directory, so a newer runner daemon makes the older client refuse with "Daemon … is newer than this client". `agent-device-runtime-match.test.ts` fails when the two drift; the weekly dependency updater reports agent-device updates but does not apply them. Versions from 0.21.34 carry [upstream #3995](https://github.com/callstack/agent-device/pull/3995), which rejected iOS input when an obsolete Xcode selection link pointed at a deleted installation; check that case when raising the pin.
 
 `build` also bundles JavaScript and CSS with esbuild and includes Baguette in macOS builds under `dist/baguette`. It does not run TypeScript, lint, Biome, visual checks, or React Doctor.
 
@@ -330,15 +330,15 @@ Claude plugin folder `release/claude-plugin/mobile-dev` with its ZIP, and a loca
 Claude's server (`apps/claude/server`), with the panel and agent-device's commands as
 `device_*` tools, the skill in `apps/claude/skills` and the shared agent-device skill.
 Packaging fails if a file exceeds the Claude plugin directory's 5 MiB limit, so the
-packages leave out the panel's native parts (`PANEL_PARTS` in
-`tooling/host-runtime.mjs`: Baguette, serve-emu, the iOS mirror addon and its
-service), as `"panelRuntime": "download"` in `apps/claude/plugin-host.json` asks.
+packages use `"panelRuntime": "download"` in `apps/claude/plugin-host.json`. The archive
+includes the native panel parts and the Testing Studio runner
+(`DOWNLOADED_RUNTIME_PARTS` in `tooling/host-runtime.mjs`).
 Packaging packs those parts from `dist/` into
 `release/mobile-dev-<version>-panel-runtime-darwin-arm64.tar.gz` and pins it in
 `dist/panel-runtime.json` with its size and SHA-256. A local build pins the archive by
 its `file:` URL; `--release` pins it on the GitHub release `v<version>`, which the
 release workflow creates with every `release/mobile-dev-<version>-*` file, this archive
-included. On the first panel open, the server downloads the archive, checks its size
+included. On first use of a component in the archive, the server downloads it, checks its size
 and checksum, refuses entries outside the parts and links, and extracts it into
 `${CLAUDE_PLUGIN_DATA}/panel-runtime/<version>-<checksum>` (or
 `~/Library/Caches/mobile-dev/panel-runtime` without it). The folder appears only once
