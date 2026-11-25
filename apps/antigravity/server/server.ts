@@ -29,7 +29,12 @@ function writePanelState(url: string) {
 }
 
 const pinned = await readFile(new URL("./panel-runtime.json", import.meta.url), "utf8").catch(() => undefined);
-if (pinned !== undefined) usePanelRuntime(downloadedPanelRuntime(panelRuntimeReleaseSchema.parse(JSON.parse(pinned))));
+if (pinned !== undefined) {
+  const metadata: unknown = JSON.parse(pinned);
+  const release = panelRuntimeReleaseSchema.parse(metadata);
+  const download = downloadedPanelRuntime(release);
+  usePanelRuntime(download.ensure);
+}
 await runStdioServer({
   panel: createPanel({ inline: false }),
   features: [
