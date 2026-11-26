@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://incubator.callstack.com/codex-mobile-dev-plugin/">
-    <img src="https://incubator.callstack.com/codex-mobile-dev-plugin/banner.jpg" alt="Mobile Dev by Callstack. Mobile development in your ADE. Supports Codex, Claude, Cursor, and more." width="100%" />
+  <a href="https://incubator.callstack.com/mobile-dev/">
+    <img src="https://incubator.callstack.com/mobile-dev/banner.jpg" alt="Mobile Dev by Callstack. Mobile development in your ADE. Supports Codex, Claude, Cursor, and more." width="100%" />
   </a>
 </p>
 
@@ -117,8 +117,9 @@ What the Claude version runs on your Mac, besides its Node.js server:
 - **A Node.js launcher and a session check** in the Claude Code plugin, which find
   Node.js and start the server.
 
-It sends plugin errors and aggregate measurements to Sentry, as described under
-[Privacy and support](#privacy-and-support), and nothing else to Callstack;
+It sends plugin errors and aggregate measurements to Sentry and basic product
+analytics to Anal, as described under [Privacy and support](#privacy-and-support),
+and nothing else to Callstack;
 profiles go only to the TraceSift service on your Mac.
 
 ### Antigravity
@@ -142,7 +143,7 @@ the Mobile Dev plugin that each of them has installed. On the Mac that runs T3 C
 install the [Claude Code plugin](#claude-code-and-claude-desktop) for Claude threads
 (run the two `claude plugin` commands in a terminal, then start a new Claude thread)
 and the [Codex plugin](#codex) for Codex threads. In both, the panel opens in T3 Code's
-Browser. See the [T3 Code setup guide](https://incubator.callstack.com/codex-mobile-dev-plugin/docs/getting-started#t3-code)
+Browser. See the [T3 Code setup guide](https://incubator.callstack.com/mobile-dev/docs/getting-started#t3-code)
 for the settings each provider needs.
 
 Turn off T3 Code's own device integration while you use Mobile Dev. In
@@ -256,8 +257,8 @@ Detailed guides are available for
 [devices](https://github.com/callstackincubator/mobile-dev/blob/main/docs/devices.md),
 [logs](https://github.com/callstackincubator/mobile-dev/blob/main/docs/logs.md),
 [performance](https://github.com/callstackincubator/mobile-dev/blob/main/docs/performance.md),
-[App Intelligence](https://incubator.callstack.com/codex-mobile-dev-plugin/docs/app-intelligence),
-[Testing](https://incubator.callstack.com/codex-mobile-dev-plugin/docs/testing),
+[App Intelligence](https://incubator.callstack.com/mobile-dev/docs/app-intelligence),
+[Testing](https://incubator.callstack.com/mobile-dev/docs/testing),
 and [MCP tools](https://github.com/callstackincubator/mobile-dev/blob/main/docs/mcp-tools.md).
 [Architecture](https://github.com/callstackincubator/mobile-dev/blob/main/docs/architecture.md) explains how the hosts share the server
 and panel.
@@ -289,9 +290,14 @@ Mobile Dev reports plugin errors, crashes, usage counters, sampled traces, and
 aggregate plugin performance measurements to Sentry by default. App logs,
 screenshots, input content, tool payloads, app storage contents, profiles, and
 device performance recordings are excluded from that telemetry. Errors and
-crashes use a randomly generated persistent installation ID. Set
-`MOBILE_DEV_TELEMETRY=off` in the MCP launch environment and restart the plugin
-processes to disable reporting. For the Mac app, start it with
+crashes use a randomly generated persistent installation ID. Release builds also
+send basic product analytics to Anal at `anal.margelo.com`: that a session started
+or a tool was called, with the tool's name, whether it succeeded, the host, the
+plugin version, the operating system type, and the same installation ID. Analytics
+exclude tool arguments and results, app and device content, device names, project
+paths, and account details. Set `MOBILE_DEV_TELEMETRY=off` in the MCP launch
+environment and restart the plugin processes to disable reporting, or set
+`MOBILE_DEV_ANALYTICS=off` to disable only product analytics. For the Mac app, start it with
 `open --env MOBILE_DEV_TELEMETRY=off "Mobile Dev.app"`. Tool results and content sent to chat are handled
 by the host separately. Read the [Privacy Policy](PRIVACY.md) and
 [Terms of Service](TERMS.md), or see
