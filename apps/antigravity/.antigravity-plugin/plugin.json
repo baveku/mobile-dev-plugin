@@ -13,8 +13,8 @@
     "email": "hello@callstack.com",
     "url": "https://www.callstack.com/"
   },
-  "homepage": "https://github.com/callstackincubator/codex-mobile-dev-plugin",
-  "repository": "https://github.com/callstackincubator/codex-mobile-dev-plugin",
+  "homepage": "https://github.com/callstackincubator/mobile-dev",
+  "repository": "https://github.com/callstackincubator/mobile-dev",
   "license": "MIT",
   "keywords": [
     "mobile",
