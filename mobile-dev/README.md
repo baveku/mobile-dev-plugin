@@ -65,12 +65,13 @@ The plugin bundles most of its runtimes and native helpers, so no `npm install`,
 account, or hosted service is needed. Your project's own tools build the app. Besides
 its Node.js server and Auxiliary Pane sidecar proxy, it runs:
 
-- **The device panel's runtime, downloaded once.** The first time you open the panel,
+- **The device and Testing Studio runtime, downloaded once.** On first use,
   Mobile Dev downloads one archive from this project's GitHub release for the
-  installed version (`mobile-dev-<version>-panel-runtime-darwin-arm64.tar.gz`). The
-  plugin pins the archive's size and SHA-256 checksum and refuses any other file. It
-  is unpacked into Antigravity's plugin data folder (`PLUGIN_DATA`), or
-  `~/Library/Caches/mobile-dev` elsewhere, and kept across sessions.
+  installed version (`mobile-dev-<version>-panel-runtime-darwin-arm64.tar.gz`, from
+  `github.com/callstackincubator/mobile-dev/releases`). The plugin pins the archive's
+  size and SHA-256 checksum and refuses any other file. It is unpacked into
+  Antigravity's plugin data folder (`PLUGIN_DATA`), or `~/Library/Caches/mobile-dev`
+  elsewhere, and kept across sessions.
 - **A loopback page and sidecar proxy for the panel:** while the panel is open, the
   server serves it on `127.0.0.1` at a random port behind a private link, and
   `sidecars/launch.mjs` proxies it into the Antigravity Auxiliary Pane authenticated
@@ -86,9 +87,17 @@ its Node.js server and Auxiliary Pane sidecar proxy, it runs:
 Mobile Dev reports plugin errors, crashes, usage counters, sampled traces, and
 aggregate plugin performance measurements to Sentry by default. App logs,
 screenshots, input content, tool payloads, app storage contents, profiles, and device
-performance recordings are excluded from that telemetry. Set `MOBILE_DEV_TELEMETRY=off`
-in the environment Antigravity starts from, then restart Antigravity, to turn reporting
-off. Read the [Privacy Policy](PRIVACY.md) and [Terms of Service](TERMS.md).
+performance recordings are excluded from that telemetry. Errors and crashes use a
+randomly generated persistent installation ID. Mobile Dev also sends basic product
+analytics to Anal at `anal.margelo.com`: that a session started or a tool was called,
+with the tool's name, whether it succeeded, the host, the plugin version, the
+operating system type, and the same installation ID. Analytics exclude tool arguments
+and results, app and device content, device names, project paths, and account details.
+Nothing else goes to Callstack, and profiles go only to the TraceSift service on your
+Mac. Set `MOBILE_DEV_TELEMETRY=off` in the environment Antigravity starts from, then
+restart Antigravity, to turn reporting off, or `MOBILE_DEV_ANALYTICS=off` to turn off
+only product analytics. Read the [Privacy Policy](PRIVACY.md) and
+[Terms of Service](TERMS.md).
 
 For help, email [hello@callstack.com](mailto:hello@callstack.com) or see
 [Support](SUPPORT.md).

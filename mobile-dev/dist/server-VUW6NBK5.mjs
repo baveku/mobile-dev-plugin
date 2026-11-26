@@ -1,5 +1,5 @@
 
-!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="87994c21-bb95-545d-8acc-b6a90fb64b07")}catch(e){}}();
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="7d22bc00-6e36-5db2-b56a-7216c05a27c9")}catch(e){}}();
 import { createRequire as mobileDevBundleRequire } from 'node:module'; import { fileURLToPath as mobileDevFileURLToPath } from 'node:url'; import { dirname as mobileDevPathDirname } from 'node:path'; const require = mobileDevBundleRequire(import.meta.url); const __filename = mobileDevFileURLToPath(import.meta.url); const __dirname = mobileDevPathDirname(__filename);
 import {
   appIntelQueryInput,
@@ -41,6 +41,7 @@ import {
   recordAndroidStartupStages,
   recordAppIntelOperation,
   recordAppStorageOperation,
+  recordBaguetteDiscoveryTime,
   recordBrowserPanelContext,
   recordBrowserPanelSessions,
   recordIosHitchOperation,
@@ -61,7 +62,7 @@ import {
   touchInputSchema,
   udidSchema,
   withDeviceAppsDiagnostic
-} from "./chunk-YFPWIM26.mjs";
+} from "./chunk-6YPEDHNY.mjs";
 import "./chunk-AV7EIOVC.mjs";
 import {
   ANALYTICS_ENGAGE_URL,
@@ -90,7 +91,7 @@ import {
   resolveTelemetryEnvironment,
   setDiscoveryCommandDiagnostic,
   telemetryHost
-} from "./chunk-C7Z3TXLQ.mjs";
+} from "./chunk-7GSY3ENK.mjs";
 import {
   $ZodObject,
   $ZodType,
@@ -37789,9 +37790,24 @@ import { basename, delimiter as delimiter2, dirname as dirname3, isAbsolute as i
 import { promisify as promisify7 } from "node:util";
 var BAGUETTE_RUNTIME_TIMEOUT_MS = 5e3;
 var execute6 = promisify7(execFile8);
-async function baguetteEnvironment(executable3, signal, run5 = execute6) {
-  const deadline = AbortSignal.timeout(BAGUETTE_RUNTIME_TIMEOUT_MS);
-  const discoverySignal = AbortSignal.any([signal, deadline]);
+var commandNames = {
+  "/usr/bin/xcode-select": "xcode-select",
+  "/usr/bin/otool": "otool",
+  "/usr/bin/xcrun": "swift-stdlib-tool"
+};
+var runXcodeCommand = async (command3, args, options) => {
+  const started = performance.now();
+  try {
+    return await execute6(command3, args, options);
+  } finally {
+    const elapsed = performance.now() - started;
+    recordBaguetteDiscoveryTime(commandNames[command3], elapsed);
+  }
+};
+async function baguetteEnvironment(executable3, signal, timeoutMs = BAGUETTE_RUNTIME_TIMEOUT_MS, run5 = runXcodeCommand) {
+  const deadline = AbortSignal.timeout(timeoutMs);
+  const inspection = new AbortController();
+  const discoverySignal = AbortSignal.any([signal, deadline, inspection.signal]);
   discoverySignal.throwIfAborted();
   let developer;
   try {
@@ -37812,12 +37828,21 @@ async function baguetteEnvironment(executable3, signal, run5 = execute6) {
   const environment = { ...process.env, DEVELOPER_DIR: developer };
   delete environment.DYLD_LIBRARY_PATH;
   try {
-    const commands2 = await run5("/usr/bin/otool", ["-l", executable3], {
+    const loadCommands = run5("/usr/bin/otool", ["-l", executable3], {
       env: environment,
       signal: discoverySignal,
       encoding: "utf8",
       maxBuffer: 1024 * 1024
     });
+    const swiftLibraries = run5("/usr/bin/xcrun", [
+      "swift-stdlib-tool",
+      "--print",
+      "--scan-executable",
+      executable3,
+      "--platform",
+      "macosx"
+    ], { env: environment, signal: discoverySignal, encoding: "utf8", maxBuffer: 64 * 1024 });
+    const [commands2, scan] = await Promise.all([loadCommands, swiftLibraries]);
     const blocks = commands2.stdout.split("Load command");
     const required3 = /* @__PURE__ */ new Set();
     for (const block of blocks) {
@@ -37827,14 +37852,6 @@ async function baguetteEnvironment(executable3, signal, run5 = execute6) {
       const name = basename(match[1]);
       required3.add(name);
     }
-    const scan = await run5("/usr/bin/xcrun", [
-      "swift-stdlib-tool",
-      "--print",
-      "--scan-executable",
-      executable3,
-      "--platform",
-      "macosx"
-    ], { env: environment, signal: discoverySignal, encoding: "utf8", maxBuffer: 64 * 1024 });
     const output = scan.stdout.trim();
     const libraries = output.length > 0 ? output.split("\n") : [];
     const directories = /* @__PURE__ */ new Set();
@@ -37861,6 +37878,7 @@ async function baguetteEnvironment(executable3, signal, run5 = execute6) {
     }
   } catch {
     discoverySignal.throwIfAborted();
+    inspection.abort();
     throw new Error("The selected Xcode cannot supply Baguette's required Swift runtime libraries. Install Xcode 26 or later and select it in Xcode Settings > Locations > Command Line Tools.");
   }
   discoverySignal.throwIfAborted();
@@ -39812,8 +39830,8 @@ async function loadVendoredAgentDevice() {
 }
 async function createAppFlowHost(options = {}) {
   const [{ createAppFlowService }, { createManualRecordingService }] = await Promise.all([
-    import("./app-flow-CC4W4O23.mjs"),
-    import("./manual-LPTGPMLF.mjs")
+    import("./app-flow-LZIDTXE3.mjs"),
+    import("./manual-74CVCD5G.mjs")
   ]);
   const listeners = /* @__PURE__ */ new Set();
   const runs = /* @__PURE__ */ new Map();
@@ -47785,7 +47803,6 @@ var PerformanceRecordings = class {
       await hitchResult;
       if (active.interrupted) throw new Error("Recording interrupted because the plugin server closed.");
       if (recording.fps.status === "recording") recording.fps.status = "finished";
-      recording.status = "finished";
     } catch (error51) {
       recording.status = "failed";
       recording.error = errorMessage(error51);
@@ -47813,11 +47830,19 @@ var PerformanceRecordings = class {
         captureServerError(result4.reason, "recording.close");
       }
       if (recording.fps.status === "connecting" || recording.fps.status === "recording") recording.fps.status = "unavailable";
-      recording.completedAt = (/* @__PURE__ */ new Date()).toISOString();
+      const completionTime = /* @__PURE__ */ new Date();
+      const completedAt = completionTime.toISOString();
+      const completed2 = {
+        ...recording,
+        completedAt,
+        status: recording.status === "failed" ? "failed" : "finished"
+      };
       try {
-        await this.store.save(recording);
+        await this.store.save(completed2);
+        active.recording = completed2;
         this.active.delete(recording.id);
       } catch (error51) {
+        recording.completedAt = completedAt;
         recording.status = "failed";
         recording.error = "The recording could not be saved to disk.";
         captureServerError(error51, "recording.save");
@@ -47844,9 +47869,13 @@ var PerformanceRecordings = class {
     return this.read(id2);
   }
   async list(limit) {
+    const pending = new Map(this.active);
     const saved = await this.store.list(limit);
-    const pending = Array.from(this.active.values(), (active) => active.recording);
-    const all = [...pending, ...saved];
+    const activeRecordings = pending.values();
+    const all = Array.from(activeRecordings, (active) => active.recording);
+    for (const recording of saved) {
+      if (pending.has(recording.id) === false) all.push(recording);
+    }
     all.sort((left, right) => right.startedAt.localeCompare(left.startedAt));
     return all.slice(0, limit);
   }
@@ -51974,7 +52003,7 @@ async function launchBundledBaguette(host, port2, signal) {
     throw new ExpectedOperationError("unsupported_platform", "Starting Baguette requires an Apple Silicon Mac with Xcode 26 or later.");
   }
   const executable3 = await bundledExecutable();
-  const environment = await baguetteEnvironment(executable3, signal);
+  const environment = await baguetteEnvironment(executable3, signal, 2e4);
   return spawn14(executable3, ["serve", "--host", host, "--port", port2, "--no-plugins"], {
     stdio: ["ignore", "pipe", "pipe"],
     shell: false,
@@ -57657,4 +57686,4 @@ content-type/index.js:
    *)
 */
 
-//# debugId=87994c21-bb95-545d-8acc-b6a90fb64b07
+//# debugId=7d22bc00-6e36-5db2-b56a-7216c05a27c9

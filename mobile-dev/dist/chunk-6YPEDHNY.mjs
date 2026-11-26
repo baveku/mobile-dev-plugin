@@ -1,5 +1,5 @@
 
-!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="d6f21c71-a0f3-521a-8b8a-084de136a6ae")}catch(e){}}();
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="acb07d82-dac9-531e-aecd-0fddec9b2316")}catch(e){}}();
 import { createRequire as mobileDevBundleRequire } from 'node:module'; import { fileURLToPath as mobileDevFileURLToPath } from 'node:url'; import { dirname as mobileDevPathDirname } from 'node:path'; const require = mobileDevBundleRequire(import.meta.url); const __filename = mobileDevFileURLToPath(import.meta.url); const __dirname = mobileDevPathDirname(__filename);
 import {
   ExpectedOperationError,
@@ -27,7 +27,7 @@ import {
   telemetryHost,
   withIsolationScope,
   wrapMcpServerWithSentry
-} from "./chunk-C7Z3TXLQ.mjs";
+} from "./chunk-7GSY3ENK.mjs";
 import {
   external_exports
 } from "./chunk-ZZCVTTEH.mjs";
@@ -4375,6 +4375,11 @@ function recordPanelRuntime(runtime2, outcome, duration2, bytes, reason) {
   public_api_exports.distribution("panel_runtime.ready", duration2, { attributes, unit: "millisecond" });
   if (bytes !== void 0) public_api_exports.distribution("panel_runtime.download_bytes", bytes, { attributes: { component: "server", runtime: runtime2 }, unit: "byte" });
 }
+function recordBaguetteDiscoveryTime(operation, duration2) {
+  if (process.env.MOBILE_DEV_TELEMETRY === "off") return;
+  const attributes = { component: "server", operation };
+  public_api_exports.distribution("baguette.runtime.command.duration", duration2, { unit: "millisecond", attributes });
+}
 function recordIosHitchOperation(operation, outcome, duration2) {
   if (process.env.MOBILE_DEV_TELEMETRY === "off") return;
   const attributes = { component: "server", surface: "recording", device_platform: "ios", operation, outcome };
@@ -4752,6 +4757,7 @@ export {
   recordBrowserPanelSessions,
   recordBrowserPanelContext,
   recordPanelRuntime,
+  recordBaguetteDiscoveryTime,
   recordIosHitchOperation,
   recordAppStorageOperation,
   recordAppIntelOperation,
@@ -4783,4 +4789,4 @@ export {
   import_websocket
 };
 
-//# debugId=d6f21c71-a0f3-521a-8b8a-084de136a6ae
+//# debugId=acb07d82-dac9-531e-aecd-0fddec9b2316

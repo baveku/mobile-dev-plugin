@@ -4,8 +4,8 @@
 
 // apps/antigravity/server/index.ts
 if (process.env.MOBILE_DEV_SERVER_WORKER === "1" || process.env.MOBILE_DEV_SIDECAR_STANDALONE === "1" || process.env.MOBILE_DEV_NO_SUPERVISOR === "1") {
-  await import("./instrument-2LRC34T3.mjs");
-  await import("./server-7YDICHMV.mjs");
+  await import("./instrument-O6OGDY4W.mjs");
+  await import("./server-VUW6NBK5.mjs");
 } else {
   const { runHotReloadSupervisor } = await import("./supervisor-TLUQ3E37.mjs");
   await runHotReloadSupervisor(import.meta.url);
